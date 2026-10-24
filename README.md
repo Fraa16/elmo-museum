@@ -24,7 +24,7 @@ keine Cookies, keine externen Requests.
 | Schalter             | Wert  | Bedeutung                                                                 |
 |----------------------|-------|---------------------------------------------------------------------------|
 | `SITE_URL`           | `https://elmo-museum.vercel.app` | Basis-URL, steht in jedem QR-Code. Nach dem QR-Export **nie mehr ändern**. |
-| `SITE_URL_CONFIRMED` | `false` | Erst `true`, wenn das Vercel-Projekt angelegt und die Domain fix ist. Vorher verweigert `npm run qr` den Export und der QR-Bogen zeigt „Entwurf, nicht drucken“. |
+| `SITE_URL_CONFIRMED` | `true`  | Domain bestätigt (Vercel-Projekt `elmo-museum`, Oktober 2026). Bei `false` verweigert `npm run qr` den Export und der QR-Bogen zeigt „Entwurf, nicht drucken“. |
 | `QUIZ_ENABLED`       | `true`  | Rate-Element global an/aus. Pro Station: `quiz: null`.                  |
 | `INDEXABLE`          | `false` | Bis zur Freigabe `noindex, nofollow` auf allen Seiten und `Disallow: /` in `robots.txt`. |
 
@@ -61,15 +61,26 @@ scripts/generate-qr.mjs    QR-Export (SVG + PNG 2000 px, Fehlerkorrektur Q)
 vercel.json                Redirect, Trailing Slash, Header
 ```
 
-## QR-Codes: Ablauf
+## QR-Codes
 
-1. Vercel-Projekt `elmo-museum` anlegen (Name vorher auf Verfügbarkeit prüfen; falls
-   vergeben: Francesco fragen). Der Projektname ist nach dem QR-Export dauerhaft.
-2. `SITE_URL` prüfen, `SITE_URL_CONFIRMED = true` setzen.
-3. `npm run qr` → `qr-export/` (SVG, PNG, `manifest.csv`).
-4. `/museum/qr-bogen` im Browser öffnen → Drucken → „Als PDF speichern“
+Die Codes sind erzeugt und zeigen auf `https://elmo-museum.vercel.app`. Das
+Vercel-Projekt `elmo-museum` und seine Domain dürfen deshalb **nie umbenannt oder
+gelöscht** werden, sonst führen alle gedruckten Schilder ins Leere.
+
+`qr-export/` enthält:
+
+- `ELMO-00_start.svg/.png` bis `ELMO-09_sidon-seeburg.svg/.png` (PNG 2000 px)
+- `manifest.csv`: QR-ID, URL, Dateinamen
+- `ELMO-QR-Schilder_A4.pdf`: fertiger Druckbogen (3 Seiten A4, Schilder 70 × 90 mm
+  mit Schnittmarken, Startschild A6, QR 38 mm). In 100 % / „Tatsächliche Größe“
+  drucken, nicht „An Seite anpassen“.
+
+Neu erzeugen (nur nötig, wenn sich Pfade oder das Schild-Design ändern):
+
+1. `npm run qr` → SVG, PNG und `manifest.csv`.
+2. `/museum/qr-bogen` im Browser öffnen → Drucken → „Als PDF speichern“
    (A4, Ränder Standard, Hintergrundgrafiken an).
-5. Jeden Code mit echten Handys (Android + iPhone) vor Ort testen.
+3. Jeden Code mit echten Handys (Android + iPhone) vor Ort testen.
 
 ## Offene Punkte (TODO)
 
@@ -79,5 +90,5 @@ vercel.json                Redirect, Trailing Slash, Header
   rechtlich prüfen lassen.
 - **Freigaben Momo:** Intro-Text der Startseite, persönliche Aussagen (Station 01),
   Ortsangaben Al Bayada / Al Mansouri (01, 05) und Tyros (07), Auflösungszeilen des Quiz.
-- **Domain:** Vercel-Projektname bestätigen, dann QR-Export und Scan-Test.
+- **Scan-Test:** gedruckte Schilder vor Ort mit Android und iPhone testen.
 - **Nach Freigabe:** optional `INDEXABLE = true`.

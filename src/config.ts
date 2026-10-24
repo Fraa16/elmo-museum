@@ -18,7 +18,7 @@ export const SITE_URL = 'https://elmo-museum.vercel.app';
  * verweigert `npm run qr` den Export und der QR-Bogen zeigt einen
  * „Entwurf, nicht drucken“-Hinweis.
  */
-export const SITE_URL_CONFIRMED = false;
+export const SITE_URL_CONFIRMED = true;
 
 /** Rate-Element („Wo glaubst du, ist das?“) global ein-/ausschalten. */
 export const QUIZ_ENABLED = true;

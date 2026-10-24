@@ -1,0 +1,11 @@
+qr_id,url,svg,png
+ELMO-00,https://elmo-museum.vercel.app/museum,ELMO-00_start.svg,ELMO-00_start.png
+ELMO-01,https://elmo-museum.vercel.app/museum/01-al-bayada-heimat,ELMO-01_al-bayada-heimat.svg,ELMO-01_al-bayada-heimat.png
+ELMO-02,https://elmo-museum.vercel.app/museum/02-baalbek-bacchustempel,ELMO-02_baalbek-bacchustempel.svg,ELMO-02_baalbek-bacchustempel.png
+ELMO-03,https://elmo-museum.vercel.app/museum/03-baalbek-jupitertempel,ELMO-03_baalbek-jupitertempel.svg,ELMO-03_baalbek-jupitertempel.png
+ELMO-04,https://elmo-museum.vercel.app/museum/04-jerusalem-felsendom,ELMO-04_jerusalem-felsendom.svg,ELMO-04_jerusalem-felsendom.png
+ELMO-05,https://elmo-museum.vercel.app/museum/05-al-bayada-natur,ELMO-05_al-bayada-natur.svg,ELMO-05_al-bayada-natur.png
+ELMO-06,https://elmo-museum.vercel.app/museum/06-beirut-raouche,ELMO-06_beirut-raouche.svg,ELMO-06_beirut-raouche.png
+ELMO-07,https://elmo-museum.vercel.app/museum/07-tyros-sour,ELMO-07_tyros-sour.svg,ELMO-07_tyros-sour.png
+ELMO-08,https://elmo-museum.vercel.app/museum/08-beirut-glaubensvielfalt,ELMO-08_beirut-glaubensvielfalt.svg,ELMO-08_beirut-glaubensvielfalt.png
+ELMO-09,https://elmo-museum.vercel.app/museum/09-sidon-seeburg,ELMO-09_sidon-seeburg.svg,ELMO-09_sidon-seeburg.png
