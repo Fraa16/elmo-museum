@@ -196,10 +196,12 @@ const ogImage = new URL(og.src, SITE_URL).href;
     color: var(--gold);
     font-size: 1.125rem;
     line-height: 1;
+    text-align: center;
+    transition: transform 200ms var(--ease);
   }
 
   .sources[open] summary::before {
-    content: '–';
+    transform: rotate(45deg);
   }
 
   .sources ul {

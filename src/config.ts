@@ -16,7 +16,7 @@ export const SITE_URL = 'https://elmo-museum.vercel.app';
  * Erst auf `true` setzen, wenn der Vercel-Projektname (und damit SITE_URL)
  * mit Francesco abgestimmt und das Projekt angelegt ist. Solange `false`,
  * verweigert `npm run qr` den Export und der QR-Bogen zeigt einen
- * „Entwurf – nicht drucken“-Hinweis.
+ * „Entwurf, nicht drucken“-Hinweis.
  */
 export const SITE_URL_CONFIRMED = false;
 

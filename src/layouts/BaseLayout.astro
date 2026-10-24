@@ -14,7 +14,7 @@ import Footer from '../components/Footer.astro';
 import { INDEXABLE, SITE_NAME, SITE_URL } from '../config';
 
 interface Props {
-  /** Seitentitel ohne Zusatz; „· Elmo Museum“ wird angehängt. */
+  /** Seitentitel ohne Zusatz; „| Elmo Museum“ wird angehängt. */
   title: string;
   description?: string;
   /** Absolute URL des Open-Graph-Bilds (WhatsApp-Vorschau). */
@@ -31,7 +31,7 @@ interface Props {
 
 const {
   title,
-  description = 'Scan den Code neben einem Bild und entdecke seine Geschichte – das kleine Museum im Flur von Elmo Shawarma in Schwäbisch Gmünd.',
+  description = 'Scan den Code neben einem Bild und entdecke seine Geschichte. Das kleine Museum im Flur von Elmo Shawarma in Schwäbisch Gmünd.',
   ogImage,
   ogImageAlt,
   noindex = false,
@@ -40,14 +40,14 @@ const {
   bodyClass,
 } = Astro.props;
 
-const fullTitle = title === SITE_NAME ? title : `${title} · ${SITE_NAME}`;
+const fullTitle = title === SITE_NAME ? title : `${title} | ${SITE_NAME}`;
 const robots = INDEXABLE && !noindex ? 'index, follow' : 'noindex, nofollow';
 const path = Astro.url.pathname.replace(/\/+$/, '') || '/';
 const canonical = new URL(path, SITE_URL).href;
 // Fehlerseite und Druckbogen bekommen keinen Canonical-Link.
 const showCanonical = !noindex;
 // Das Inline-Skript im <head> setzt `.js` vor dem ersten Rendern:
-// Rate-Element zeigen, Einblendungen aktivieren – ohne Layoutsprung.
+// Rate-Element zeigen, Einblendungen aktivieren, ohne Layoutsprung.
 ---
 
 <!doctype html>

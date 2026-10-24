@@ -1,5 +1,5 @@
 /* ---------------------------------------------------------------------------
-   Elmo Museum – Design-Tokens & Basis
+   Elmo Museum: Design-Tokens & Basis
    Digitale Verlängerung des Flurs: Anthrazit, warmes Gold, klassische Antiqua.
    --------------------------------------------------------------------------- */
 
@@ -118,7 +118,7 @@ p {
   max-width: calc(68rem + 2 * var(--gutter));
 }
 
-/* Kicker / Ortsangabe – wie die Goldbuchstaben an der Wand */
+/* Kicker / Ortsangabe, wie die Goldbuchstaben an der Wand */
 .kicker {
   font-family: var(--font-display);
   font-weight: 500;
@@ -189,7 +189,7 @@ p {
 }
 
 /* ---------------------------------------------------------------------------
-   Dezente Bewegung – nur mit JS und ohne „reduzierte Bewegung“.
+   Dezente Bewegung, nur mit JS und ohne „reduzierte Bewegung“.
    `.js` setzt ein Inline-Skript im <head> vor dem ersten Rendern.
    --------------------------------------------------------------------------- */
 

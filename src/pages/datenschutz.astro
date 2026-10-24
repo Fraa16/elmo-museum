@@ -4,16 +4,16 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import Todo from '../components/Todo.astro';
 import { CITY, RESTAURANT } from '../config';
 
-// TODO: Daten von Momo – Verantwortlicher ergänzen; Text vor Veröffentlichung rechtlich prüfen lassen.
+// TODO: Daten von Momo: Verantwortlicher ergänzen; Text vor Veröffentlichung rechtlich prüfen lassen.
 ---
 
-<BaseLayout title="Datenschutz" description={`Datenschutzerklärung – ${RESTAURANT}, ${CITY}`}>
+<BaseLayout title="Datenschutz" description={`Datenschutzerklärung von ${RESTAURANT}, ${CITY}`}>
   <main class="legal wrap prose">
     <p class="kicker">Rechtliches</p>
     <h1>Datenschutz&shy;erklärung</h1>
 
     <p class="legal__draft">
-      Entwurf – die markierten Angaben fehlen noch. Der Text wird vor der Veröffentlichung geprüft.
+      Entwurf: Die markierten Angaben fehlen noch. Der Text wird vor der Veröffentlichung geprüft.
     </p>
 
     <h2>Kurz gesagt</h2>

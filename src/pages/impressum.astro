@@ -4,15 +4,15 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import Todo from '../components/Todo.astro';
 import { CITY, RESTAURANT } from '../config';
 
-// TODO: Daten von Momo – alle <Todo>-Platzhalter ersetzen und rechtlich prüfen lassen.
+// TODO: Daten von Momo: alle <Todo>-Platzhalter ersetzen und rechtlich prüfen lassen.
 ---
 
-<BaseLayout title="Impressum" description={`Impressum – ${RESTAURANT}, ${CITY}`}>
+<BaseLayout title="Impressum" description={`Impressum von ${RESTAURANT}, ${CITY}`}>
   <main class="legal wrap prose">
     <p class="kicker">Rechtliches</p>
     <h1>Impressum</h1>
 
-    <p class="legal__draft">Entwurf – die markierten Angaben fehlen noch und werden vor der Veröffentlichung ergänzt.</p>
+    <p class="legal__draft">Entwurf: Die markierten Angaben fehlen noch und werden vor der Veröffentlichung ergänzt.</p>
 
     <h2>Angaben gemäß § 5 DDG</h2>
     <address>

@@ -1,9 +1,11 @@
 /**
  * Alle Inhalte des Museums an einem Ort.
  *
- * Texte (kicker, headline, subline, paragraphs) wortgetreu aus dem Briefing,
- * Abschnitt 7 – nicht umschreiben. `**…**` markiert Hervorhebungen, wie sie
- * im Kunden-PDF (Seiten 5–13) fett gesetzt sind.
+ * Texte (kicker, headline, subline, paragraphs) aus dem Briefing, Abschnitt 7.
+ * Wortlaut nicht umschreiben. Auf Wunsch ohne Gedankenstriche und ohne
+ * Mittelpunkte; die Striche sind durch Komma, Doppelpunkt, Punkt oder Klammern
+ * ersetzt. `**…**` markiert Hervorhebungen, wie sie im Kunden-PDF (Seiten 5 bis
+ * 13) fett gesetzt sind.
  *
  * Diese Datei wird auch von scripts/generate-qr.mjs direkt mit Node gelesen:
  * deshalb nur reine Daten, keine Bild- oder Astro-Imports. Die Bilder werden
@@ -32,7 +34,7 @@ export interface Station {
   id: string;
   /** QR-ID, z. B. „ELMO-02“. */
   qrId: string;
-  /** Pfadsegment unter /museum/ – verbindlich, nie ändern (steht im QR-Code). */
+  /** Pfadsegment unter /museum/, verbindlich, nie ändern (steht im QR-Code). */
   slug: string;
   number: number;
   title: string;
@@ -50,7 +52,7 @@ export interface Station {
 
 export const MUSEUM_PATH = '/museum';
 
-/** Startseite – eigener QR-Code ELMO-00. */
+/** Startseite mit eigenem QR-Code ELMO-00. */
 export const start = {
   qrId: 'ELMO-00',
   slug: 'start',
@@ -60,21 +62,21 @@ export const start = {
 
 export const stations: Station[] = [
   {
-    // TODO: Freigabe Momo – persönliche Aussagen und Ortsangabe Al Bayada.
+    // TODO: Freigabe Momo: persönliche Aussagen und Ortsangabe Al Bayada.
     // Keine Quelle (persönliche Geschichte), daher kein Quellenblock.
     id: '01',
     qrId: 'ELMO-01',
     slug: '01-al-bayada-heimat',
     number: 1,
     title: 'Unsere Heimat',
-    kicker: 'AL BAYADA · SÜDLIBANON',
+    kicker: 'AL BAYADA, SÜDLIBANON',
     headline: 'Du siehst einen Sonnenuntergang.',
     subline: 'Wir sehen unsere Heimat.',
     paragraphs: [
       'Auf den ersten Blick könnte dieses Bild irgendwo in Griechenland oder Italien entstanden sein. Doch willkommen in **Al Bayada, an der Küste des Südlibanon.**',
       'Hier treffen die Wellen des Mittelmeers auf helle Felsen. Nicht weit entfernt liegt das Dorf Al Mansouri.',
       'Für viele Menschen ist das einfach eine wunderschöne Küste. **Für uns ist es viel mehr.**',
-      'Denn aus dieser Gegend stammt unsere Familie. Hier liegen unsere Wurzeln – lange bevor es Elmo Shawarma in Schwäbisch Gmünd gab.',
+      'Denn aus dieser Gegend stammt unsere Familie. Hier liegen unsere Wurzeln, lange bevor es Elmo Shawarma in Schwäbisch Gmünd gab.',
       'Tausende Kilometer liegen zwischen diesem Ort und unserem Restaurant. Doch manche Verbindungen bleiben bestehen, egal wie weit man reist.',
       '**Deshalb hängt dieses Bild hier. Nicht nur als Dekoration, sondern als ein Stück unserer Heimat.**',
     ],
@@ -84,7 +86,7 @@ export const stations: Station[] = [
       question: 'Wo glaubst du, ist das?',
       options: ['Griechenland', 'Italien', 'Südlibanon'],
       answer: 2,
-      right: 'Richtig – oder überrascht? Das ist Al Bayada im Südlibanon.',
+      right: 'Richtig! Oder überrascht? Das ist Al Bayada im Südlibanon.',
       wrong: 'Fast. Es ist Al Bayada im Südlibanon.',
     },
     sources: [],
@@ -95,13 +97,13 @@ export const stations: Station[] = [
     slug: '02-baalbek-bacchustempel',
     number: 2,
     title: 'Bacchustempel',
-    kicker: 'BAALBEK · LIBANON',
+    kicker: 'BAALBEK, LIBANON',
     headline: 'Du dachtest, das wäre in Athen?',
     subline: 'Falsch gedacht. Willkommen in Baalbek!',
     paragraphs: [
       'Vor fast 2.000 Jahren schufen die Römer im heutigen Libanon eine der gewaltigsten Tempelanlagen ihrer Zeit.',
       'Hier in Baalbek steht der sogenannte **Bacchustempel**. Seine mächtigen Säulen, steinernen Ornamente und monumentalen Proportionen beeindrucken bis heute.',
-      'Aber die Geschichte dieses Ortes begann schon vor den Römern: Baalbek war ein bedeutendes Heiligtum und wurde in der Antike auch **Heliopolis – Stadt der Sonne** – genannt.',
+      'Aber die Geschichte dieses Ortes begann schon vor den Römern: Baalbek war ein bedeutendes Heiligtum und wurde in der Antike auch **Heliopolis (Stadt der Sonne)** genannt.',
       'Das Besondere? Baalbek gehört zu den eindrucksvollsten Beispielen römischer Architektur überhaupt. Seit 1984 ist die Stätte UNESCO-Weltkulturerbe.',
       '**Griechische Tempel kennst du vielleicht. Doch auch mitten im Libanon wartet eine antike Welt von gewaltigem Ausmaß.**',
     ],
@@ -111,11 +113,11 @@ export const stations: Station[] = [
       question: 'Wo steht dieser Tempel?',
       options: ['Athen', 'Rom', 'Baalbek, Libanon'],
       answer: 2,
-      right: 'Richtig – oder überrascht? Das ist Baalbek im Libanon.',
+      right: 'Richtig! Oder überrascht? Das ist Baalbek im Libanon.',
       wrong: 'Fast. Es ist Baalbek im Libanon.',
     },
     sources: [
-      { label: 'UNESCO World Heritage Centre – Baalbek', url: 'https://whc.unesco.org/en/list/294/' },
+      { label: 'UNESCO World Heritage Centre: Baalbek', url: 'https://whc.unesco.org/en/list/294/' },
     ],
   },
   {
@@ -124,12 +126,12 @@ export const stations: Station[] = [
     slug: '03-baalbek-jupitertempel',
     number: 3,
     title: 'Jupitertempel',
-    kicker: 'BAALBEK · LIBANON',
+    kicker: 'BAALBEK, LIBANON',
     headline: '54 Säulen. Nur sechs stehen noch.',
     subline: 'Die letzten Giganten von Baalbek.',
     paragraphs: [
       'Hier stand der **Jupitertempel von Baalbek**, eines der monumentalsten Heiligtümer der römischen Welt.',
-      'Einst umgaben **54 Säulen** den riesigen Tempel. Heute ragen nur noch sechs davon auf – rund 20 Meter hoch, beinahe wie ein sechsstöckiges Gebäude.',
+      'Einst umgaben **54 Säulen** den riesigen Tempel. Heute ragen nur noch sechs davon auf: rund 20 Meter hoch, beinahe wie ein sechsstöckiges Gebäude.',
       'Jahrhunderte vergingen. Erdbeben, Verfall und die Wiederverwendung von Steinen veränderten die Anlage. Die sechs Säulen und ihr mächtiges Gebälk blieben dennoch erhalten.',
       'Was heute wie eine Ruine aussieht, erzählt von großartiger Baukunst und von der gewaltigen Bedeutung Baalbeks in der Antike.',
       '**Manchmal genügen sechs Säulen, um fast 2.000 Jahre Geschichte sichtbar zu machen.**',
@@ -141,11 +143,11 @@ export const stations: Station[] = [
       options: ['12', '30', '54'],
       answer: 2,
       right: 'Richtig: 54 Säulen. Heute stehen nur noch sechs.',
-      wrong: 'Mehr! Es waren 54 Säulen – heute stehen nur noch sechs.',
+      wrong: 'Mehr! Es waren 54 Säulen. Heute stehen nur noch sechs.',
     },
     sources: [
-      { label: 'Deutsches Archäologisches Institut – Jupitertempel', url: 'https://www.dainst.org/forschung/projekte/noslug/5875' },
-      { label: 'University of Notre Dame – Temple of Jupiter', url: 'https://marble.nd.edu/item/9f05bd55-9085-4482-9474-15dc2d0e81c8' },
+      { label: 'Deutsches Archäologisches Institut: Jupitertempel', url: 'https://www.dainst.org/forschung/projekte/noslug/5875' },
+      { label: 'University of Notre Dame: Temple of Jupiter', url: 'https://marble.nd.edu/item/9f05bd55-9085-4482-9474-15dc2d0e81c8' },
     ],
   },
   {
@@ -159,7 +161,7 @@ export const stations: Station[] = [
     headline: 'Du kennst die goldene Kuppel.',
     subline: 'Aber kennst du ihre Geschichte?',
     paragraphs: [
-      'Mitten in Jerusalem erhebt sich der **Felsendom** – eines der bekanntesten Bauwerke der Welt.',
+      'Mitten in Jerusalem erhebt sich der **Felsendom**, eines der bekanntesten Bauwerke der Welt.',
       'Er wurde **691/692 n. Chr.** unter dem Umayyaden-Kalifen Abd al-Malik vollendet. Damit zählt er zu den ältesten erhaltenen Meisterwerken islamischer Baukunst.',
       'Viele verwechseln ihn mit der Al-Aqsa-Moschee. Tatsächlich ist er ein eigenes Heiligtum innerhalb des weitläufigen Al-Aqsa-Geländes.',
       'Der Felsen in seinem Inneren besitzt besondere religiöse Bedeutung. In der islamischen Überlieferung wird dieser Ort mit der Himmelsreise des Propheten Muhammad verbunden. Auch im Judentum und Christentum ist die Stätte religiös bedeutsam.',
@@ -175,25 +177,25 @@ export const stations: Station[] = [
       wrong: 'Eine häufige Verwechslung: Das ist der Felsendom.',
     },
     sources: [
-      { label: 'Metropolitan Museum of Art – The Dome of the Rock (Byzantium and Islam, 2012)', url: 'https://www.metmuseum.org/exhibitions/listings/2012/byzantium-and-islam/blog/where-in-the-world/posts/dome-of-the-rock' },
+      { label: 'Metropolitan Museum of Art: The Dome of the Rock (Byzantium and Islam, 2012)', url: 'https://www.metmuseum.org/exhibitions/listings/2012/byzantium-and-islam/blog/where-in-the-world/posts/dome-of-the-rock' },
     ],
   },
   {
-    // TODO: Freigabe Momo – Ortsangaben Al Bayada / Al Mansouri.
+    // TODO: Freigabe Momo: Ortsangaben Al Bayada / Al Mansouri.
     // Quellen-URL im PDF-Text gekürzt; vollständige URL aus der Link-Annotation im Kunden-PDF (S. 15).
     id: '05',
     qrId: 'ELMO-05',
     slug: '05-al-bayada-natur',
     number: 5,
     title: 'Küste & Natur',
-    kicker: 'AL BAYADA · SÜDLIBANON',
+    kicker: 'AL BAYADA, SÜDLIBANON',
     headline: 'Eine Küste mit einem Geheimnis.',
     subline: 'Am Meer beginnt ein kleines Wunder.',
     paragraphs: [
       'Türkisblaues Wasser, helle Felsen und der Blick auf das Mittelmeer: **Al Bayada** zeigt eine stille, wunderschöne Seite des Südlibanon.',
       'Doch auch die nahe gelegene Küste von **Al Mansouri** bewahrt ein außergewöhnliches Naturerlebnis.',
       'Dort legen bedrohte Meeresschildkröten ihre Eier im Sand ab. Freiwillige schützen die Nester und helfen, dass die Jungtiere sicher ihren Weg zum Wasser finden.',
-      'Im Jahr **2024 wurden am Strand von Al Mansouri 51 Nester** überwacht und geschützt – trotz schwieriger Umstände.',
+      'Im Jahr **2024 wurden am Strand von Al Mansouri 51 Nester** überwacht und geschützt, trotz schwieriger Umstände.',
       'Während Menschen am Meer den Sonnenuntergang genießen, beginnt für winzige Schildkröten eine lange Reise.',
       '**Die schönsten Geschichten der Natur passieren manchmal ganz in der Nähe unserer Heimat.**',
     ],
@@ -203,11 +205,11 @@ export const stations: Station[] = [
       question: 'Wer schlüpft an diesem Küstenabschnitt?',
       options: ['Möwen', 'Meeresschildkröten', 'Krabben'],
       answer: 1,
-      right: 'Richtig – hier schlüpfen Meeresschildkröten.',
+      right: 'Richtig, hier schlüpfen Meeresschildkröten.',
       wrong: 'Fast. Hier schlüpfen Meeresschildkröten.',
     },
     sources: [
-      { label: 'Mongabay (2024) – Meeresschildkröten Al Mansouri', url: 'https://news.mongabay.com/2024/09/amid-haze-of-war-lebanese-activists-helped-turtle-hatchlings-journey-to-sea/' },
+      { label: 'Mongabay (2024): Meeresschildkröten Al Mansouri', url: 'https://news.mongabay.com/2024/09/amid-haze-of-war-lebanese-activists-helped-turtle-hatchlings-journey-to-sea/' },
     ],
   },
   {
@@ -216,7 +218,7 @@ export const stations: Station[] = [
     slug: '06-beirut-raouche',
     number: 6,
     title: 'Raouché-Felsen',
-    kicker: 'BEIRUT · LIBANON',
+    kicker: 'BEIRUT, LIBANON',
     headline: 'Zwei Felsen. Eine ganze Stadt.',
     subline: 'Beiruts berühmtester Blick aufs Meer.',
     paragraphs: [
@@ -232,26 +234,26 @@ export const stations: Station[] = [
       question: 'Wo stehen diese Felsen?',
       options: ['Capri', 'Algarve', 'Beirut'],
       answer: 2,
-      right: 'Richtig – oder überrascht? Das sind die Raouché-Felsen in Beirut.',
+      right: 'Richtig! Oder überrascht? Das sind die Raouché-Felsen in Beirut.',
       wrong: 'Fast. Das sind die Raouché-Felsen in Beirut.',
     },
     sources: [
-      { label: 'Wikipedia – Raouché', url: 'https://en.wikipedia.org/wiki/Raouch%C3%A9' },
+      { label: 'Wikipedia: Raouché', url: 'https://en.wikipedia.org/wiki/Raouch%C3%A9' },
     ],
   },
   {
-    // TODO: Freigabe Momo – Ortsangabe Tyros.
+    // TODO: Freigabe Momo: Ortsangabe Tyros.
     id: '07',
     qrId: 'ELMO-07',
     slug: '07-tyros-sour',
     number: 7,
     title: 'Antikes Tyros',
-    kicker: 'TYROS / SOUR · SÜDLIBANON',
+    kicker: 'TYROS / SOUR, SÜDLIBANON',
     headline: 'Diese Stadt beherrschte einst die Meere.',
-    subline: 'Tyros – die Geschichte hinter den Säulen.',
+    subline: 'Tyros: die Geschichte hinter den Säulen.',
     paragraphs: [
       'Willkommen in **Tyros**, auf Arabisch **Sour**, einer der großen Städte der phönizischen Welt.',
-      'Ihre Händler und Seefahrer waren im gesamten Mittelmeer unterwegs. Von Tyros aus entstanden wichtige Handelsverbindungen und Kolonien – darunter das berühmte Karthago in Nordafrika.',
+      'Ihre Händler und Seefahrer waren im gesamten Mittelmeer unterwegs. Von Tyros aus entstanden wichtige Handelsverbindungen und Kolonien, darunter das berühmte Karthago in Nordafrika.',
       'Das Überraschende: Ein großer Teil der Stadt lag einst auf einer Insel. Als **Alexander der Große** Tyros im Jahr 332 v. Chr. belagerte, ließ er einen Damm vom Festland zur Insel aufschütten. Dadurch veränderte sich die Küste dauerhaft.',
       'Später errichteten die Römer hier Straßen, Säulenhallen und weitere prächtige Bauwerke. Seit 1984 steht Tyros auf der UNESCO-Welterbeliste.',
       '**Was heute still zwischen antiken Steinen liegt, war einst ein Tor zur ganzen Mittelmeerwelt.**',
@@ -262,11 +264,11 @@ export const stations: Station[] = [
       question: 'Welche berühmte Stadt gründeten Seefahrer aus Tyros?',
       options: ['Rom', 'Karthago', 'Alexandria'],
       answer: 1,
-      right: 'Richtig – Karthago in Nordafrika.',
+      right: 'Richtig: Karthago in Nordafrika.',
       wrong: 'Fast. Es war Karthago in Nordafrika.',
     },
     sources: [
-      { label: 'UNESCO World Heritage Centre – Tyre', url: 'https://whc.unesco.org/en/list/299/' },
+      { label: 'UNESCO World Heritage Centre: Tyre', url: 'https://whc.unesco.org/en/list/299/' },
     ],
   },
   {
@@ -275,14 +277,14 @@ export const stations: Station[] = [
     slug: '08-beirut-glaubensvielfalt',
     number: 8,
     title: 'Moschee & Kirche',
-    kicker: 'BEIRUT · LIBANON',
+    kicker: 'BEIRUT, LIBANON',
     headline: 'Wenn Minarette auf Kirchtürme treffen.',
     subline: 'Zwei Gotteshäuser. Eine Stadt.',
     paragraphs: [
       'Dieses Bild zeigt einen besonderen Ort im Zentrum Beiruts.',
       'Die große **Mohammed-al-Amin-Moschee** mit ihren blauen Kuppeln und vier Minaretten wurde 2008 eingeweiht. Direkt daneben steht die **maronitische St.-Georgs-Kathedrale**, deren Geschichte ins 19. Jahrhundert zurückreicht.',
       'Auf engem Raum begegnen sich hier zwei Religionen, unterschiedliche Baustile und viele Kapitel libanesischer Geschichte.',
-      'Der Libanon ist seit Jahrhunderten Heimat verschiedener religiöser Gemeinschaften. Ihr Zusammenleben war nicht immer einfach – doch ihre Architektur prägt das Land bis heute.',
+      'Der Libanon ist seit Jahrhunderten Heimat verschiedener religiöser Gemeinschaften. Ihr Zusammenleben war nicht immer einfach, doch ihre Architektur prägt das Land bis heute.',
       '**Dieses Bild erzählt nicht nur von zwei Gebäuden. Es zeigt, wie vielfältig die Geschichte Beiruts ist.**',
     ],
     image: '08.jpg',
@@ -291,11 +293,11 @@ export const stations: Station[] = [
       question: 'Wie alt ist diese Moschee?',
       options: ['ca. 500 Jahre', 'ca. 200 Jahre', 'eingeweiht 2008'],
       answer: 2,
-      right: 'Richtig – sie wurde erst 2008 eingeweiht.',
+      right: 'Richtig, sie wurde erst 2008 eingeweiht.',
       wrong: 'Überraschend jung: Sie wurde 2008 eingeweiht.',
     },
     sources: [
-      { label: 'Wikipedia – Mohammed-al-Amin-Moschee', url: 'https://de.wikipedia.org/wiki/Mohammed-al-Amin-Moschee' },
+      { label: 'Wikipedia: Mohammed-al-Amin-Moschee', url: 'https://de.wikipedia.org/wiki/Mohammed-al-Amin-Moschee' },
     ],
   },
   {
@@ -304,7 +306,7 @@ export const stations: Station[] = [
     slug: '09-sidon-seeburg',
     number: 9,
     title: 'Seeburg von Sidon',
-    kicker: 'SIDON / SAIDA · LIBANON',
+    kicker: 'SIDON / SAIDA, LIBANON',
     headline: 'Warum baut man eine Burg ins Meer?',
     subline: 'Die steinerne Wächterin von Sidon.',
     paragraphs: [
@@ -321,11 +323,11 @@ export const stations: Station[] = [
       question: 'Wer baute diese Burg ins Meer?',
       options: ['Römer', 'Kreuzfahrer', 'Osmanen'],
       answer: 1,
-      right: 'Richtig – Kreuzfahrer, im Jahr 1228.',
+      right: 'Richtig: Kreuzfahrer, im Jahr 1228.',
       wrong: 'Fast. Es waren Kreuzfahrer, im Jahr 1228.',
     },
     sources: [
-      { label: 'ENI CBC MED – Sea Castle of Sidon', url: 'https://www.enicbcmed.eu/sites/default/files/2020-08/Annex%20E%20GDDs.pdf' },
+      { label: 'ENI CBC MED: Sea Castle of Sidon', url: 'https://www.enicbcmed.eu/sites/default/files/2020-08/Annex%20E%20GDDs.pdf' },
     ],
   },
 ];

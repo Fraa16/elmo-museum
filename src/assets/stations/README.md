@@ -6,12 +6,12 @@ Dateiname = QR-ID (`01.jpg` = ELMO-01 … `09.jpg` = ELMO-09), **nicht** die Pos
 
 Alle neun Dateien sind **Platzhalter**: Handyfotos der gerahmten Wandbilder aus dem
 Kunden-PDF (`Elmo_Shawarma_Interaktives_Museum_Masterbriefing_261019_154246.pdf`,
-Stationsseiten 5–13, Zuordnung gegen das Bildinventar auf Seite 3 geprüft),
+Stationsseiten 5 bis 13, Zuordnung gegen das Bildinventar auf Seite 3 geprüft),
 auf den Bildausschnitt zugeschnitten. Spiegelungen vom Glas sind noch sichtbar.
 
 Ersetzen durch die Originaldateien ohne Rahmen/Spiegelung:
 
-- Gleicher Dateiname, JPG (oder PNG/WebP – dann `image` in `src/data/stations.ts` anpassen)
+- Gleicher Dateiname, JPG (oder PNG/WebP, dann `image` in `src/data/stations.ts` anpassen)
 - Mindestens 1600 px breit, Astro erzeugt daraus AVIF/WebP in mehreren Größen
 - Danach den `alt`-Text in `src/data/stations.ts` gegen das neue Bild prüfen
 - Vor Veröffentlichung: Bildrechte und ggf. KI-Herkunft klären (Kunden-PDF, S. 14)

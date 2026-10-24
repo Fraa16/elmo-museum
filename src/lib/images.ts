@@ -1,6 +1,6 @@
 import type { ImageMetadata } from 'astro';
 
-// TODO: Original von Momo – alle Stationsbilder sind noch Platzhalter (siehe src/assets/stations/README.md).
+// TODO: Original von Momo. Alle Stationsbilder sind noch Platzhalter (siehe src/assets/stations/README.md).
 const files = import.meta.glob<{ default: ImageMetadata }>('../assets/stations/*.{jpg,jpeg,png,webp}', {
   eager: true,
 });

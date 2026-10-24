@@ -19,12 +19,12 @@ keine Cookies, keine externen Requests.
 | `npm run qr`               | QR-Codes nach `qr-export/` (nur mit bestätigter Domain)      |
 | `npm run qr -- --dry-run`  | QR-Testlauf in einen temporären Ordner                       |
 
-## Konfiguration – `src/config.ts`
+## Konfiguration: `src/config.ts`
 
 | Schalter             | Wert  | Bedeutung                                                                 |
 |----------------------|-------|---------------------------------------------------------------------------|
 | `SITE_URL`           | `https://elmo-museum.vercel.app` | Basis-URL, steht in jedem QR-Code. Nach dem QR-Export **nie mehr ändern**. |
-| `SITE_URL_CONFIRMED` | `false` | Erst `true`, wenn das Vercel-Projekt angelegt und die Domain fix ist. Vorher verweigert `npm run qr` den Export und der QR-Bogen zeigt „Entwurf – nicht drucken“. |
+| `SITE_URL_CONFIRMED` | `false` | Erst `true`, wenn das Vercel-Projekt angelegt und die Domain fix ist. Vorher verweigert `npm run qr` den Export und der QR-Bogen zeigt „Entwurf, nicht drucken“. |
 | `QUIZ_ENABLED`       | `true`  | Rate-Element global an/aus. Pro Station: `quiz: null`.                  |
 | `INDEXABLE`          | `false` | Bis zur Freigabe `noindex, nofollow` auf allen Seiten und `Disallow: /` in `robots.txt`. |
 
@@ -51,8 +51,8 @@ Außerdem `/impressum`, `/datenschutz`, eine eigene 404-Seite und der Druckbogen
 
 ```
 src/config.ts              zentrale Schalter (auch von Node-Skripten gelesen)
-src/data/stations.ts       alle Inhalte (Texte wortgetreu, **…** = Hervorhebung)
-src/assets/stations/       Stationsbilder 01–09 (noch Platzhalter, siehe README dort)
+src/data/stations.ts       alle Inhalte (Texte aus dem Briefing, **…** = Hervorhebung)
+src/assets/stations/       Stationsbilder 01 bis 09 (noch Platzhalter, siehe README dort)
 src/lib/images.ts          Bild-Auflösung und srcset-Breiten
 src/lib/qr.ts              gemeinsame QR-Definitionen (Skript + Druckbogen)
 src/components/            Topbar, Footer, Quiz, Karten
@@ -61,7 +61,7 @@ scripts/generate-qr.mjs    QR-Export (SVG + PNG 2000 px, Fehlerkorrektur Q)
 vercel.json                Redirect, Trailing Slash, Header
 ```
 
-## QR-Codes – Ablauf
+## QR-Codes: Ablauf
 
 1. Vercel-Projekt `elmo-museum` anlegen (Name vorher auf Verfügbarkeit prüfen; falls
    vergeben: Francesco fragen). Der Projektname ist nach dem QR-Export dauerhaft.

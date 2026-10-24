@@ -4,10 +4,9 @@ import { CITY, RESTAURANT } from '../config';
 
 <footer class="footer">
   <div class="footer__inner wrap wrap--wide">
-    <p class="footer__name">{RESTAURANT} <span aria-hidden="true">·</span> {CITY}</p>
+    <p class="footer__name">{`${RESTAURANT}, ${CITY}`}</p>
     <nav class="footer__nav" aria-label="Rechtliches">
       <a href="/impressum">Impressum</a>
-      <span aria-hidden="true">·</span>
       <a href="/datenschutz">Datenschutz</a>
     </nav>
   </div>
@@ -38,7 +37,7 @@ import { CITY, RESTAURANT } from '../config';
   .footer__nav {
     display: flex;
     align-items: center;
-    gap: 0.5rem;
+    gap: 1.25rem;
   }
 
   .footer__nav a {

@@ -37,7 +37,7 @@ const signs: Sign[] = await Promise.all(
 );
 
 // Bogenaufteilung (Druckbereich 190 × 277 mm, je Schild 5 mm Rand für Schnittmarken):
-// Bogen 1: Startschild A6 + ELMO-01/02 · Bogen 2: ELMO-03–06 · Bogen 3: ELMO-07–09
+// Bogen 1: Startschild A6 + ELMO-01/02, Bogen 2: ELMO-03 bis 06, Bogen 3: ELMO-07 bis 09
 const sheets: Sign[][] = [signs.slice(0, 3), signs.slice(3, 7), signs.slice(7)];
 
 const MARK = 5; // mm Randzone um jedes Schild
@@ -59,7 +59,7 @@ const marks = (w: number, h: number) => {
 <BaseLayout title="QR-Bogen" noindex chrome={false} bodyClass="qr-body">
   <div class="toolbar">
     <div>
-      <strong>QR-Schilder · Druckbogen</strong>
+      <strong>QR-Schilder: Druckbogen</strong>
       <span>
         A4, Ränder 10 mm, Hintergrundgrafiken an → „Als PDF speichern“. Schilder 70 × 90 mm, Start A6, QR 38 mm.
       </span>
@@ -70,7 +70,7 @@ const marks = (w: number, h: number) => {
   {
     draft && (
       <p class="draft-banner" role="alert">
-        Entwurf – nicht drucken. {urlProblem ?? `Die Domain ${SITE_URL} ist noch nicht bestätigt (SITE_URL_CONFIRMED).`}
+        Entwurf, nicht drucken. {urlProblem ?? `Die Domain ${SITE_URL} ist noch nicht bestätigt (SITE_URL_CONFIRMED).`}
       </p>
     )
   }
@@ -95,7 +95,7 @@ const marks = (w: number, h: number) => {
                 >
                   {sign.start ? (
                     <>
-                      <p class="sign__brand">Elmo · Museum</p>
+                      <p class="sign__brand">Elmo Museum</p>
                       <h2 class="sign__welcome">Ahlan wa Sahlan</h2>
                       <p class="sign__ar" lang="ar" dir="rtl">
                         أهلاً وسهلاً
@@ -108,7 +108,7 @@ const marks = (w: number, h: number) => {
                       <p class="sign__num">{sign.number}</p>
                       <h2 class="sign__title">{sign.title}</h2>
                       <div class="sign__qr" set:html={sign.svg} />
-                      <p class="sign__cta">Scan mich · Entdecke die Geschichte</p>
+                      <p class="sign__cta">Scan mich und entdecke die Geschichte</p>
                     </>
                   )}
                   <p class="sign__id">{sign.qrId}</p>
@@ -207,7 +207,7 @@ const marks = (w: number, h: number) => {
   }
 
   .sheet--draft::after {
-    content: 'ENTWURF – NICHT DRUCKEN';
+    content: 'ENTWURF: NICHT DRUCKEN';
     position: absolute;
     inset: 0;
     display: grid;
