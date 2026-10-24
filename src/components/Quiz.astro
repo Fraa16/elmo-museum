@@ -93,14 +93,13 @@ const questionId = `quiz-${id}-frage`;
     text-wrap: balance;
   }
 
+  /* Antworten untereinander: Höhe unabhängig von Schrift und Labellänge (kein Layoutsprung). */
   .quiz__options {
-    display: flex;
-    flex-wrap: wrap;
+    display: grid;
     gap: 0.5rem;
   }
 
   .quiz__option {
-    flex: 1 1 auto;
     min-height: var(--tap);
     padding: 0.5rem 0.875rem;
     border: 1px solid #6b645a;
