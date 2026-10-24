@@ -1,9 +1,106 @@
 ---
+import '@fontsource/noto-naskh-arabic/arabic-500.css';
 import BaseLayout from '../../layouts/BaseLayout.astro';
+import StationCard from '../../components/StationCard.astro';
+import { SITE_NAME } from '../../config';
+import { stations } from '../../data/stations';
+
+// TODO: Freigabe Momo – Intro-Text ist ein Entwurf.
+const intro =
+  'Willkommen in unserem kleinen Museum. An den Wänden hängen Orte aus unserer Heimat – manche davon würdest du nie im Libanon vermuten. Scan einfach den Code neben einem Bild und entdecke seine Geschichte.';
 ---
 
-<BaseLayout title="Elmo Museum">
-  <main class="wrap">
-    <h1>Ahlan wa Sahlan</h1>
+<BaseLayout title={SITE_NAME} description={intro}>
+  <main>
+    <header class="welcome wrap wrap--wide">
+      <h1 class="welcome__title">
+        Ahlan wa Sahlan
+        <span class="welcome__ar" lang="ar" dir="rtl">أهلاً وسهلاً</span>
+      </h1>
+      <hr class="rule" />
+      <p class="welcome__intro">{intro}</p>
+    </header>
+
+    <section class="stations wrap wrap--wide" aria-labelledby="stations-title">
+      <h2 id="stations-title" class="kicker stations__title">{stations.length} Stationen</h2>
+      <ol class="stations__grid" role="list">
+        {
+          stations.map((station, i) => (
+            <li>
+              <StationCard station={station} eager={i < 3} />
+            </li>
+          ))
+        }
+      </ol>
+    </section>
   </main>
 </BaseLayout>
+
+<style>
+  .welcome {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.25rem;
+    padding-top: 3rem;
+    padding-bottom: 2.5rem;
+    text-align: center;
+  }
+
+  .welcome__title {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.75rem;
+    font-family: var(--font-display);
+    font-weight: 500;
+    font-size: clamp(2rem, 9.5vw, 3.75rem);
+    line-height: 1.1;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--gold);
+  }
+
+  .welcome__ar {
+    font-family: var(--font-arabic);
+    font-weight: 500;
+    font-size: clamp(1.75rem, 8vw, 2.75rem);
+    line-height: 1.4;
+    letter-spacing: 0;
+    text-transform: none;
+    color: var(--gold-soft);
+  }
+
+  .welcome__intro {
+    max-width: 34rem;
+    font-size: 1.125rem;
+    text-wrap: pretty;
+  }
+
+  .stations__title {
+    margin-bottom: 1rem;
+    text-align: center;
+  }
+
+  .stations__grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 0.75rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  @media (min-width: 40rem) {
+    .stations__grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 1.25rem;
+    }
+  }
+
+  @media (min-width: 64rem) {
+    .stations__grid {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+  }
+</style>

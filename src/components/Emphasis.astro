@@ -1,0 +1,11 @@
+---
+import { splitEmphasis } from '../data/stations';
+
+interface Props {
+  text: string;
+}
+
+const { text } = Astro.props;
+---
+
+{splitEmphasis(text).map((part) => (part.strong ? <strong>{part.text}</strong> : part.text))}

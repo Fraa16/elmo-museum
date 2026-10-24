@@ -13,3 +13,12 @@ export function stationImage(file: string): ImageMetadata {
   }
   return entry.default;
 }
+
+/**
+ * Bildbreiten für `srcset`: nur Kandidaten bis zur Originalbreite, höchstens
+ * die größte Kandidatenbreite (z. B. 1600 px laut Briefing).
+ */
+export function widthsFor(image: ImageMetadata, candidates: number[]): number[] {
+  const max = Math.min(image.width, Math.max(...candidates));
+  return [...new Set([...candidates.filter((w) => w < max), max])];
+}

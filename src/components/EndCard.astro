@@ -1,0 +1,31 @@
+<div class="end">
+  <p class="kicker">Ende der Tour</p>
+  <p class="end__title">Das war die Tour.</p>
+  <p class="end__text">Hat’s dir gefallen? Hinterlass uns etwas im Gästebuch gleich hier im Raum.</p>
+  <a class="btn" href="/museum">Zurück zum Start</a>
+</div>
+
+<style>
+  .end {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.75rem;
+    padding: 1.75rem 1.5rem;
+    border: 1px solid var(--line);
+    border-top: 2px solid var(--gold);
+    border-radius: var(--radius);
+    background: var(--surface);
+  }
+
+  .end__title {
+    font-family: var(--font-head);
+    font-weight: 600;
+    font-size: 1.75rem;
+    line-height: 1.15;
+  }
+
+  .end__text {
+    margin-bottom: 0.5rem;
+  }
+</style>

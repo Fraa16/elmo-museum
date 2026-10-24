@@ -1,0 +1,240 @@
+---
+import { Picture, getImage } from 'astro:assets';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Emphasis from '../../components/Emphasis.astro';
+import NextCard from '../../components/NextCard.astro';
+import EndCard from '../../components/EndCard.astro';
+import { SITE_URL } from '../../config';
+import { MUSEUM_PATH, nextStation, stations, type Station } from '../../data/stations';
+import { stationImage, widthsFor } from '../../lib/images';
+
+export function getStaticPaths() {
+  return stations.map((station) => ({ params: { slug: station.slug }, props: { station } }));
+}
+
+interface Props {
+  station: Station;
+}
+
+const { station } = Astro.props;
+const image = stationImage(station.image);
+const next = nextStation(station);
+
+// Open-Graph-Bild = Hero-Bild (JPEG für die WhatsApp-Vorschau).
+const og = await getImage({ src: image, width: Math.min(1200, image.width), format: 'jpg', quality: 80 });
+const ogImage = new URL(og.src, SITE_URL).href;
+---
+
+<BaseLayout
+  title={station.title}
+  description={`${station.headline} ${station.subline}`}
+  ogImage={ogImage}
+  ogImageAlt={station.alt}
+  counter={{ current: station.number, total: stations.length }}
+>
+  <main>
+    <figure class="hero">
+      <Picture
+        src={image}
+        alt={station.alt}
+        formats={['avif', 'webp']}
+        widths={widthsFor(image, [480, 800, 1200, 1600])}
+        sizes="(min-width: 72rem) 72rem, 100vw"
+        quality={70}
+        loading="eager"
+        fetchpriority="high"
+        decoding="async"
+        class="hero__img"
+        onload="this.classList.add('is-loaded')"
+      />
+    </figure>
+
+    <article class="story wrap">
+      <header class="story__head">
+        <p class="kicker">{station.kicker}</p>
+        <h1 class="story__headline">{station.headline}</h1>
+        <p class="story__subline">{station.subline}</p>
+      </header>
+
+      <div class="story__text prose">
+        {
+          station.paragraphs.map((text) => (
+            <p class="reveal">
+              <Emphasis text={text} />
+            </p>
+          ))
+        }
+      </div>
+
+      {
+        station.sources.length > 0 && (
+          <details class="sources">
+            <summary>{station.sources.length > 1 ? 'Quellen' : 'Quelle'} / Mehr erfahren</summary>
+            <ul>
+              {station.sources.map((source) => (
+                <li>
+                  {source.url ? (
+                    <a href={source.url} rel="noreferrer">
+                      {source.label}
+                    </a>
+                  ) : (
+                    source.label
+                  )}
+                </li>
+              ))}
+            </ul>
+          </details>
+        )
+      }
+    </article>
+
+    <nav class="onward wrap" aria-label="Weiter durch das Museum">
+      {
+        next ? (
+          <>
+            <NextCard station={next} />
+            <a class="onward__all" href={MUSEUM_PATH}>
+              Alle Stationen
+            </a>
+          </>
+        ) : (
+          <EndCard />
+        )
+      }
+    </nav>
+  </main>
+</BaseLayout>
+
+<style>
+  .hero {
+    margin: 0 auto;
+    max-width: 72rem;
+  }
+
+  .hero :global(picture) {
+    display: block;
+  }
+
+  .hero__img {
+    display: block;
+    width: 100%;
+    height: auto;
+    max-height: 65vh;
+    max-height: 65svh;
+    object-fit: contain;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    :global(.js) .hero__img {
+      opacity: 0;
+      transition: opacity 600ms var(--ease);
+    }
+
+    :global(.js) .hero__img.is-loaded {
+      opacity: 1;
+    }
+  }
+
+  .story {
+    padding-top: 2rem;
+  }
+
+  .story__head {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+    margin-bottom: 1.75rem;
+  }
+
+  .story__headline {
+    font-size: clamp(2.125rem, 8.5vw, 3.25rem);
+  }
+
+  .story__subline {
+    font-family: var(--font-head);
+    font-weight: 600;
+    font-size: clamp(1.375rem, 5vw, 1.75rem);
+    line-height: 1.2;
+    color: var(--gold-soft);
+    text-wrap: balance;
+  }
+
+  .sources {
+    margin-top: 2.5rem;
+    border-top: 1px solid var(--line);
+    font-size: 0.9375rem;
+    color: var(--muted);
+  }
+
+  .sources summary {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    min-height: var(--tap);
+    padding-block: 0.5rem;
+    cursor: pointer;
+    list-style: none;
+    letter-spacing: 0.02em;
+  }
+
+  .sources summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .sources summary::before {
+    content: '+';
+    width: 1em;
+    color: var(--gold);
+    font-size: 1.125rem;
+    line-height: 1;
+  }
+
+  .sources[open] summary::before {
+    content: '–';
+  }
+
+  .sources ul {
+    margin: 0;
+    padding: 0 0 0.5rem 1.5rem;
+  }
+
+  .sources li + li {
+    margin-top: 0.5rem;
+  }
+
+  .sources a {
+    color: var(--muted);
+  }
+
+  .sources a:hover {
+    color: var(--text);
+  }
+
+  .onward {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.5rem;
+    margin-top: 3rem;
+  }
+
+  .onward__all {
+    align-self: center;
+    display: inline-flex;
+    align-items: center;
+    min-height: var(--tap);
+    padding-inline: 1rem;
+    font-family: var(--font-display);
+    font-weight: 500;
+    font-size: 0.75rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--gold);
+    text-decoration: none;
+  }
+
+  .onward__all:hover {
+    color: var(--gold-soft);
+    text-decoration: underline;
+  }
+</style>

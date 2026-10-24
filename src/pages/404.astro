@@ -1,0 +1,36 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { MUSEUM_PATH } from '../data/stations';
+---
+
+<BaseLayout title="Seite nicht gefunden" noindex>
+  <main class="notfound wrap">
+    <p class="kicker">Fehler 404</p>
+    <h1 class="notfound__title">Dieses Bild hängt hier nicht.</h1>
+    <p class="notfound__text">
+      Die Seite gibt es leider nicht. Alle Geschichten aus unserem kleinen Museum findest du in der Übersicht.
+    </p>
+    <a class="btn" href={MUSEUM_PATH}>Alle Stationen</a>
+  </main>
+</BaseLayout>
+
+<style>
+  .notfound {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.25rem;
+    padding-top: 5rem;
+    text-align: center;
+  }
+
+  .notfound__title {
+    font-size: clamp(2rem, 8vw, 3rem);
+  }
+
+  .notfound__text {
+    max-width: 30rem;
+    color: var(--muted);
+    margin-bottom: 0.75rem;
+  }
+</style>

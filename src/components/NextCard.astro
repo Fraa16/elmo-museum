@@ -1,0 +1,114 @@
+---
+import { Picture } from 'astro:assets';
+import { stationPath, type Station } from '../data/stations';
+import { stationImage, widthsFor } from '../lib/images';
+
+interface Props {
+  station: Station;
+}
+
+const { station } = Astro.props;
+const image = stationImage(station.image);
+---
+
+<a class="next" href={stationPath(station)}>
+  <Picture
+    src={image}
+    alt=""
+    formats={['avif', 'webp']}
+    widths={widthsFor(image, [240, 480])}
+    sizes="7.5rem"
+    loading="lazy"
+    decoding="async"
+    class="next__img"
+  />
+  <span class="next__body">
+    <span class="next__label">Nächste Geschichte</span>
+    <span class="next__title">
+      <span class="next__num">{station.id}</span>
+      {station.title}
+    </span>
+    <span class="next__place">{station.kicker}</span>
+  </span>
+  <span class="next__arrow" aria-hidden="true">→</span>
+</a>
+
+<style>
+  .next {
+    display: grid;
+    grid-template-columns: 7.5rem 1fr auto;
+    align-items: center;
+    gap: 1rem;
+    padding: 0.75rem;
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    background: var(--surface);
+    color: var(--text);
+    text-decoration: none;
+    transition: border-color 200ms var(--ease);
+  }
+
+  .next:hover {
+    border-color: var(--gold);
+    color: var(--text);
+  }
+
+  .next :global(picture) {
+    display: block;
+  }
+
+  .next__img {
+    width: 100%;
+    aspect-ratio: 4 / 3;
+    object-fit: cover;
+    border-radius: 2px;
+  }
+
+  .next__body {
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
+    min-width: 0;
+  }
+
+  .next__label {
+    font-family: var(--font-display);
+    font-weight: 500;
+    font-size: 0.6875rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--gold);
+  }
+
+  .next__title {
+    font-family: var(--font-head);
+    font-weight: 600;
+    font-size: 1.375rem;
+    line-height: 1.15;
+  }
+
+  .next__num {
+    color: var(--gold);
+    margin-right: 0.25em;
+    font-variant-numeric: lining-nums;
+  }
+
+  .next__place {
+    font-size: 0.8125rem;
+    letter-spacing: 0.06em;
+    color: var(--muted);
+  }
+
+  .next__arrow {
+    color: var(--gold);
+    font-size: 1.25rem;
+    padding-right: 0.25rem;
+  }
+
+  @media (max-width: 22.5rem) {
+    .next {
+      grid-template-columns: 5.5rem 1fr auto;
+      gap: 0.75rem;
+    }
+  }
+</style>

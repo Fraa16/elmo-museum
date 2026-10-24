@@ -133,6 +133,8 @@ p {
 .prose {
   hyphens: auto;
   -webkit-hyphens: auto;
+  /* nur lange Wörter trennen, mind. 4 Zeichen vor/nach dem Trennstrich */
+  hyphenate-limit-chars: 10 4 4;
   text-wrap: pretty;
 }
 

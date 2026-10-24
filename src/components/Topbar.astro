@@ -10,16 +10,13 @@ const pad = (n: number) => String(n).padStart(2, '0');
 <header class="topbar">
   <div class="topbar__inner wrap wrap--wide">
     <a class="topbar__brand" href="/museum">
-      Elmo <span aria-hidden="true">·</span> Museum<span class="visually-hidden">: alle Stationen</span>
+      {'Elmo · Museum'}<span class="visually-hidden">: alle Stationen</span>
     </a>
     {
       counter && (
         <p class="topbar__count">
-          <span class="visually-hidden">Station </span>
-          {pad(counter.current)}
-          <span aria-hidden="true"> / </span>
-          <span class="visually-hidden"> von </span>
-          {pad(counter.total)}
+          <span class="visually-hidden">{`Station ${counter.current} von ${counter.total}`}</span>
+          <span aria-hidden="true">{`${pad(counter.current)} / ${pad(counter.total)}`}</span>
         </p>
       )
     }
