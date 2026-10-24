@@ -4,7 +4,8 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 import Emphasis from '../../components/Emphasis.astro';
 import NextCard from '../../components/NextCard.astro';
 import EndCard from '../../components/EndCard.astro';
-import { SITE_URL } from '../../config';
+import Quiz from '../../components/Quiz.astro';
+import { QUIZ_ENABLED, SITE_URL } from '../../config';
 import { MUSEUM_PATH, nextStation, stations, type Station } from '../../data/stations';
 import { stationImage, widthsFor } from '../../lib/images';
 
@@ -48,6 +49,14 @@ const ogImage = new URL(og.src, SITE_URL).href;
         onload="this.classList.add('is-loaded')"
       />
     </figure>
+
+    {
+      QUIZ_ENABLED && station.quiz && (
+        <div class="wrap">
+          <Quiz quiz={station.quiz} id={station.id} />
+        </div>
+      )
+    }
 
     <article class="story wrap">
       <header class="story__head">

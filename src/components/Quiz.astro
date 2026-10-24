@@ -1,0 +1,174 @@
+---
+import type { Quiz } from '../data/stations';
+
+interface Props {
+  quiz: Quiz;
+  /** Stations-ID, für eindeutige Element-IDs. */
+  id: string;
+}
+
+const { quiz, id } = Astro.props;
+const questionId = `quiz-${id}-frage`;
+
+// Rate-Element: Karte direkt unter dem Bild. Ohne JavaScript unsichtbar (siehe
+// `.js` im BaseLayout), blockiert nie das Lesen. Keine Speicherung, kein Tracking.
+---
+
+<section
+  class="quiz"
+  aria-labelledby={questionId}
+  data-quiz
+  data-answer={quiz.answer}
+  data-right={quiz.right}
+  data-wrong={quiz.wrong}
+>
+  <p class="quiz__eyebrow">Rate mal</p>
+  <p class="quiz__question" id={questionId}>{quiz.question}</p>
+  <div class="quiz__options" role="group" aria-labelledby={questionId}>
+    {
+      quiz.options.map((option, index) => (
+        <button type="button" class="quiz__option" data-index={index}>
+          {option}
+        </button>
+      ))
+    }
+  </div>
+  <p class="quiz__result" role="status"></p>
+</section>
+
+<script>
+  for (const quiz of document.querySelectorAll<HTMLElement>('[data-quiz]')) {
+    const answer = Number(quiz.dataset.answer);
+    const result = quiz.querySelector<HTMLElement>('.quiz__result');
+    const buttons = [...quiz.querySelectorAll<HTMLButtonElement>('.quiz__option')];
+
+    quiz.addEventListener('click', (event) => {
+      const chosen = (event.target as HTMLElement).closest<HTMLButtonElement>('.quiz__option');
+      if (!chosen || !result || quiz.classList.contains('is-answered')) return;
+
+      const correct = Number(chosen.dataset.index) === answer;
+      quiz.classList.add('is-answered');
+      chosen.classList.add('is-chosen');
+      buttons.forEach((button, index) => {
+        // aria-disabled statt disabled: Fokus bleibt auf dem gewählten Button.
+        button.setAttribute('aria-disabled', 'true');
+        if (index === answer) button.classList.add('is-correct');
+      });
+
+      result.textContent = (correct ? quiz.dataset.right : quiz.dataset.wrong) ?? '';
+      requestAnimationFrame(() => requestAnimationFrame(() => result.classList.add('is-visible')));
+    });
+  }
+</script>
+
+<style>
+  .quiz {
+    display: none;
+    margin-top: 1.25rem;
+    padding: 1rem 1rem 1.125rem;
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    background: var(--surface);
+  }
+
+  :global(.js) .quiz {
+    display: block;
+  }
+
+  .quiz__eyebrow {
+    font-family: var(--font-display);
+    font-weight: 500;
+    font-size: 0.6875rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--gold);
+  }
+
+  .quiz__question {
+    margin: 0.2rem 0 0.75rem;
+    font-family: var(--font-head);
+    font-weight: 600;
+    font-size: 1.375rem;
+    line-height: 1.2;
+    text-wrap: balance;
+  }
+
+  .quiz__options {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  .quiz__option {
+    flex: 1 1 auto;
+    min-height: var(--tap);
+    padding: 0.5rem 0.875rem;
+    border: 1px solid #6b645a;
+    border-radius: var(--radius);
+    background: transparent;
+    color: var(--text);
+    font-family: var(--font-body);
+    font-size: 1rem;
+    font-weight: 600;
+    line-height: 1.25;
+    cursor: pointer;
+    transition:
+      opacity 300ms var(--ease),
+      background-color 300ms var(--ease),
+      border-color 200ms var(--ease),
+      color 300ms var(--ease);
+  }
+
+  .quiz__option:hover:not([aria-disabled]) {
+    border-color: var(--gold);
+  }
+
+  .quiz__option[aria-disabled] {
+    cursor: default;
+  }
+
+  .quiz__option.is-correct {
+    border-color: var(--gold);
+    background: var(--gold);
+    color: var(--bg);
+  }
+
+  .quiz__option.is-correct::before {
+    content: '✓ ';
+  }
+
+  .is-answered .quiz__option:not(.is-correct) {
+    opacity: 0.4;
+  }
+
+  .is-answered .quiz__option.is-chosen:not(.is-correct) {
+    text-decoration: line-through;
+    text-decoration-thickness: 1px;
+  }
+
+  .quiz__result {
+    font-weight: 600;
+    color: var(--gold-soft);
+    opacity: 0;
+    transform: translateY(4px);
+    transition:
+      opacity 400ms var(--ease),
+      transform 400ms var(--ease);
+  }
+
+  .quiz__result:not(:empty) {
+    margin-top: 0.875rem;
+  }
+
+  .quiz__result.is-visible {
+    opacity: 1;
+    transform: none;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .quiz__option,
+    .quiz__result {
+      transition: none;
+    }
+  }
+</style>
