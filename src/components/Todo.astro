@@ -1,0 +1,20 @@
+---
+// Sichtbarer Platzhalter für fehlende Angaben (TODO: Daten von Momo).
+interface Props {
+  label: string;
+}
+
+const { label } = Astro.props;
+---
+
+<mark class="todo">[{label}]</mark>
+
+<style>
+  .todo {
+    padding: 0 0.25em;
+    border: 1px dashed var(--gold);
+    border-radius: 2px;
+    background: transparent;
+    color: var(--gold-soft);
+  }
+</style>

@@ -1,0 +1,41 @@
+/* Rechtstexte (Impressum, Datenschutz) */
+.legal {
+  padding-top: 2.5rem;
+}
+
+.legal h1 {
+  font-size: clamp(2rem, 8vw, 2.75rem);
+  margin: 0.4rem 0 1.5rem;
+}
+
+.legal h2 {
+  font-size: 1.5rem;
+  margin: 2.25rem 0 0.75rem;
+}
+
+.legal p + p,
+.legal p + ul,
+.legal ul + p {
+  margin-top: 0.9em;
+}
+
+.legal ul {
+  margin: 0;
+  padding-left: 1.25rem;
+}
+
+.legal li + li {
+  margin-top: 0.35em;
+}
+
+.legal address {
+  font-style: normal;
+}
+
+.legal__draft {
+  padding: 0.75rem 1rem;
+  border-left: 2px solid var(--gold);
+  background: var(--surface);
+  color: var(--muted);
+  font-size: 0.9375rem;
+}

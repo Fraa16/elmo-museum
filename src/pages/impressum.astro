@@ -1,0 +1,42 @@
+---
+import '../styles/legal.css';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Todo from '../components/Todo.astro';
+import { CITY, RESTAURANT } from '../config';
+
+// TODO: Daten von Momo – alle <Todo>-Platzhalter ersetzen und rechtlich prüfen lassen.
+---
+
+<BaseLayout title="Impressum" description={`Impressum – ${RESTAURANT}, ${CITY}`}>
+  <main class="legal wrap prose">
+    <p class="kicker">Rechtliches</p>
+    <h1>Impressum</h1>
+
+    <p class="legal__draft">Entwurf – die markierten Angaben fehlen noch und werden vor der Veröffentlichung ergänzt.</p>
+
+    <h2>Angaben gemäß § 5 DDG</h2>
+    <address>
+      {RESTAURANT}<br />
+      Inhaber: <Todo label="Vor- und Nachname" /><br />
+      <Todo label="Straße und Hausnummer" /><br />
+      <Todo label="PLZ" /> {CITY}
+    </address>
+
+    <h2>Kontakt</h2>
+    <p>
+      Telefon: <Todo label="Telefonnummer" /><br />
+      E-Mail: <Todo label="E-Mail-Adresse" />
+    </p>
+
+    <h2>Umsatzsteuer-ID</h2>
+    <p>
+      Umsatzsteuer-Identifikationsnummer gemäß § 27a Umsatzsteuergesetz: <Todo label="USt-IdNr., falls vorhanden" />
+    </p>
+
+    <h2>Verantwortlich für den Inhalt nach § 18 Abs. 2 MStV</h2>
+    <p><Todo label="Name und Anschrift" /></p>
+
+    <h2>Bildnachweise</h2>
+    <p><Todo label="Bildrechte der neun Wandbilder klären" /></p>
+  </main>
+</BaseLayout>
