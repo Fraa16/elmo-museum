@@ -1,0 +1,372 @@
+---
+/**
+ * Druckbogen für die QR-Schilder (A4 → PDF). noindex, nirgends verlinkt.
+ * Schilder 70 × 90 mm mit Schnittmarken, Startschild ELMO-00 im Format A6.
+ */
+import '@fontsource/noto-naskh-arabic/arabic-500.css';
+import QRCode from 'qrcode';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { SITE_URL, SITE_URL_CONFIRMED } from '../../config';
+import { QR_OPTIONS, qrEntries, qrUrl, siteUrlProblem, type QrEntry } from '../../lib/qr';
+
+const urlProblem = siteUrlProblem(SITE_URL);
+const draft = !SITE_URL_CONFIRMED || urlProblem !== null;
+
+interface Sign extends QrEntry {
+  url: string;
+  svg: string;
+  /** Endformat in mm */
+  w: number;
+  h: number;
+  start: boolean;
+}
+
+const signs: Sign[] = await Promise.all(
+  qrEntries.map(async (entry) => {
+    const url = qrUrl(SITE_URL, entry);
+    const start = entry.number === '00';
+    return {
+      ...entry,
+      url,
+      svg: await QRCode.toString(url, { ...QR_OPTIONS, type: 'svg' }),
+      w: start ? 105 : 70,
+      h: start ? 148 : 90,
+      start,
+    };
+  }),
+);
+
+// Bogenaufteilung (Druckbereich 190 × 277 mm, je Schild 5 mm Rand für Schnittmarken):
+// Bogen 1: Startschild A6 + ELMO-01/02 · Bogen 2: ELMO-03–06 · Bogen 3: ELMO-07–09
+const sheets: Sign[][] = [signs.slice(0, 3), signs.slice(3, 7), signs.slice(7)];
+
+const MARK = 5; // mm Randzone um jedes Schild
+const marks = (w: number, h: number) => {
+  const W = w + 2 * MARK;
+  const H = h + 2 * MARK;
+  const len = 4; // Länge der Schnittmarke
+  const lines: [number, number, number, number][] = [];
+  for (const x of [MARK, MARK + w]) {
+    lines.push([x, 0, x, len], [x, H - len, x, H]);
+  }
+  for (const y of [MARK, MARK + h]) {
+    lines.push([0, y, len, y], [W - len, y, W, y]);
+  }
+  return { W, H, lines };
+};
+---
+
+<BaseLayout title="QR-Bogen" noindex chrome={false} bodyClass="qr-body">
+  <div class="toolbar">
+    <div>
+      <strong>QR-Schilder · Druckbogen</strong>
+      <span>
+        A4, Ränder 10 mm, Hintergrundgrafiken an → „Als PDF speichern“. Schilder 70 × 90 mm, Start A6, QR 38 mm.
+      </span>
+    </div>
+    <button type="button" onclick="window.print()">Drucken / PDF</button>
+  </div>
+
+  {
+    draft && (
+      <p class="draft-banner" role="alert">
+        Entwurf – nicht drucken. {urlProblem ?? `Die Domain ${SITE_URL} ist noch nicht bestätigt (SITE_URL_CONFIRMED).`}
+      </p>
+    )
+  }
+
+  <main class="sheets">
+    {
+      sheets.map((sheet) => (
+        <section class:list={['sheet', { 'sheet--draft': draft }]}>
+          {sheet.map((sign) => {
+            const m = marks(sign.w, sign.h);
+            return (
+              <div class="cut" style={`width:${m.W}mm;height:${m.H}mm`}>
+                <svg class="marks" viewBox={`0 0 ${m.W} ${m.H}`} aria-hidden="true">
+                  {m.lines.map(([x1, y1, x2, y2]) => (
+                    <line x1={x1} y1={y1} x2={x2} y2={y2} />
+                  ))}
+                </svg>
+                <article
+                  class:list={['sign', { 'sign--start': sign.start }]}
+                  style={`width:${sign.w}mm;height:${sign.h}mm`}
+                  aria-label={sign.qrId}
+                >
+                  {sign.start ? (
+                    <>
+                      <p class="sign__brand">Elmo · Museum</p>
+                      <h2 class="sign__welcome">Ahlan wa Sahlan</h2>
+                      <p class="sign__ar" lang="ar" dir="rtl">
+                        أهلاً وسهلاً
+                      </p>
+                      <div class="sign__qr" set:html={sign.svg} />
+                      <p class="sign__cta">Scan mich und starte die Tour</p>
+                    </>
+                  ) : (
+                    <>
+                      <p class="sign__num">{sign.number}</p>
+                      <h2 class="sign__title">{sign.title}</h2>
+                      <div class="sign__qr" set:html={sign.svg} />
+                      <p class="sign__cta">Scan mich · Entdecke die Geschichte</p>
+                    </>
+                  )}
+                  <p class="sign__id">{sign.qrId}</p>
+                </article>
+              </div>
+            );
+          })}
+        </section>
+      ))
+    }
+  </main>
+</BaseLayout>
+
+<style is:global>
+  @page {
+    size: A4;
+    margin: 10mm;
+  }
+
+  .qr-body {
+    --paper: #f6f1e7;
+    --ink: #1d1c1a;
+    --ink-muted: #5c564d;
+    --gold-print: #a8833c;
+    background: #6d6862;
+    color: var(--ink);
+    print-color-adjust: exact;
+    -webkit-print-color-adjust: exact;
+  }
+
+  .toolbar {
+    position: sticky;
+    top: 0;
+    z-index: 2;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem 1.5rem;
+    padding: 0.75rem 1.25rem;
+    background: var(--bg);
+    color: var(--text);
+    font-size: 0.875rem;
+    line-height: 1.4;
+  }
+
+  .toolbar strong {
+    display: block;
+    color: var(--gold);
+  }
+
+  .toolbar span {
+    color: var(--muted);
+  }
+
+  .toolbar button {
+    min-height: 44px;
+    padding: 0.5rem 1.25rem;
+    border: 1px solid var(--gold);
+    border-radius: 4px;
+    background: var(--gold);
+    color: var(--bg);
+    font: 600 0.9375rem var(--font-body);
+    cursor: pointer;
+  }
+
+  .draft-banner {
+    margin: 0;
+    padding: 0.75rem 1.25rem;
+    background: #8b1e1e;
+    color: #fff;
+    font-weight: 600;
+    text-align: center;
+  }
+
+  .sheets {
+    overflow-x: auto;
+    padding: 10mm 0;
+  }
+
+  /* Bildschirm: Bogen als A4-Blatt mit 10 mm Rand */
+  .sheet {
+    position: relative;
+    display: flex;
+    flex-wrap: wrap;
+    align-content: flex-start;
+    justify-content: center;
+    box-sizing: content-box;
+    width: 190mm;
+    height: 277mm;
+    margin: 0 auto 10mm;
+    padding: 10mm;
+    background: #fff;
+    box-shadow: 0 2px 16px rgb(0 0 0 / 0.35);
+    overflow: hidden;
+  }
+
+  .sheet--draft::after {
+    content: 'ENTWURF – NICHT DRUCKEN';
+    position: absolute;
+    inset: 0;
+    display: grid;
+    place-items: center;
+    color: rgb(170 0 0 / 0.28);
+    font: 700 13mm/1 var(--font-body);
+    letter-spacing: 0.1em;
+    transform: rotate(-35deg);
+    pointer-events: none;
+  }
+
+  .cut {
+    position: relative;
+    display: grid;
+    place-items: center;
+  }
+
+  .marks {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    stroke: #000;
+    stroke-width: 0.2;
+  }
+
+  .sign {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 2mm;
+    padding: 5mm;
+    background: var(--paper);
+    color: var(--ink);
+    text-align: center;
+  }
+
+  .sign p,
+  .sign h2 {
+    margin: 0;
+  }
+
+  .sign__num {
+    font-family: var(--font-display);
+    font-weight: 500;
+    font-size: 30pt;
+    line-height: 1;
+    letter-spacing: 0.06em;
+    color: var(--gold-print);
+  }
+
+  .sign__title {
+    font-family: var(--font-head);
+    font-weight: 600;
+    font-size: 15pt;
+    line-height: 1.1;
+    color: var(--ink);
+  }
+
+  .sign__qr {
+    width: 38mm;
+    height: 38mm;
+    margin-top: 1mm;
+  }
+
+  .sign__qr svg {
+    display: block;
+    width: 100%;
+    height: 100%;
+  }
+
+  .sign__cta {
+    font-family: var(--font-body);
+    font-weight: 600;
+    font-size: 8pt;
+    letter-spacing: 0.04em;
+    color: var(--ink);
+  }
+
+  .sign__id {
+    font-family: var(--font-body);
+    font-size: 5.5pt;
+    letter-spacing: 0.08em;
+    color: var(--ink-muted);
+  }
+
+  .sign--start {
+    gap: 3mm;
+    padding: 8mm;
+  }
+
+  .sign__brand {
+    font-family: var(--font-display);
+    font-weight: 500;
+    font-size: 7pt;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--gold-print);
+  }
+
+  .sign__welcome {
+    font-family: var(--font-display);
+    font-weight: 500;
+    font-size: 20pt;
+    line-height: 1.1;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--gold-print);
+  }
+
+  .sign__ar {
+    font-family: var(--font-arabic);
+    font-weight: 500;
+    font-size: 17pt;
+    line-height: 1.3;
+    color: var(--gold-print);
+  }
+
+  .sign--start .sign__qr {
+    width: 55mm;
+    height: 55mm;
+  }
+
+  .sign--start .sign__cta {
+    font-size: 10pt;
+  }
+
+  @media print {
+    :root {
+      color-scheme: light;
+    }
+
+    html,
+    .qr-body {
+      background: #fff;
+    }
+
+    .toolbar,
+    .draft-banner {
+      display: none;
+    }
+
+    .sheets {
+      overflow: visible;
+      padding: 0;
+    }
+
+    .sheet {
+      width: 190mm;
+      height: 277mm;
+      margin: 0;
+      padding: 0;
+      box-shadow: none;
+      break-after: page;
+    }
+
+    .sheet:last-child {
+      break-after: auto;
+    }
+  }
+</style>
