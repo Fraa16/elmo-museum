@@ -1,0 +1,54 @@
+---
+import { CITY, RESTAURANT } from '../config';
+---
+
+<footer class="footer">
+  <div class="footer__inner wrap wrap--wide">
+    <p class="footer__name">{RESTAURANT} <span aria-hidden="true">·</span> {CITY}</p>
+    <nav class="footer__nav" aria-label="Rechtliches">
+      <a href="/impressum">Impressum</a>
+      <span aria-hidden="true">·</span>
+      <a href="/datenschutz">Datenschutz</a>
+    </nav>
+  </div>
+</footer>
+
+<style>
+  .footer {
+    margin-top: 4rem;
+    border-top: 1px solid var(--line);
+    color: var(--muted);
+    font-size: 0.875rem;
+  }
+
+  .footer__inner {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.25rem 1.5rem;
+    padding-top: 1rem;
+    padding-bottom: calc(1rem + env(safe-area-inset-bottom, 0));
+  }
+
+  .footer__name {
+    letter-spacing: 0.02em;
+  }
+
+  .footer__nav {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .footer__nav a {
+    display: inline-flex;
+    align-items: center;
+    min-height: var(--tap);
+    color: var(--muted);
+  }
+
+  .footer__nav a:hover {
+    color: var(--text);
+  }
+</style>

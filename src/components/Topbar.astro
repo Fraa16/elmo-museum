@@ -1,0 +1,70 @@
+---
+interface Props {
+  counter?: { current: number; total: number };
+}
+
+const { counter } = Astro.props;
+const pad = (n: number) => String(n).padStart(2, '0');
+---
+
+<header class="topbar">
+  <div class="topbar__inner wrap wrap--wide">
+    <a class="topbar__brand" href="/museum">
+      Elmo <span aria-hidden="true">·</span> Museum<span class="visually-hidden">: alle Stationen</span>
+    </a>
+    {
+      counter && (
+        <p class="topbar__count">
+          <span class="visually-hidden">Station </span>
+          {pad(counter.current)}
+          <span aria-hidden="true"> / </span>
+          <span class="visually-hidden"> von </span>
+          {pad(counter.total)}
+        </p>
+      )
+    }
+  </div>
+</header>
+
+<style>
+  .topbar {
+    border-bottom: 1px solid var(--line);
+  }
+
+  .topbar__inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    min-height: 3rem;
+    padding-top: env(safe-area-inset-top, 0);
+  }
+
+  .topbar__brand,
+  .topbar__count {
+    font-family: var(--font-display);
+    font-weight: 500;
+    font-size: 0.75rem;
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+    line-height: 1;
+  }
+
+  .topbar__brand {
+    display: inline-flex;
+    align-items: center;
+    min-height: var(--tap);
+    color: var(--gold);
+    text-decoration: none;
+  }
+
+  .topbar__brand:hover {
+    color: var(--gold-soft);
+  }
+
+  .topbar__count {
+    color: var(--muted);
+    font-variant-numeric: lining-nums tabular-nums;
+    white-space: nowrap;
+  }
+</style>

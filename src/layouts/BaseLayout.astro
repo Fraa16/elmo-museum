@@ -1,0 +1,78 @@
+---
+import '@fontsource/cinzel/latin-500.css';
+import '@fontsource/cormorant-garamond/latin-600.css';
+import '@fontsource/source-sans-3/latin-400.css';
+import '@fontsource/source-sans-3/latin-600.css';
+import '../styles/global.css';
+
+import Topbar from '../components/Topbar.astro';
+import Footer from '../components/Footer.astro';
+import { INDEXABLE, SITE_NAME, SITE_URL } from '../config';
+
+interface Props {
+  /** Seitentitel ohne Zusatz; „· Elmo Museum“ wird angehängt. */
+  title: string;
+  description?: string;
+  /** Absolute URL des Open-Graph-Bilds (WhatsApp-Vorschau). */
+  ogImage?: string;
+  ogImageAlt?: string;
+  /** Erzwingt noindex, auch wenn INDEXABLE = true (z. B. QR-Bogen, 404). */
+  noindex?: boolean;
+  /** Topbar rechts, z. B. { current: 2, total: 9 }. */
+  counter?: { current: number; total: number };
+  /** Topbar und Footer anzeigen (für die Druckseite abschaltbar). */
+  chrome?: boolean;
+  bodyClass?: string;
+}
+
+const {
+  title,
+  description = 'Scan den Code neben einem Bild und entdecke seine Geschichte – das kleine Museum im Flur von Elmo Shawarma in Schwäbisch Gmünd.',
+  ogImage,
+  ogImageAlt,
+  noindex = false,
+  counter,
+  chrome = true,
+  bodyClass,
+} = Astro.props;
+
+const fullTitle = title === SITE_NAME ? title : `${title} · ${SITE_NAME}`;
+const robots = INDEXABLE && !noindex ? 'index, follow' : 'noindex, nofollow';
+const path = Astro.url.pathname.replace(/\/+$/, '') || '/';
+const canonical = new URL(path, SITE_URL).href;
+---
+
+<!doctype html>
+<html lang="de">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>{fullTitle}</title>
+    <meta name="description" content={description} />
+    <meta name="robots" content={robots} />
+    <link rel="canonical" href={canonical} />
+    <meta name="theme-color" content="#141413" />
+    <meta name="color-scheme" content="dark" />
+    <meta name="format-detection" content="telephone=no" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="de_DE" />
+    <meta property="og:site_name" content={SITE_NAME} />
+    <meta property="og:title" content={fullTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    {ogImage && <meta property="og:image" content={ogImage} />}
+    {ogImage && ogImageAlt && <meta property="og:image:alt" content={ogImageAlt} />}
+    {ogImage && <meta name="twitter:card" content="summary_large_image" />}
+
+    <!-- Vor dem ersten Rendern: JS verfügbar → Quiz zeigen, Einblendungen aktivieren. -->
+    <script is:inline>document.documentElement.classList.add('js');</script>
+    <slot name="head" />
+  </head>
+  <body class={bodyClass}>
+    {chrome && <Topbar counter={counter} />}
+    <slot />
+    {chrome && <Footer />}
+  </body>
+</html>
