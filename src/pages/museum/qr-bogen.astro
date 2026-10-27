@@ -37,7 +37,7 @@ const signs: Sign[] = await Promise.all(
 );
 
 // Bogenaufteilung (Druckbereich 190 × 277 mm, je Schild 5 mm Rand für Schnittmarken):
-// Bogen 1: Startschild A6 + ELMO-01/02, Bogen 2: ELMO-03 bis 06, Bogen 3: ELMO-07 bis 09
+// Bogen 1: Startschild A6 + ELMO-01/02, Bogen 2: ELMO-03 bis 06, Bogen 3: ELMO-07 bis 10
 const sheets: Sign[][] = [signs.slice(0, 3), signs.slice(3, 7), signs.slice(7)];
 
 const MARK = 5; // mm Randzone um jedes Schild

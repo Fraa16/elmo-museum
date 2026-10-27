@@ -1,6 +1,6 @@
 # Elmo Museum
 
-Interaktives Museum für **Elmo Shawarma, Schwäbisch Gmünd**: neun mobile Besucherseiten
+Interaktives Museum für **Elmo Shawarma, Schwäbisch Gmünd**: zehn mobile Besucherseiten
 plus Startseite. Neben jedem Bild im Flur hängt ein QR-Code, der direkt zur Geschichte
 dieses Bildes führt.
 
@@ -42,6 +42,7 @@ keine Cookies, keine externen Requests.
 | ELMO-07 | `/museum/07-tyros-sour`               |
 | ELMO-08 | `/museum/08-beirut-glaubensvielfalt`  |
 | ELMO-09 | `/museum/09-sidon-seeburg`            |
+| ELMO-10 | `/museum/10-harissa-jounieh`          |
 
 Außerdem `/impressum`, `/datenschutz`, eine eigene 404-Seite und der Druckbogen
 `/museum/qr-bogen` (noindex, nirgends verlinkt). `/` leitet auf `/museum` weiter
@@ -69,7 +70,7 @@ gelöscht** werden, sonst führen alle gedruckten Schilder ins Leere.
 
 `qr-export/` enthält:
 
-- `ELMO-00_start.svg/.png` bis `ELMO-09_sidon-seeburg.svg/.png` (PNG 2000 px)
+- `ELMO-00_start.svg/.png` bis `ELMO-10_harissa-jounieh.svg/.png` (PNG 2000 px)
 - `manifest.csv`: QR-ID, URL, Dateinamen
 - `ELMO-QR-Schilder_A4.pdf`: fertiger Druckbogen (3 Seiten A4, Schilder 70 × 90 mm
   mit Schnittmarken, Startschild A6, QR 38 mm). In 100 % / „Tatsächliche Größe“
@@ -84,11 +85,13 @@ Neu erzeugen (nur nötig, wenn sich Pfade oder das Schild-Design ändern):
 
 ## Offene Punkte (TODO)
 
-- **Bilder:** Originale ohne Rahmen/Spiegelung von Momo (`src/assets/stations/`),
-  danach Alt-Texte prüfen. Bildrechte und ggf. KI-Herkunft klären.
+- **Bilder:** Original für 06 Raouché fehlt noch (Platzhalter). Bildrechte und ggf.
+  KI-Herkunft aller Bilder klären.
 - **Impressum / Datenschutz:** Daten von Momo eintragen (markierte Platzhalter),
   rechtlich prüfen lassen.
 - **Freigaben Momo:** Intro-Text der Startseite, persönliche Aussagen (Station 01),
-  Ortsangaben Al Bayada / Al Mansouri (01, 05) und Tyros (07), Auflösungszeilen des Quiz.
+  Ortsangaben Al Bayada / Al Mansouri (01, 05) und Tyros (07), Auflösungszeilen des Quiz,
+  Station 10 Harissa & Jounieh (Text, Quiz, Bild).
+- **Quelle Station 10:** fehlt noch (Höhe, Bronze, Lyon, Einweihung 1908, 104 Stufen).
 - **Scan-Test:** gedruckte Schilder vor Ort mit Android und iPhone testen.
 - **Nach Freigabe:** optional `INDEXABLE = true`.

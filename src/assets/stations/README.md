@@ -1,29 +1,24 @@
 # Stationsbilder
 
-Dateiname = QR-ID (`01.jpg` = ELMO-01 … `09.jpg` = ELMO-09), **nicht** die Position im Flur.
+Dateiname = QR-ID (`01.jpg` = ELMO-01 … `10.jpg` = ELMO-10), **nicht** die Position im Flur.
+Astro erzeugt daraus AVIF/WebP in mehreren Größen (höchstens 1600 px breit).
 
-## TODO: Original von Momo
+| Datei   | Station            | Stand                                              |
+|---------|--------------------|----------------------------------------------------|
+| 01.jpg  | Unsere Heimat      | Original (2000 × 1333)                             |
+| 02.jpg  | Bacchustempel      | Original (2000 × 1333)                             |
+| 03.jpg  | Jupitertempel      | Original (2000 × 1333)                             |
+| 04.jpg  | Felsendom          | Original (2000 × 1333)                             |
+| 05.webp | Küste & Natur      | Original (1536 × 1024)                             |
+| 06.jpg  | Raouché-Felsen     | **Platzhalter**: Handyfoto des Wandbilds aus dem Kunden-PDF (S. 10) |
+| 07.jpg  | Antikes Tyros      | Original (2000 × 1333)                             |
+| 08.jpg  | Moschee & Kirche   | Original (2000 × 1333)                             |
+| 09.jpg  | Seeburg von Sidon  | Original (2000 × 1333)                             |
+| 10.jpg  | Harissa & Jounieh  | Aus dem Druck-PDF 25 × 20 cm, auf 2000 × 1600 verkleinert |
 
-Alle neun Dateien sind **Platzhalter**: Handyfotos der gerahmten Wandbilder aus dem
-Kunden-PDF (`Elmo_Shawarma_Interaktives_Museum_Masterbriefing_261019_154246.pdf`,
-Stationsseiten 5 bis 13, Zuordnung gegen das Bildinventar auf Seite 3 geprüft),
-auf den Bildausschnitt zugeschnitten. Spiegelungen vom Glas sind noch sichtbar.
+## TODO
 
-Ersetzen durch die Originaldateien ohne Rahmen/Spiegelung:
-
-- Gleicher Dateiname, JPG (oder PNG/WebP, dann `image` in `src/data/stations.ts` anpassen)
-- Mindestens 1600 px breit, Astro erzeugt daraus AVIF/WebP in mehreren Größen
-- Danach den `alt`-Text in `src/data/stations.ts` gegen das neue Bild prüfen
-- Vor Veröffentlichung: Bildrechte und ggf. KI-Herkunft klären (Kunden-PDF, S. 14)
-
-| Datei  | Station            | Quelle im PDF |
-|--------|--------------------|---------------|
-| 01.jpg | Unsere Heimat      | S. 5          |
-| 02.jpg | Bacchustempel      | S. 6          |
-| 03.jpg | Jupitertempel      | S. 7          |
-| 04.jpg | Felsendom          | S. 8          |
-| 05.jpg | Küste & Natur      | S. 9          |
-| 06.jpg | Raouché-Felsen     | S. 10         |
-| 07.jpg | Antikes Tyros      | S. 11         |
-| 08.jpg | Moschee & Kirche   | S. 12         |
-| 09.jpg | Seeburg von Sidon  | S. 13         |
+- **06 Raouché:** Original ohne Rahmen/Spiegelung von Momo. Gleicher Dateiname als JPG
+  (bei PNG/WebP `image` in `src/data/stations.ts` anpassen), danach den `alt`-Text prüfen.
+- **Vor Veröffentlichung:** Bildrechte und ggf. KI-Herkunft aller Bilder klären
+  (Kunden-PDF, S. 14). Die Dateien enthalten keine Metadaten zur Herkunft.

@@ -108,7 +108,7 @@ export const stations: Station[] = [
       '**Griechische Tempel kennst du vielleicht. Doch auch mitten im Libanon wartet eine antike Welt von gewaltigem Ausmaß.**',
     ],
     image: '02.jpg',
-    alt: 'Der Bacchustempel in Baalbek mit seinen langen Säulenreihen vor einem rosa-goldenen Abendhimmel',
+    alt: 'Der Bacchustempel in Baalbek mit seinen langen Säulenreihen im Licht der untergehenden Sonne',
     quiz: {
       question: 'Wo steht dieser Tempel?',
       options: ['Athen', 'Rom', 'Baalbek, Libanon'],
@@ -199,8 +199,8 @@ export const stations: Station[] = [
       'Während Menschen am Meer den Sonnenuntergang genießen, beginnt für winzige Schildkröten eine lange Reise.',
       '**Die schönsten Geschichten der Natur passieren manchmal ganz in der Nähe unserer Heimat.**',
     ],
-    image: '05.jpg',
-    alt: 'Helle Steilküste bei Al Bayada über türkisblauem Meer, die Abendsonne steht tief über der Küstenlinie',
+    image: '05.webp',
+    alt: 'Helle Steilküste bei Al Bayada über tiefblauem Meer, die Abendsonne steht tief über dem Horizont',
     quiz: {
       question: 'Wer schlüpft an diesem Küstenabschnitt?',
       options: ['Möwen', 'Meeresschildkröten', 'Krabben'],
@@ -329,6 +329,43 @@ export const stations: Station[] = [
     sources: [
       { label: 'ENI CBC MED: Sea Castle of Sidon', url: 'https://www.enicbcmed.eu/sites/default/files/2020-08/Annex%20E%20GDDs.pdf' },
     ],
+  },
+  {
+    // Nachgeliefert am 27.10.2026. Gedankenstrich in Absatz 2 durch Komma ersetzt.
+    // TODO: Freigabe Momo: Text, Quizfrage und Bild.
+    // TODO: Quelle nachtragen (650 m, 8,5 m, 15 Tonnen Bronze, Lyon, 3. Mai 1908, 104 Stufen).
+    id: '10',
+    qrId: 'ELMO-10',
+    slug: '10-harissa-jounieh',
+    number: 10,
+    title: 'Harissa & Jounieh',
+    kicker: 'HARISSA, LIBANON',
+    headline: 'Eine Frau über dem Meer.',
+    subline: 'Ein Wahrzeichen, das Menschen verbindet.',
+    paragraphs: [
+      'Hoch über der wunderschönen Bucht von Jounieh, rund 650 Meter über dem Mittelmeer, steht eine Frau mit ausgebreiteten Armen.',
+      'Es ist die Muttergottes von Harissa, bekannt als **Unsere Liebe Frau vom Libanon**.',
+      'Auf den ersten Blick scheint die gewaltige Statue aus weißem Marmor zu bestehen. Doch tatsächlich verbirgt sich unter ihrer weißen Oberfläche eine unglaubliche Geschichte.',
+      'Die 8,5 Meter hohe Statue besteht aus **15 Tonnen Bronze**. Sie wurde im französischen Lyon hergestellt, in sieben Einzelteilen über das Mittelmeer transportiert und schließlich auf dem Berg von Harissa zusammengesetzt.',
+      'Am 3. Mai 1908 wurde das Heiligtum feierlich eingeweiht.',
+      '104 Stufen führen spiralförmig um ihren mächtigen Steinsockel. Wer sie erklimmt, wird mit einem atemberaubenden Blick über Jounieh und das Mittelmeer belohnt.',
+      'Doch das wirklich Besondere an diesem Ort ist nicht nur seine Schönheit.',
+      'Harissa zieht Christen und Muslime gleichermaßen an. Denn Maria besitzt sowohl im Christentum als auch im Islam eine besondere religiöse Bedeutung.',
+      'Für viele Menschen ist dieser Berg ein Ort des Gebets, der Hoffnung und des Friedens.',
+      'Seit über einem Jahrhundert blickt die weiße Statue über die libanesische Küste.',
+      '**Ein Land. Viele Glaubensrichtungen. Eine gemeinsame Heimat.**',
+      'Und genau diese besondere Seite des Libanon möchten wir dir bei Elmo Shawarma zeigen.',
+    ],
+    image: '10.jpg',
+    alt: 'Die weiße Marienstatue Unsere Liebe Frau vom Libanon in Harissa, hoch über der Bucht von Jounieh und dem Mittelmeer',
+    quiz: {
+      question: 'Woraus besteht diese riesige, schneeweiße Marienstatue?',
+      options: ['Weißer Marmor', '15 Tonnen Bronze', 'Massiver Kalkstein'],
+      answer: 1,
+      right: 'Richtig! Unter dem Weiß stecken 15 Tonnen Bronze.',
+      wrong: 'Überraschend, oder? Sie besteht aus 15 Tonnen Bronze.',
+    },
+    sources: [],
   },
 ];
 
