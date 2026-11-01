@@ -19,7 +19,7 @@ const hasAside = Astro.slots.has('aside');
 
 <section class:list={['phero page', { 'phero--aside': hasAside }]} aria-labelledby={id}>
   <div class="phero__main">
-    <div class="phero__label">
+    <div class="phero__label" data-reveal style="--d: 60ms">
       <p class="label">{label}</p>
       {
         ar && (
@@ -32,9 +32,9 @@ const hasAside = Astro.slots.has('aside');
         )
       }
     </div>
-    <h1 id={id} class="display phero__title" set:html={title} />
-    {intro && <p class="phero__intro">{intro}</p>}
-    <slot />
+    <h1 id={id} class="display phero__title" data-reveal="mask" style="--d: 140ms"><span class="mask__in" set:html={title} /></h1>
+    {intro && <p class="phero__intro" data-reveal style="--d: 320ms">{intro}</p>}
+    <div data-reveal style="--d: 440ms"><slot /></div>
   </div>
   {hasAside && <div class="phero__aside"><slot name="aside" /></div>}
 </section>

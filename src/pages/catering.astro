@@ -25,21 +25,21 @@ const steps = [
       intro="Grillplatten für Feiern und Shawarma für Firmen in Schwäbisch Gmünd. Alles handgemacht und frisch zubereitet."
     >
       <a class="btn btn--solid hero-cta" href={restaurant.phoneHref}>Catering anfragen<span aria-hidden="true">→</span></a>
-      <Arch slot="aside" framed placeholder="Foto: Grillplatte" class="hero-arch" />
+      <Arch slot="aside" framed reveal style="--d: 240ms" placeholder="Foto: Grillplatte" class="hero-arch" />
     </PageHero>
 
-    <section class="offers page" aria-label="Angebote">
-      <article class="offer">
+    <section class="offers page" aria-label="Angebote" data-reveal-stagger="120">
+      <article class="offer" data-reveal>
         <p class="label">Firmenlieferung</p>
         <p class="display offer__big">Ab 10 <em>Shawarma</em></p>
         <p class="offer__text">liefern wir selbst an Firmen in {restaurant.city}. Bestellung per Telefon.</p>
       </article>
-      <article class="offer">
+      <article class="offer" data-reveal>
         <p class="label">Elmo-Grill Platte</p>
         <p class="display offer__big">80,00 €</p>
         <p class="offer__text">Gemischte Grillplatte für 4 Personen.</p>
       </article>
-      <article class="offer">
+      <article class="offer" data-reveal>
         <p class="label">Sayyudiyye</p>
         <p class="display offer__big"><em>Platte</em> für 4</p>
         <p class="offer__text">Makrele in Reis nach palästinensischer Art, dazu Salat. Preis auf Anfrage.</p>
@@ -47,11 +47,11 @@ const steps = [
     </section>
 
     <section class="flow page" aria-labelledby="flow-title">
-      <h2 id="flow-title" class="display flow__title">So <em>läuft es.</em></h2>
-      <ol class="flow__list" role="list">
+      <h2 id="flow-title" class="display flow__title" data-reveal="mask"><span class="mask__in">So <em>läuft es.</em></span></h2>
+      <ol class="flow__list" role="list" data-reveal-stagger="120">
         {
           steps.map((step) => (
-            <li class="flow__step">
+            <li class="flow__step" data-reveal>
               <span class="flow__num" aria-hidden="true">{step.num}</span>
               <h3 class="flow__name">{step.title}</h3>
               <p class="flow__text">{step.text}</p>
@@ -59,13 +59,13 @@ const steps = [
           ))
         }
       </ol>
-      <p class="flow__open">
+      <p class="flow__open" data-reveal>
         Noch offen: Vorlaufzeit <Todo label="z. B. 2 Tage vorher" />, ab wie vielen Personen <Todo label="Personenzahl" />.
       </p>
     </section>
 
     <section class="mail page" aria-label="Anfrage per E-Mail">
-      <p class="mail__text">
+      <p class="mail__text" data-reveal>
         Lieber schriftlich? Schreib uns an <a href={`mailto:${restaurant.email}?subject=Catering-Anfrage`}>{restaurant.email}</a>.
       </p>
     </section>

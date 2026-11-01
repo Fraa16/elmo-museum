@@ -5,12 +5,14 @@ interface Props {
   dish: Dish;
   /** Arabischen Namen zeigen, falls vorhanden. */
   showAr?: boolean;
+  /** Beim Scrollen einblenden. */
+  reveal?: boolean;
 }
 
-const { dish, showAr = true } = Astro.props;
+const { dish, showAr = true, reveal = true } = Astro.props;
 ---
 
-<div class="dish">
+<div class="dish" data-reveal={reveal ? '' : undefined}>
   <div class="dish__head">
     <h3 class="dish__name">{dish.name}</h3>
     {showAr && dish.ar && <span class="dish__ar" lang="ar" dir="rtl">{dish.ar}</span>}

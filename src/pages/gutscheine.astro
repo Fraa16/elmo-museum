@@ -20,22 +20,22 @@ import { restaurant } from '../data/restaurant';
       title="Genuss <em>verschenken.</em>"
       intro="Ein Gutschein für Shawarma, Grillteller und Mezze. Einlösbar bei uns in der Kapuzinergasse."
     >
-      <Arch slot="aside" framed placeholder="Foto: Gutschein" class="hero-arch" />
+      <Arch slot="aside" framed reveal style="--d: 240ms" placeholder="Foto: Gutschein" class="hero-arch" />
     </PageHero>
 
-    <section class="ways page" aria-label="So bekommst du einen Gutschein">
-      <article class="way">
+    <section class="ways page" aria-label="So bekommst du einen Gutschein" data-reveal-stagger="120">
+      <article class="way" data-reveal>
         <span class="way__num" aria-hidden="true">01</span>
         <h2 class="way__title">Im Restaurant</h2>
         <p class="way__text">Gutscheine bekommst du direkt bei uns, {restaurant.street}.</p>
       </article>
-      <article class="way">
+      <article class="way" data-reveal>
         <span class="way__num" aria-hidden="true">02</span>
         <h2 class="way__title">Am Telefon</h2>
         <p class="way__text">Ruf an, wir legen dir den Gutschein zum Abholen bereit.</p>
         <a class="link-arrow" href={restaurant.phoneHref}>{restaurant.phone}<span aria-hidden="true">→</span></a>
       </article>
-      <article class="way">
+      <article class="way" data-reveal>
         <span class="way__num" aria-hidden="true">03</span>
         <h2 class="way__title">Online</h2>
         <p class="way__text">Bald kannst du Gutscheine hier direkt kaufen und bezahlen.</p>

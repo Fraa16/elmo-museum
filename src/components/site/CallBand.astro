@@ -14,10 +14,10 @@ const {
 ---
 
 <section class="band" aria-label={label}>
-  <div class="band__inner page">
-    <p class="label band__label">{label}</p>
-    <a class="band__phone display" href={restaurant.phoneHref}>{restaurant.phone}</a>
-    <p class="band__text">{text}</p>
+  <div class="band__inner page" data-reveal-stagger="120">
+    <p class="label band__label" data-reveal>{label}</p>
+    <div data-reveal="mask"><a class="band__phone display mask__in" href={restaurant.phoneHref}>{restaurant.phone}</a></div>
+    <p class="band__text" data-reveal>{text}</p>
   </div>
 </section>
 

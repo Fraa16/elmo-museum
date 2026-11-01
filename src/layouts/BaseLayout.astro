@@ -92,25 +92,63 @@ const showCanonical = !noindex;
     {chrome && <SiteFooter />}
 
     <script>
-      // Textabsätze beim Scrollen leicht einblenden (nur mit JS, siehe .reveal in global.css).
-      const items = document.querySelectorAll<HTMLElement>('.reveal');
+      // Bewegung nur mit JS und ohne „Bewegung reduzieren“ (siehe global.css).
       const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-      if (items.length && 'IntersectionObserver' in window && !reduced) {
+      // Gruppen: Kinder nacheinander einblenden (data-reveal-stagger="80" = 80 ms Abstand).
+      document.querySelectorAll<HTMLElement>('[data-reveal-stagger]').forEach((group) => {
+        const step = Number(group.dataset.revealStagger) || 90;
+        group.querySelectorAll<HTMLElement>('[data-reveal]').forEach((item, i) => {
+          if (!item.style.getPropertyValue('--d')) item.style.setProperty('--d', `${i * step}ms`);
+        });
+      });
+
+      // Museum: .reveal → .is-visible; Website: [data-reveal] → .is-in
+      const museum = document.querySelectorAll<HTMLElement>('.reveal');
+      const site = document.querySelectorAll<HTMLElement>('[data-reveal]');
+
+      if ('IntersectionObserver' in window && !reduced) {
         const observer = new IntersectionObserver(
           (entries) => {
             for (const entry of entries) {
-              if (entry.isIntersecting) {
-                entry.target.classList.add('is-visible');
-                observer.unobserve(entry.target);
-              }
+              if (!entry.isIntersecting) continue;
+              const el = entry.target as HTMLElement;
+              el.classList.add(el.classList.contains('reveal') ? 'is-visible' : 'is-in');
+              observer.unobserve(el);
             }
           },
-          { rootMargin: '0px 0px -5% 0px' },
+          { rootMargin: '0px 0px -8% 0px' },
         );
-        items.forEach((item) => observer.observe(item));
+        museum.forEach((item) => observer.observe(item));
+        site.forEach((item) => observer.observe(item));
       } else {
-        items.forEach((item) => item.classList.add('is-visible'));
+        museum.forEach((item) => item.classList.add('is-visible'));
+        site.forEach((item) => item.classList.add('is-in'));
+      }
+
+      // Parallax: Bild wandert beim Scrollen um wenige Prozent gegen die Scrollrichtung.
+      const layers = document.querySelectorAll<HTMLElement>('[data-parallax]');
+      if (layers.length && !reduced) {
+        let queued = false;
+        const update = () => {
+          queued = false;
+          const vh = window.innerHeight;
+          layers.forEach((layer) => {
+            const box = (layer.closest('[data-parallax-box]') ?? layer.parentElement)!.getBoundingClientRect();
+            if (box.bottom < 0 || box.top > vh) return;
+            const progress = (box.top + box.height / 2 - vh / 2) / (vh / 2 + box.height / 2);
+            layer.style.transform = `translate3d(0, ${(progress * -5).toFixed(2)}%, 0) scale(1.12)`;
+          });
+        };
+        const queue = () => {
+          if (!queued) {
+            queued = true;
+            requestAnimationFrame(update);
+          }
+        };
+        window.addEventListener('scroll', queue, { passive: true });
+        window.addEventListener('resize', queue);
+        update();
       }
     </script>
   </body>

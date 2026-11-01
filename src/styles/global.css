@@ -39,6 +39,9 @@
   --radius: 0;
   --tap: 44px;
   --ease: cubic-bezier(0.2, 0.6, 0.2, 1);
+  /* Bewegung: weich auslaufend, eher langsam, nie verspielt */
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
 
   color-scheme: dark;
 }
@@ -311,3 +314,180 @@ p {
     transform: none;
   }
 }
+
+/* ---------------------------------------------------------------------------
+   Bewegungssystem der Website (dezent, wie bei Agenturen üblich)
+
+   data-reveal          gleitet beim Scrollen leicht nach oben und blendet ein
+   data-reveal="fade"   nur einblenden
+   data-reveal="arch"   Bogen öffnet sich von unten, Bild zoomt sanft zurück
+   data-reveal="mask"   große Überschrift steigt aus einer Maske (Kind .mask__in)
+   data-reveal-stagger  Kinder mit data-reveal nacheinander (Abstand in ms)
+   data-parallax        Bild bewegt sich beim Scrollen leicht mit
+
+   Ohne JS oder mit „Bewegung reduzieren“ ist alles sofort sichtbar.
+   --------------------------------------------------------------------------- */
+
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 1.25rem, 0);
+  }
+}
+
+@keyframes fade {
+  from {
+    opacity: 0;
+  }
+}
+
+@keyframes line-up {
+  from {
+    transform: translate3d(0, 108%, 0);
+  }
+}
+
+@keyframes arch-open {
+  from {
+    clip-path: inset(100% 0 0 0);
+  }
+}
+
+@keyframes settle {
+  from {
+    transform: scale(1.12);
+  }
+}
+
+/* Masken für Zeilen und große Überschriften: etwas Luft für Unterlängen und Kursive */
+.line,
+[data-reveal='mask'] {
+  display: block;
+  overflow: hidden;
+  padding: 0 0.12em 0.14em 0;
+  margin: 0 -0.12em -0.14em 0;
+}
+
+.line__in,
+.mask__in {
+  display: block;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .js [data-reveal] {
+    opacity: 0;
+    transform: translate3d(0, 1.75rem, 0);
+    transition:
+      opacity 900ms var(--ease-out),
+      transform 1200ms var(--ease-out);
+    transition-delay: var(--d, 0ms);
+  }
+
+  .js [data-reveal].is-in {
+    opacity: 1;
+    transform: none;
+  }
+
+  .js [data-reveal='fade'] {
+    transform: none;
+  }
+
+  .js [data-reveal='arch'] {
+    opacity: 1;
+    transform: none;
+    clip-path: inset(100% 0 0 0);
+    transition: clip-path 1400ms var(--ease-out);
+    transition-delay: var(--d, 0ms);
+  }
+
+  .js [data-reveal='arch'].is-in {
+    clip-path: inset(0 0 0 0);
+  }
+
+  .js [data-reveal='arch'] img {
+    transform: scale(1.12);
+    transition: transform 2000ms var(--ease-out);
+    transition-delay: var(--d, 0ms);
+  }
+
+  .js [data-reveal='arch'].is-in img {
+    transform: none;
+  }
+
+  .js [data-reveal='mask'] {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+
+  .js [data-reveal='mask'] > .mask__in {
+    transform: translate3d(0, 108%, 0);
+    transition: transform 1300ms var(--ease-out);
+    transition-delay: var(--d, 0ms);
+  }
+
+  .js [data-reveal='mask'].is-in > .mask__in {
+    transform: none;
+  }
+
+  .js [data-parallax] {
+    transform: scale(1.12);
+    will-change: transform;
+  }
+
+  /* Kopfzeile beim Laden sanft einblenden */
+  .js .header {
+    animation: fade 900ms var(--ease-out) both;
+  }
+
+  /* Weiche Übergänge zwischen den Seiten (moderne Browser, ohne JS) */
+  @view-transition {
+    navigation: auto;
+  }
+
+  ::view-transition-old(root) {
+    animation: 260ms var(--ease-in-out) both fade-out;
+  }
+
+  ::view-transition-new(root) {
+    animation: 420ms var(--ease-out) both fade;
+  }
+}
+
+@keyframes fade-out {
+  to {
+    opacity: 0;
+  }
+}
+
+/* Hover nur mit Maus: Pfeile rücken nach, Bilder zoomen leicht */
+@media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
+  .btn > span[aria-hidden],
+  .link-arrow > span[aria-hidden] {
+    transition: transform 500ms var(--ease-out);
+  }
+
+  .btn:hover > span[aria-hidden],
+  .link-arrow:hover > span[aria-hidden] {
+    transform: translate3d(0.3rem, 0, 0);
+  }
+
+  .link-arrow {
+    background: linear-gradient(var(--gold-soft), var(--gold-soft)) left bottom / 0 1px no-repeat;
+    transition: background-size 600ms var(--ease-out), color 300ms var(--ease-out);
+  }
+
+  .link-arrow:hover {
+    background-size: 100% 1px;
+  }
+
+  .archbox picture {
+    transition: transform 1400ms var(--ease-out);
+  }
+
+  a:hover .archbox picture,
+  a.archbox:hover picture {
+    transform: scale(1.04);
+  }
+}
+

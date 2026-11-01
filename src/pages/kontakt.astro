@@ -17,42 +17,42 @@ import { restaurant, routeHref } from '../data/restaurant';
   <main>
     <PageHero label="Kontakt und Anfahrt" title="Komm <em>vorbei.</em>" intro="Mitten in Schwäbisch Gmünd. Vorbestellen, abholen und reservieren per Telefon.">
       <OpenStatus class="hero-status" />
-      <Arch slot="aside" framed placeholder="Foto: Außenansicht Kapuzinergasse" class="hero-arch" />
+      <Arch slot="aside" framed reveal style="--d: 240ms" placeholder="Foto: Außenansicht Kapuzinergasse" class="hero-arch" />
     </PageHero>
 
-    <section class="info page" aria-label="Adresse, Telefon und Öffnungszeiten">
-      <div class="info__block">
+    <section class="info page" aria-label="Adresse, Telefon und Öffnungszeiten" data-reveal-stagger="120">
+      <div class="info__block" data-reveal>
         <p class="label">Adresse</p>
         <p class="display info__address">{restaurant.street}<br />{restaurant.postalCode} {restaurant.city}</p>
         <a class="link-arrow" href={routeHref} rel="noopener">Route planen<span aria-hidden="true">→</span></a>
       </div>
-      <div class="info__block">
+      <div class="info__block" data-reveal>
         <p class="label">Telefon</p>
         <a class="display info__phone" href={restaurant.phoneHref}>{restaurant.phone}</a>
         <p class="info__text">Vorbestellen, abholen und Tische reservieren nur telefonisch.</p>
       </div>
-      <div class="info__block">
+      <div class="info__block" data-reveal>
         <p class="label">Öffnungszeiten</p>
         <HoursTable class="info__hours" />
       </div>
     </section>
 
     <section class="facts page" aria-labelledby="facts-title">
-      <h2 id="facts-title" class="display facts__title">Gut zu <em>wissen.</em></h2>
-      <dl class="facts__list">
-        <div class="facts__item">
+      <h2 id="facts-title" class="display facts__title" data-reveal="mask"><span class="mask__in">Gut zu <em>wissen.</em></span></h2>
+      <dl class="facts__list" data-reveal-stagger="70">
+        <div class="facts__item" data-reveal>
           <dt>Parken</dt>
           <dd><Todo label="Parkmöglichkeiten in der Nähe" /></dd>
         </div>
-        <div class="facts__item">
+        <div class="facts__item" data-reveal>
           <dt>Bus und Bahn</dt>
           <dd><Todo label="Haltestelle und Fußweg" /></dd>
         </div>
-        <div class="facts__item">
+        <div class="facts__item" data-reveal>
           <dt>Bezahlen</dt>
           <dd><Todo label="Zahlungsarten, z. B. bar und Karte" /></dd>
         </div>
-        <div class="facts__item">
+        <div class="facts__item" data-reveal>
           <dt>E-Mail</dt>
           <dd><a href={`mailto:${restaurant.email}`}>{restaurant.email}</a></dd>
         </div>

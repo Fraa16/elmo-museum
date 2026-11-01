@@ -19,6 +19,8 @@ interface Props {
   eager?: boolean;
   /** CSS object-position für den Ausschnitt. */
   position?: string;
+  /** Bogen öffnet sich beim Einblenden von unten (data-reveal="arch"). */
+  reveal?: boolean;
   class?: string;
   style?: string;
 }
@@ -31,12 +33,13 @@ const {
   sizes = '(min-width: 64rem) 33vw, 100vw',
   eager = false,
   position,
+  reveal = false,
   class: className,
   style,
 } = Astro.props;
 ---
 
-<div class:list={['archbox', { 'archbox--framed': framed }, className]} style={style}>
+<div class:list={['archbox', { 'archbox--framed': framed }, className]} style={style} data-reveal={reveal ? 'arch' : undefined}>
   <div class="arch archbox__inner">
     {
       image ? (

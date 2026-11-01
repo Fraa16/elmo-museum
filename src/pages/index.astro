@@ -11,15 +11,18 @@ import OpenStatus from '../components/site/OpenStatus.astro';
 import { SITE_URL } from '../config';
 import { restaurant, restaurantJsonLd, routeHref } from '../data/restaurant';
 import { dishCount, featuredDishes } from '../data/menu';
-import { stations } from '../data/stations';
+import { stationPath, stations } from '../data/stations';
 import { stationImage } from '../lib/images';
 
 const roots = stationImage('01.jpg');
 const museumImages = [
-  { image: stationImage('02.jpg'), alt: 'Bacchustempel in Baalbek', tall: false },
-  { image: stationImage('04.jpg'), alt: 'Felsendom in Jerusalem', tall: true },
-  { image: stationImage('09.jpg'), alt: 'Seeburg von Sidon', tall: false },
-];
+  { id: '02', alt: 'Bacchustempel in Baalbek', tall: false },
+  { id: '04', alt: 'Felsendom in Jerusalem', tall: true },
+  { id: '09', alt: 'Seeburg von Sidon', tall: false },
+].map((item) => {
+  const station = stations.find((s) => s.id === item.id)!;
+  return { ...item, image: stationImage(station.image), href: stationPath(station), title: station.title };
+});
 const numberWords: Record<number, string> = { 10: 'Zehn', 11: 'Elf', 12: 'Zwölf', 13: 'Dreizehn', 14: 'Vierzehn', 15: 'Fünfzehn' };
 const count = numberWords[stations.length] ?? String(stations.length);
 
@@ -45,14 +48,18 @@ const steps = [
 
   <main>
     <section class="hero page" aria-labelledby="hero-title">
-      <div class="hero__label">
+      <div class="hero__label" data-reveal style="--d: 60ms">
         <p class="label">Libanesische Küche<span class="hero__city"> in {restaurant.city}</span></p>
         <span class="hero__rule" aria-hidden="true"></span>
         <p class="kufi hero__ar" lang="ar" dir="rtl">أهلاً وسهلاً</p>
       </div>
-      <h1 id="hero-title" class="hero__title display">Alles<br />von Hand.<br /><em>Frisch vom Spieß.</em></h1>
-      <Arch framed eager placeholder="Foto: Shawarma vom Spieß" class="hero__arch" />
-      <div class="hero__bottom">
+      <h1 id="hero-title" class="hero__title display">
+        <span class="line" data-reveal="mask" style="--d: 140ms"><span class="mask__in">Alles</span></span>
+        <span class="line" data-reveal="mask" style="--d: 240ms"><span class="mask__in">von Hand.</span></span>
+        <span class="line" data-reveal="mask" style="--d: 340ms"><em class="mask__in">Frisch vom Spieß.</em></span>
+      </h1>
+      <Arch framed eager reveal placeholder="Foto: Shawarma vom Spieß" class="hero__arch" style="--d: 260ms" />
+      <div class="hero__bottom" data-reveal style="--d: 720ms">
         <p class="hero__text">
           Hähnchen selbst mariniert und von Hand geschichtet. Kafta von Hand geformt. Falafel, Ayran und Joghurt aus
           unserer Küche.
@@ -68,8 +75,8 @@ const steps = [
 
     <section class="hand page" aria-labelledby="hand-title">
       <div class="hand__head">
-        <h2 id="hand-title" class="display hand__title">Was bei uns <em>von Hand</em> passiert.</h2>
-        <p class="hand__text">
+        <h2 id="hand-title" class="display hand__title" data-reveal="mask"><span class="mask__in">Was bei uns <em>von Hand</em> passiert.</span></h2>
+        <p class="hand__text" data-reveal style="--d: 150ms">
           Wir marinieren, schichten und formen selbst, in unserer Küche in {restaurant.city}. Alles handgemacht und frisch
           zubereitet.
         </p>
@@ -78,8 +85,8 @@ const steps = [
         {
           steps.map((step, i) => (
             <li class="hand__step">
-              <Arch placeholder={step.placeholder} class={`hand__arch hand__arch--${i + 1}`} />
-              <div class="hand__caption">
+              <Arch reveal placeholder={step.placeholder} class={`hand__arch hand__arch--${i + 1}`} style={`--d: ${i * 140}ms`} />
+              <div class="hand__caption" data-reveal style={`--d: ${i * 140 + 300}ms`}>
                 <span class="hand__num" aria-hidden="true">{step.num}</span>
                 <h3 class="hand__name">{step.title}</h3>
                 <p class="hand__desc">{step.text}</p>
@@ -88,14 +95,14 @@ const steps = [
           ))
         }
       </ol>
-      <p class="hand__more">Außerdem aus unserer Küche: Falafel, Ayran und Joghurt. Und die Batata schneiden wir von Hand.</p>
+      <p class="hand__more" data-reveal>Außerdem aus unserer Küche: Falafel, Ayran und Joghurt. Und die Batata schneiden wir von Hand.</p>
     </section>
 
     <section class="menu" aria-labelledby="menu-title">
       <div class="page">
         <div class="menu__head">
-          <h2 id="menu-title" class="display menu__title">Die Karte</h2>
-          <div class="menu__meta">
+          <h2 id="menu-title" class="display menu__title" data-reveal="mask"><span class="mask__in">Die Karte</span></h2>
+          <div class="menu__meta" data-reveal style="--d: 150ms">
             <p class="kufi menu__ar" lang="ar" dir="rtl">قائمة الطعام</p>
             <p>Eine Auswahl aus {dishCount} Gerichten. Preise in Euro.</p>
           </div>
@@ -103,7 +110,7 @@ const steps = [
         <div class="menu__grid">
           {
             [featured.slice(0, 4), featured.slice(4)].map((column) => (
-              <div class="menu__col">
+              <div class="menu__col" data-reveal-stagger="70">
                 {column.map((dish) => (
                   <DishRow dish={dish} />
                 ))}
@@ -111,14 +118,14 @@ const steps = [
             ))
           }
         </div>
-        <div class="menu__foot">
+        <div class="menu__foot" data-reveal>
           <a class="btn btn--ink" href="/speisekarte">Ganze Speisekarte<span aria-hidden="true">→</span></a>
           <p>Vorbestellen und abholen: <a href={restaurant.phoneHref}>{restaurant.phone}</a></p>
         </div>
       </div>
     </section>
 
-    <section class="roots" aria-labelledby="roots-title">
+    <section class="roots" aria-labelledby="roots-title" data-parallax-box>
       <Picture
         src={roots}
         alt="Sonnenuntergang über dem Mittelmeer an der Küste von Al Bayada im Südlibanon"
@@ -129,44 +136,45 @@ const steps = [
         loading="lazy"
         decoding="async"
         class="roots__img"
+        data-parallax
       />
       <div class="roots__shade" aria-hidden="true"></div>
-      <div class="roots__body page">
-        <p class="label roots__label">Al Bayada, Südlibanon</p>
-        <h2 id="roots-title" class="display roots__title">Hier liegen unsere <em>Wurzeln.</em></h2>
-        <p class="roots__text">Aus dieser Gegend stammt unsere Familie, lange bevor es {restaurant.name} in {restaurant.city} gab.</p>
-        <a class="link-arrow" href="/ueber-uns">Unsere Geschichte<span aria-hidden="true">→</span></a>
+      <div class="roots__body page" data-reveal-stagger="120">
+        <p class="label roots__label" data-reveal>Al Bayada, Südlibanon</p>
+        <h2 id="roots-title" class="display roots__title" data-reveal="mask"><span class="mask__in">Hier liegen unsere <em>Wurzeln.</em></span></h2>
+        <p class="roots__text" data-reveal>Aus dieser Gegend stammt unsere Familie, lange bevor es {restaurant.name} in {restaurant.city} gab.</p>
+        <a class="link-arrow" href="/ueber-uns" data-reveal>Unsere Geschichte<span aria-hidden="true">→</span></a>
       </div>
     </section>
 
     <section class="visit page" aria-labelledby="visit-title">
-      <div>
+      <div data-reveal>
         <p id="visit-title" class="label">Vorbestellen, abholen, reservieren</p>
         <a class="visit__phone display" href={restaurant.phoneHref}>{restaurant.phone}</a>
         <p class="visit__text">Ruf an und bestell vor, dann holst du dein Essen einfach ab. Tische reservieren wir dir auch telefonisch.</p>
         <p class="visit__address">{restaurant.name}<br />{restaurant.street}<br />{restaurant.postalCode} {restaurant.city}</p>
         <a class="link-arrow" href={routeHref} rel="noopener">Route planen<span aria-hidden="true">→</span></a>
       </div>
-      <div class="visit__hours">
+      <div class="visit__hours" data-reveal style="--d: 150ms">
         <p class="label">Öffnungszeiten</p>
         <HoursTable />
         <OpenStatus class="visit__status" />
       </div>
     </section>
 
-    <section class="offers page" aria-label="Mittagstisch, Catering und Gutscheine">
-      <div class="offer">
+    <section class="offers page" aria-label="Mittagstisch, Catering und Gutscheine" data-reveal-stagger="120">
+      <div class="offer" data-reveal>
         <p class="label">Mittagstisch</p>
         <p class="offer__big display">ab 9,90 €</p>
         <p class="offer__text">Jeden Tag ein anderes Gericht mit Reis. Was es heute gibt, erfährst du vor Ort oder am Telefon.</p>
       </div>
-      <div class="offer">
+      <div class="offer" data-reveal>
         <p class="label">Catering und Firmen</p>
         <p class="offer__mid display">Ab 10 Shawarma liefern wir.</p>
         <p class="offer__text">An Firmen in {restaurant.city}. Für Feiern: die Elmo-Grill Platte für 4 Personen, 80,00 €.</p>
         <a class="link-arrow offer__link" href="/catering">Catering anfragen<span aria-hidden="true">→</span></a>
       </div>
-      <div class="offer">
+      <div class="offer" data-reveal>
         <p class="label">Gutscheine</p>
         <p class="offer__mid display">Genuss <em>verschenken.</em></p>
         <p class="offer__text">Im Restaurant oder auf Anfrage am Telefon.</p>
@@ -175,24 +183,28 @@ const steps = [
     </section>
 
     <section class="museum page" aria-labelledby="museum-title">
-      <div>
-        <p class="label">Das Museum im Flur</p>
-        <h2 id="museum-title" class="display museum__title">{count} Bilder, {count.toLowerCase()} <em>Geschichten.</em></h2>
-        <p class="museum__text">
+      <div data-reveal-stagger="110">
+        <p class="label" data-reveal>Das Museum im Flur</p>
+        <h2 id="museum-title" class="display museum__title" data-reveal="mask"><span class="mask__in">{count} Bilder, {count.toLowerCase()} <em>Geschichten.</em></span></h2>
+        <p class="museum__text" data-reveal>
           Orte aus dem Libanon und aus Jerusalem hängen bei uns im Flur. Scan den Code neben einem Bild oder lies alle
           Geschichten hier.
         </p>
-        <a class="link-arrow" href="/museum">Zum Museum<span aria-hidden="true">→</span></a>
+        <a class="link-arrow" href="/museum" data-reveal>Zum Museum<span aria-hidden="true">→</span></a>
       </div>
       <div class="museum__images">
         {
-          museumImages.map((item) => (
-            <Arch
-              image={item.image}
-              alt={item.alt}
-              sizes="(min-width: 64rem) 16rem, 30vw"
-              class:list={['museum__arch', { 'museum__arch--tall': item.tall }]}
-            />
+          museumImages.map((item, i) => (
+            <a class="museum__link" href={item.href} aria-label={`Station ${item.id}: ${item.title}`}>
+              <Arch
+                reveal
+                image={item.image}
+                alt={item.alt}
+                sizes="(min-width: 64rem) 16rem, 30vw"
+                class:list={['museum__arch', { 'museum__arch--tall': item.tall }]}
+                style={`--d: ${i * 140}ms`}
+              />
+            </a>
           ))
         }
       </div>
@@ -686,6 +698,10 @@ const steps = [
     grid-template-columns: repeat(3, minmax(0, 1fr));
     gap: clamp(0.625rem, 1.7vw, 1.5rem);
     align-items: end;
+  }
+
+  .museum__link {
+    display: block;
   }
 
   .museum :global(.museum__arch) {

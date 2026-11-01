@@ -5,6 +5,7 @@ import { NAV } from './nav';
 
 const current = Astro.url.pathname.replace(/\/+$/, '') || '/';
 const isCurrent = (href: string) => (href === '/' ? current === '/' : current === href || current.startsWith(`${href}/`));
+const sheetItems = [{ href: '/', label: 'Start' }, ...NAV, { href: '/gutscheine', label: 'Gutscheine' }, { href: '/kontakt', label: 'Kontakt' }];
 ---
 
 <header class="header">
@@ -48,16 +49,13 @@ const isCurrent = (href: string) => (href === '/' ? current === '/' : current ==
       </button>
     </div>
     <nav class="sheet__nav page" aria-label="Hauptmenü">
-      <a href="/" aria-current={current === '/' ? 'page' : undefined}>Start</a>
       {
-        NAV.map((item) => (
-          <a href={item.href} aria-current={isCurrent(item.href) ? 'page' : undefined}>
-            {item.label}
+        sheetItems.map((item, i) => (
+          <a href={item.href} style={`--i: ${i}`} aria-current={isCurrent(item.href) ? 'page' : undefined}>
+            <span class="sheet__in">{item.label}</span>
           </a>
         ))
       }
-      <a href="/gutscheine" aria-current={isCurrent('/gutscheine') ? 'page' : undefined}>Gutscheine</a>
-      <a href="/kontakt" aria-current={isCurrent('/kontakt') ? 'page' : undefined}>Kontakt</a>
     </nav>
     <div class="sheet__foot page">
       <a class="btn btn--solid" href={restaurant.phoneHref}>Anrufen: {restaurant.phone}<span aria-hidden="true">→</span></a>
@@ -91,11 +89,13 @@ const isCurrent = (href: string) => (href === '/' ? current === '/' : current ==
   }
 
   .header__nav a {
+    position: relative;
     display: inline-flex;
     align-items: center;
     min-height: var(--tap);
     color: var(--text);
     text-decoration: none;
+    transition: color 300ms var(--ease-out);
   }
 
   .header__nav a:hover,
@@ -103,16 +103,31 @@ const isCurrent = (href: string) => (href === '/' ? current === '/' : current ==
     color: var(--gold-soft);
   }
 
-  .header__nav a[aria-current='page'] {
-    text-decoration: underline;
-    text-decoration-color: var(--gold);
-    text-underline-offset: 0.5em;
+  /* feine Goldlinie, wächst beim Hovern von links */
+  .header__nav a:not(.header__phone)::after {
+    content: '';
+    position: absolute;
+    right: 0;
+    bottom: 0.55rem;
+    left: 0;
+    height: 1px;
+    background: var(--gold);
+    transform: scaleX(0);
+    transform-origin: right;
+    transition: transform 600ms var(--ease-out);
+  }
+
+  .header__nav a:not(.header__phone):hover::after,
+  .header__nav a[aria-current='page']::after {
+    transform: scaleX(1);
+    transform-origin: left;
   }
 
   .header__nav .header__phone {
     padding-inline: 1.25rem;
     border: 1px solid var(--gold);
     color: var(--gold-soft);
+    transition: background-color 400ms var(--ease-out), color 400ms var(--ease-out);
   }
 
   .header__nav .header__phone:hover {
@@ -203,15 +218,32 @@ const isCurrent = (href: string) => (href === '/' ? current === '/' : current ==
   }
 
   .sheet__nav a {
+    position: relative;
     display: flex;
     align-items: center;
     min-height: 3.5rem;
-    border-bottom: 1px solid var(--line);
+    overflow: hidden;
     font-family: var(--font-head);
     font-size: 2.25rem;
     line-height: 1;
     color: var(--text);
     text-decoration: none;
+  }
+
+  /* Trennlinie als eigenes Element, damit sie sich aufziehen kann */
+  .sheet__nav a::after {
+    content: '';
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    height: 1px;
+    background: var(--line);
+  }
+
+  .sheet__in {
+    display: block;
+    padding-bottom: 0.08em;
   }
 
   .sheet__nav a[aria-current='page'] {
@@ -227,5 +259,118 @@ const isCurrent = (href: string) => (href === '/' ? current === '/' : current ==
     padding-bottom: calc(1.5rem + env(safe-area-inset-bottom, 0));
     color: var(--muted-2);
     font-size: 0.9375rem;
+  }
+
+  /* Seite dahinter nicht mitscrollen, solange das Menü offen ist */
+  :global(html:has(#site-menu:popover-open)) {
+    overflow: hidden;
+  }
+
+  /*
+   * Menü-Animation: Der Vorhang zieht von oben auf, dann steigen die Einträge
+   * nacheinander aus ihrer Maske und die Linien ziehen sich von links auf.
+   * Schließen: Vorhang fährt zügig nach oben zurück. Reine CSS (@starting-style);
+   * ältere Browser zeigen das Menü einfach ohne Bewegung.
+   */
+  @media (prefers-reduced-motion: no-preference) {
+    .sheet {
+      clip-path: inset(0 0 100% 0);
+      transition:
+        clip-path 520ms var(--ease-in-out),
+        overlay 520ms allow-discrete,
+        display 520ms allow-discrete;
+    }
+
+    .sheet:popover-open {
+      clip-path: inset(0 0 0 0);
+      transition-duration: 760ms;
+    }
+
+    @starting-style {
+      .sheet:popover-open {
+        clip-path: inset(0 0 100% 0);
+      }
+    }
+
+    .sheet::backdrop {
+      background: rgba(0, 0, 0, 0);
+      transition:
+        background-color 520ms var(--ease-in-out),
+        overlay 520ms allow-discrete,
+        display 520ms allow-discrete;
+    }
+
+    .sheet:popover-open::backdrop {
+      background: rgba(0, 0, 0, 0.6);
+    }
+
+    @starting-style {
+      .sheet:popover-open::backdrop {
+        background: rgba(0, 0, 0, 0);
+      }
+    }
+
+    .sheet__top,
+    .sheet__foot {
+      opacity: 0;
+      transform: translate3d(0, -0.5rem, 0);
+      transition:
+        opacity 400ms var(--ease-out),
+        transform 600ms var(--ease-out);
+    }
+
+    .sheet__foot {
+      transform: translate3d(0, 1rem, 0);
+    }
+
+    .sheet:popover-open .sheet__top {
+      opacity: 1;
+      transform: none;
+      transition-delay: 200ms;
+    }
+
+    .sheet:popover-open .sheet__foot {
+      opacity: 1;
+      transform: none;
+      transition-delay: calc(420ms + 7 * 55ms);
+    }
+
+    .sheet__in {
+      transform: translate3d(0, 110%, 0);
+      transition: transform 380ms var(--ease-in-out);
+    }
+
+    .sheet__nav a::after {
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 380ms var(--ease-in-out);
+    }
+
+    .sheet:popover-open .sheet__in {
+      transform: none;
+      transition: transform 900ms var(--ease-out);
+      transition-delay: calc(300ms + var(--i) * 55ms);
+    }
+
+    .sheet:popover-open a::after {
+      transform: scaleX(1);
+      transition: transform 1000ms var(--ease-out);
+      transition-delay: calc(360ms + var(--i) * 55ms);
+    }
+
+    @starting-style {
+      .sheet:popover-open .sheet__top,
+      .sheet:popover-open .sheet__foot {
+        opacity: 0;
+      }
+
+      .sheet:popover-open .sheet__in {
+        transform: translate3d(0, 110%, 0);
+      }
+
+      .sheet:popover-open a::after {
+        transform: scaleX(0);
+      }
+    }
   }
 </style>
