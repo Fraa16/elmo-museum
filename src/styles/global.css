@@ -39,7 +39,6 @@
   --radius: 0;
   --tap: 44px;
   --ease: cubic-bezier(0.2, 0.6, 0.2, 1);
-  --callbar: 0px;
 
   color-scheme: dark;
 }
@@ -310,12 +309,5 @@ p {
   .js .reveal.is-visible {
     opacity: 1;
     transform: none;
-  }
-}
-
-/* Platz für die fixierte Handy-Leiste (CallBar) */
-@media (max-width: 63.99rem) {
-  body.has-callbar {
-    padding-bottom: calc(3.75rem + env(safe-area-inset-bottom, 0));
   }
 }

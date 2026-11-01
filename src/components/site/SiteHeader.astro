@@ -24,11 +24,18 @@ const isCurrent = (href: string) => (href === '/' ? current === '/' : current ==
       <a class="header__phone" href={restaurant.phoneHref}>{restaurant.phone}</a>
     </nav>
 
-    <button class="header__menu" type="button" popovertarget="site-menu" aria-label="Menü öffnen">
-      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true">
-        <path d="M4 8h16M4 16h16"></path>
-      </svg>
-    </button>
+    <div class="header__mobile">
+      <a class="header__call" href={restaurant.phoneHref} aria-label={`Anrufen: ${restaurant.phone}`}>
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1.9.4 1.8.7 2.7a2 2 0 0 1-.5 2.1L8 9.8a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.4c.9.3 1.8.6 2.7.7a2 2 0 0 1 1.7 2z"></path>
+        </svg>
+      </a>
+      <button class="header__menu" type="button" popovertarget="site-menu" aria-label="Menü öffnen">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true">
+          <path d="M4 8h16M4 16h16"></path>
+        </svg>
+      </button>
+    </div>
   </div>
 
   <div id="site-menu" class="sheet" popover>
@@ -113,6 +120,21 @@ const isCurrent = (href: string) => (href === '/' ? current === '/' : current ==
     color: var(--bg);
   }
 
+  .header__mobile {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+  }
+
+  .header__call {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 48px;
+    height: 48px;
+    color: var(--gold-soft);
+  }
+
   .header__menu {
     display: inline-flex;
     align-items: center;
@@ -138,7 +160,7 @@ const isCurrent = (href: string) => (href === '/' ? current === '/' : current ==
       display: flex;
     }
 
-    .header__menu {
+    .header__mobile {
       display: none;
     }
   }

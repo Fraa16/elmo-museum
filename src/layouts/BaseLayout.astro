@@ -12,7 +12,6 @@ import serif400 from '@fontsource/instrument-serif/files/instrument-serif-latin-
 
 import SiteHeader from '../components/site/SiteHeader.astro';
 import SiteFooter from '../components/site/SiteFooter.astro';
-import CallBar from '../components/site/CallBar.astro';
 import MuseumBar from '../components/MuseumBar.astro';
 import { INDEXABLE, MUSEUM_NAME, SITE_NAME, SITE_URL } from '../config';
 
@@ -29,7 +28,7 @@ interface Props {
   noindex?: boolean;
   /** Museumsleiste rechts, z. B. { current: 2, total: 11 }. */
   counter?: { current: number; total: number };
-  /** Kopfzeile, Fußzeile und Handy-Leiste anzeigen (für die Druckseite abschaltbar). */
+  /** Kopfzeile und Fußzeile anzeigen (für die Druckseite abschaltbar). */
   chrome?: boolean;
   bodyClass?: string;
 }
@@ -86,12 +85,11 @@ const showCanonical = !noindex;
     <script is:inline>document.documentElement.classList.add('js');</script>
     <slot name="head" />
   </head>
-  <body class:list={[bodyClass, { 'has-callbar': chrome }]}>
+  <body class={bodyClass}>
     {chrome && <SiteHeader />}
     {chrome && inMuseum && <MuseumBar counter={counter} />}
     <slot />
     {chrome && <SiteFooter />}
-    {chrome && <CallBar />}
 
     <script>
       // Textabsätze beim Scrollen leicht einblenden (nur mit JS, siehe .reveal in global.css).
