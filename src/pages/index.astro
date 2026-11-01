@@ -13,6 +13,11 @@ import { restaurant, restaurantJsonLd, routeHref } from '../data/restaurant';
 import { dishCount, featuredDishes } from '../data/menu';
 import { stationPath, stations } from '../data/stations';
 import { stationImage } from '../lib/images';
+// Fotos der Gerichte und der Küche (mit KI erstellt, Serviervorschläge)
+import heroFood from '../assets/food/shawarma-teller.webp';
+import imgMarinieren from '../assets/food/marinieren.webp';
+import imgSpiess from '../assets/food/spiess.webp';
+import imgKafta from '../assets/food/kafta-formen.webp';
 
 const roots = stationImage('01.jpg');
 const museumImages = [
@@ -28,13 +33,34 @@ const count = numberWords[stations.length] ?? String(stations.length);
 
 const featured = featuredDishes();
 
-const og = await getImage({ src: roots, width: 1200, format: 'jpg', quality: 80 });
+const og = await getImage({ src: heroFood, width: 1200, format: 'jpg', quality: 80 });
 const ogImage = new URL(og.src, SITE_URL).href;
 
 const steps = [
-  { num: '01', title: 'Selbst mariniert', text: 'Das Hähnchen für den Spieß.', placeholder: 'Foto: Marinade' },
-  { num: '02', title: 'Von Hand geschichtet', text: 'Schicht für Schicht auf den Spieß.', placeholder: 'Foto: Hände am Spieß' },
-  { num: '03', title: 'Von Hand geformt', text: 'Kafta nach libanesischer Art.', placeholder: 'Foto: Kafta formen' },
+  {
+    num: '01',
+    title: 'Selbst mariniert',
+    text: 'Das Hähnchen für den Spieß.',
+    image: imgMarinieren,
+    alt: 'Hände in schwarzen Handschuhen mischen Hähnchenfleisch mit einer Gewürzmarinade',
+    position: '50% 50%',
+  },
+  {
+    num: '02',
+    title: 'Von Hand geschichtet',
+    text: 'Schicht für Schicht auf den Spieß.',
+    image: imgSpiess,
+    alt: 'Hähnchen-Shawarma, Schicht für Schicht auf den Spieß gesteckt, vor dem Grill',
+    position: '50% 40%',
+  },
+  {
+    num: '03',
+    title: 'Von Hand geformt',
+    text: 'Kafta nach libanesischer Art.',
+    image: imgKafta,
+    alt: 'Hände formen Kafta aus gewürztem Hackfleisch um einen Spieß',
+    position: '55% 50%',
+  },
 ];
 ---
 
@@ -42,7 +68,7 @@ const steps = [
   title={restaurant.name}
   fullTitle="Elmo Shawarma | Libanesische Küche in Schwäbisch Gmünd"
   ogImage={ogImage}
-  ogImageAlt="Sonnenuntergang über dem Mittelmeer an der Küste von Al Bayada im Südlibanon"
+  ogImageAlt="Shawarma im Fladenbrot mit Batata, im Hintergrund der Spieß"
 >
   <script type="application/ld+json" slot="head" set:html={JSON.stringify(restaurantJsonLd(SITE_URL))} />
 
@@ -58,7 +84,16 @@ const steps = [
         <span class="line" data-reveal="mask"><span class="mask__in">von Hand.</span></span>
         <span class="line" data-reveal="mask"><em class="mask__in">Frisch vom Spieß.</em></span>
       </h1>
-      <Arch framed eager reveal placeholder="Foto: Shawarma vom Spieß" class="hero__arch" />
+      <Arch
+        framed
+        priority
+        reveal
+        image={heroFood}
+        alt="Aufgeschnittenes Shawarma im Fladenbrot mit Hähnchen, Tomate und Sauce, daneben Batata, im Hintergrund der Spieß"
+        position="42% 50%"
+        sizes="(min-width: 64rem) 33rem, 85vw"
+        class="hero__arch"
+      />
       <div class="hero__bottom" data-reveal>
         <p class="hero__text">
           Hähnchen selbst mariniert und von Hand geschichtet. Kafta von Hand geformt. Falafel, Ayran und Joghurt aus
@@ -85,7 +120,14 @@ const steps = [
         {
           steps.map((step, i) => (
             <li class="hand__step">
-              <Arch reveal placeholder={step.placeholder} class={`hand__arch hand__arch--${i + 1}`} />
+              <Arch
+                reveal
+                image={step.image}
+                alt={step.alt}
+                position={step.position}
+                sizes="(min-width: 64rem) 26rem, 16rem"
+                class={`hand__arch hand__arch--${i + 1}`}
+              />
               <div class="hand__caption" data-reveal data-reveal-offset="250">
                 <span class="hand__num" aria-hidden="true">{step.num}</span>
                 <h3 class="hand__name">{step.title}</h3>
@@ -308,6 +350,8 @@ const steps = [
     margin-top: 1.25rem;
     font-size: clamp(4.5rem, 21.5vw, 11rem);
     line-height: 0.86;
+    /* weicher Schatten: Titel bleibt lesbar, wo er über das Foto im Bogen läuft */
+    text-shadow: 0 0.04em 0.35em rgba(20, 18, 14, 0.55);
   }
 
   /* normaler Umbruch („Frisch vom / Spieß.“), nicht ausbalanciert */

@@ -17,6 +17,8 @@ interface Props {
   framed?: boolean;
   sizes?: string;
   eager?: boolean;
+  /** Wichtigstes Bild der Seite (LCP): früh laden. */
+  priority?: boolean;
   /** CSS object-position für den Ausschnitt. */
   position?: string;
   /** Bogen öffnet sich beim Einblenden von unten (data-reveal="arch"). */
@@ -32,6 +34,7 @@ const {
   framed = false,
   sizes = '(min-width: 64rem) 33vw, 100vw',
   eager = false,
+  priority = false,
   position,
   reveal = false,
   class: className,
@@ -50,7 +53,8 @@ const {
           widths={widthsFor(image, [400, 640, 960, 1280])}
           sizes={sizes}
           quality={60}
-          loading={eager ? 'eager' : 'lazy'}
+          loading={eager || priority ? 'eager' : 'lazy'}
+          fetchpriority={priority ? 'high' : undefined}
           decoding="async"
           class="archbox__img"
           style={position ? `object-position: ${position}` : undefined}
