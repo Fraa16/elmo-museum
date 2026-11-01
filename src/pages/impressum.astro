@@ -4,7 +4,8 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import Todo from '../components/Todo.astro';
 import { CITY, RESTAURANT } from '../config';
 
-// TODO: Daten von Momo: alle <Todo>-Platzhalter ersetzen und rechtlich prüfen lassen.
+// TODO: Daten von Momo: restliche <Todo>-Platzhalter ersetzen, Vorname des Inhabers ausschreiben,
+// rechtlich prüfen lassen.
 ---
 
 <BaseLayout title="Impressum" description={`Impressum von ${RESTAURANT}, ${CITY}`}>
@@ -17,9 +18,9 @@ import { CITY, RESTAURANT } from '../config';
     <h2>Angaben gemäß § 5 DDG</h2>
     <address>
       {RESTAURANT}<br />
-      Inhaber: <Todo label="Vor- und Nachname" /><br />
-      <Todo label="Straße und Hausnummer" /><br />
-      <Todo label="PLZ" /> {CITY}
+      Inhaber: K. El-Abdallah<br />
+      Kapuzinergasse 6<br />
+      73525 {CITY}
     </address>
 
     <h2>Kontakt</h2>
