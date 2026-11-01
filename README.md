@@ -19,6 +19,7 @@ externen Requests.
 | `npm run check`            | Typprüfung (`astro check`)                                   |
 | `npm run qr`               | QR-Codes nach `qr-export/` (nur mit bestätigter Domain)      |
 | `npm run qr -- --dry-run`  | QR-Testlauf in einen temporären Ordner                       |
+| `npm run og`               | Vorschaubilder (1200 × 630) nach `public/og/`, braucht Playwright |
 
 ## Konfiguration: `src/config.ts`
 
@@ -68,6 +69,8 @@ src/components/site/       Website: Kopf- und Fußzeile, Handy-Leiste, Bogen, Ka
 src/components/            Museum: Museumsleiste, Quiz, Karten
 src/pages/                 Seiten und robots.txt
 scripts/generate-qr.mjs    QR-Export (SVG + PNG 2000 px, Fehlerkorrektur Q)
+scripts/generate-og.mjs    Vorschaubilder je Seite (Logo, Titel, Foto im Bogen)
+public/                    Favicon (Kuppel aus dem Emblem), Homescreen-Icons, Manifest, og/
 vercel.json                Redirect, Trailing Slash, Header
 ```
 

@@ -33,12 +33,10 @@ const count = numberWords[stations.length] ?? String(stations.length);
 
 const featured = featuredDishes();
 
-const og = await getImage({ src: heroFood, width: 1200, format: 'jpg', quality: 80 });
 
 // Titelbild vorab laden: gleiche Breiten und Qualität wie im Bogen, damit der Browser dieselbe Datei nimmt
 const heroSizes = '(min-width: 64rem) 33rem, 85vw';
 const heroPreload = await getImage({ src: heroFood, widths: widthsFor(heroFood, ARCH_WIDTHS), format: 'avif', quality: ARCH_QUALITY });
-const ogImage = new URL(og.src, SITE_URL).href;
 
 const steps = [
   {
@@ -71,8 +69,7 @@ const steps = [
 <BaseLayout
   title={restaurant.name}
   fullTitle="Elmo Shawarma | Libanesische Küche in Schwäbisch Gmünd"
-  ogImage={ogImage}
-  ogImageAlt="Shawarma im Fladenbrot mit Batata, im Hintergrund der Spieß"
+  og="start"
 >
   <script type="application/ld+json" slot="head" set:html={JSON.stringify(restaurantJsonLd(SITE_URL))} />
   <link
