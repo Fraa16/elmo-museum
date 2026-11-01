@@ -21,8 +21,8 @@
   --ink: #1b1814;
   --ink-muted: #6b6253;
   --ink-line: #cbbea6;
-  --ink-gold: #94702f;
-  --leaf: #4f7a3e;
+  --ink-gold: #7e5e22;
+  --leaf: #3f6a31;
   --open: #7fae6a;
 
   --font-head: 'Instrument Serif', Georgia, 'Times New Roman', serif;
@@ -68,6 +68,8 @@ body {
   line-height: 1.6;
   font-weight: 400;
   overflow-wrap: break-word;
+  /* Instrument Serif gibt es nur in einer Stärke: kein künstliches Fett */
+  font-synthesis-weight: none;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }

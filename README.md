@@ -1,11 +1,12 @@
-# Elmo Museum
+# Elmo Shawarma: Website und Museum
 
-Interaktives Museum für **Elmo Shawarma, Schwäbisch Gmünd**: zehn mobile Besucherseiten
-plus Startseite. Neben jedem Bild im Flur hängt ein QR-Code, der direkt zur Geschichte
-dieses Bildes führt.
+Website von **Elmo Shawarma, Schwäbisch Gmünd** (elmo-shawarma.de) im Design B2
+„Libanesisches Haus“, dazu das Museum im Flur: elf mobile Besucherseiten plus Übersicht.
+Neben jedem Bild im Flur hängt ein QR-Code, der direkt zur Geschichte dieses Bildes führt.
 
-Astro (static), TypeScript, eigenes CSS, selbst gehostete Schriften. Kein Tracking,
-keine Cookies, keine externen Requests.
+Astro (static), TypeScript, eigenes CSS, selbst gehostete Schriften (Instrument Serif,
+Instrument Sans, Reem Kufi, Noto Naskh Arabic). Kein Tracking, keine Cookies, keine
+externen Requests.
 
 ## Befehle
 
@@ -23,7 +24,8 @@ keine Cookies, keine externen Requests.
 
 | Schalter             | Wert  | Bedeutung                                                                 |
 |----------------------|-------|---------------------------------------------------------------------------|
-| `SITE_URL`           | `https://elmo-museum.vercel.app` | Basis-URL, steht in jedem QR-Code. Nach dem QR-Export **nie mehr ändern**. |
+| `SITE_URL`           | `https://elmo-shawarma.de` | Hauptadresse: Canonical-Links, Open Graph, JSON-LD, `site` in Astro. |
+| `QR_BASE_URL`        | `https://elmo-museum.vercel.app` | Basis-URL in jedem gedruckten QR-Code. **Nie mehr ändern.** Dieselbe Website läuft dauerhaft auch unter dieser Adresse. |
 | `SITE_URL_CONFIRMED` | `true`  | Domain bestätigt (Vercel-Projekt `elmo-museum`, Oktober 2026). Bei `false` verweigert `npm run qr` den Export und der QR-Bogen zeigt „Entwurf, nicht drucken“. |
 | `QUIZ_ENABLED`       | `true`  | Rate-Element global an/aus. Pro Station: `quiz: null`.                  |
 | `INDEXABLE`          | `false` | Bis zur Freigabe `noindex, nofollow` auf allen Seiten und `Disallow: /` in `robots.txt`. |
@@ -45,19 +47,25 @@ keine Cookies, keine externen Requests.
 | ELMO-10 | `/museum/10-harissa-jounieh`          |
 | ELMO-11 | `/museum/11-jamal-al-mahamel`         |
 
+Website: `/` Start, `/speisekarte`, `/catering`, `/gutscheine`, `/ueber-uns`, `/kontakt`.
+
 Außerdem `/impressum`, `/datenschutz`, eine eigene 404-Seite und der Druckbogen
-`/museum/qr-bogen` (noindex, nirgends verlinkt). `/` leitet auf `/museum` weiter
-(`vercel.json`); `/pfad/` wird auf `/pfad` umgeleitet.
+`/museum/qr-bogen` (noindex, nirgends verlinkt). `/pfad/` wird auf `/pfad` umgeleitet.
+Der Druckbogen behält die Museumsschriften (Cinzel, Cormorant, Source Sans), damit
+nachgedruckte Schilder pixelgleich zu den alten sind.
 
 ## Struktur
 
 ```
 src/config.ts              zentrale Schalter (auch von Node-Skripten gelesen)
+src/data/restaurant.ts     Adresse, Telefon, Öffnungszeiten, JSON-LD
+src/data/menu.ts           Speisekarte: 55 Gerichte aus der Druckkarte, Wörterbuch
 src/data/stations.ts       alle Inhalte (Texte aus dem Briefing, **…** = Hervorhebung)
 src/assets/stations/       Stationsbilder 01 bis 11 (siehe README dort)
 src/lib/images.ts          Bild-Auflösung und srcset-Breiten
 src/lib/qr.ts              gemeinsame QR-Definitionen (Skript + Druckbogen)
-src/components/            Topbar, Footer, Quiz, Karten
+src/components/site/       Website: Kopf- und Fußzeile, Handy-Leiste, Bogen, Karte
+src/components/            Museum: Museumsleiste, Quiz, Karten
 src/pages/                 Seiten und robots.txt
 scripts/generate-qr.mjs    QR-Export (SVG + PNG 2000 px, Fehlerkorrektur Q)
 vercel.json                Redirect, Trailing Slash, Header
@@ -84,7 +92,19 @@ Neu erzeugen (nur nötig, wenn sich Pfade oder das Schild-Design ändern):
    (A4, Ränder Standard, Hintergrundgrafiken an).
 3. Jeden Code mit echten Handys (Android + iPhone) vor Ort testen.
 
+## Domain
+
+elmo-shawarma.de und elmo-museum.vercel.app zeigen auf dasselbe Vercel-Projekt.
+In Vercel unter Settings, Domains `elmo-shawarma.de` und `www.elmo-shawarma.de`
+hinzufügen, die angezeigten DNS-Einträge beim Registrar setzen und www auf die
+Hauptadresse umleiten. `elmo-museum.vercel.app` **nie entfernen** (QR-Schilder).
+
 ## Offene Punkte (TODO)
+
+- **Website vor dem Start:** Fotos (Platzhalter im Bogen), E-Mail, Zahlungsweg für
+  Online-Gutscheine, Catering-Details (Vorlaufzeit, Personenzahl), Parken, Bus,
+  Zahlungsarten, Familiengeschichte; Rückfragen zur Speisekarte (vegan, Allergene,
+  Halal, Schreibweisen); Wörterbuch und Jahreszahlen von Momo freigeben lassen.
 
 - **Bilder:** Bildrechte aller Bilder klären. Alle Bilder sind mit KI bearbeitet (steht im
   Impressum). Station 11 zeigt ein Gemälde von Sliman Mansour (gestorben 2026, Werk

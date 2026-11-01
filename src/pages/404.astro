@@ -1,16 +1,17 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
-import { MUSEUM_PATH } from '../data/stations';
 ---
 
 <BaseLayout title="Seite nicht gefunden" noindex>
   <main class="notfound wrap">
     <p class="kicker">Fehler 404</p>
-    <h1 class="notfound__title">Dieses Bild hängt hier nicht.</h1>
-    <p class="notfound__text">
-      Die Seite gibt es leider nicht. Alle Geschichten aus unserem kleinen Museum findest du in der Übersicht.
-    </p>
-    <a class="btn" href={MUSEUM_PATH}>Alle Stationen</a>
+    <h1 class="notfound__title display">Diese Seite gibt es <em>nicht.</em></h1>
+    <p class="notfound__text">Vielleicht hilft dir die Startseite, die Speisekarte oder unser kleines Museum weiter.</p>
+    <div class="notfound__links">
+      <a class="btn btn--solid" href="/">Zur Startseite<span aria-hidden="true">→</span></a>
+      <a class="btn" href="/speisekarte">Speisekarte<span aria-hidden="true">→</span></a>
+      <a class="btn" href="/museum">Museum<span aria-hidden="true">→</span></a>
+    </div>
   </main>
 </BaseLayout>
 
@@ -25,7 +26,14 @@ import { MUSEUM_PATH } from '../data/stations';
   }
 
   .notfound__title {
-    font-size: clamp(2rem, 8vw, 3rem);
+    font-size: clamp(3.5rem, 12vw, 6rem);
+  }
+
+  .notfound__links {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.75rem;
   }
 
   .notfound__text {

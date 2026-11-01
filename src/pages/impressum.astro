@@ -3,6 +3,7 @@ import '../styles/legal.css';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Todo from '../components/Todo.astro';
 import { CITY, RESTAURANT } from '../config';
+import { restaurant } from '../data/restaurant';
 
 // TODO: Daten von Momo: restliche <Todo>-Platzhalter ersetzen, Vorname des Inhabers ausschreiben,
 // rechtlich prüfen lassen.
@@ -18,14 +19,14 @@ import { CITY, RESTAURANT } from '../config';
     <h2>Angaben gemäß § 5 DDG</h2>
     <address>
       {RESTAURANT}<br />
-      Inhaber: K. El-Abdallah<br />
-      Kapuzinergasse 6<br />
-      73525 {CITY}
+      Inhaber: {restaurant.owner}<br />
+      {restaurant.street}<br />
+      {restaurant.postalCode} {CITY}
     </address>
 
     <h2>Kontakt</h2>
     <p>
-      Telefon: <Todo label="Telefonnummer" /><br />
+      Telefon: <a href={restaurant.phoneHref}>{restaurant.phone}</a><br />
       E-Mail: <Todo label="E-Mail-Adresse" />
     </p>
 
@@ -41,7 +42,7 @@ import { CITY, RESTAURANT } from '../config';
     <p><Todo label="Bildrechte der Wandbilder klären" /></p>
     <p class="legal__small">
       Station 11: Sliman Mansour, Jamal al-Mahamel III, Dalloul Art Foundation, Beirut.<br />
-      Alle Bilder im Museum wurden mit KI bearbeitet.
+      Alle Bilder im Museum wurden mit KI bearbeitet. Emblem: {RESTAURANT}.
     </p>
   </main>
 </BaseLayout>

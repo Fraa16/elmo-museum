@@ -273,6 +273,8 @@ const marks = (w: number, h: number) => {
     font-weight: 600;
     font-size: 15pt;
     line-height: 1.1;
+    /* wie beim ersten Druck, unabhängig vom Website-Design */
+    letter-spacing: 0.005em;
     color: var(--ink);
   }
 
@@ -345,8 +347,9 @@ const marks = (w: number, h: number) => {
   }
 
   @media print {
+    /* !important: global.css (color-scheme: dark) kann später geladen werden */
     :root {
-      color-scheme: light;
+      color-scheme: light !important;
     }
 
     html,
