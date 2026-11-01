@@ -47,19 +47,19 @@ const steps = [
   <script type="application/ld+json" slot="head" set:html={JSON.stringify(restaurantJsonLd(SITE_URL))} />
 
   <main>
-    <section class="hero page" aria-labelledby="hero-title">
-      <div class="hero__label" data-reveal style="--d: 60ms">
+    <section class="hero page" aria-labelledby="hero-title" data-reveal-intro>
+      <div class="hero__label" data-reveal>
         <p class="label">Libanesische Küche<span class="hero__city"> in {restaurant.city}</span></p>
         <span class="hero__rule" aria-hidden="true"></span>
         <p class="kufi hero__ar" lang="ar" dir="rtl">أهلاً وسهلاً</p>
       </div>
       <h1 id="hero-title" class="hero__title display">
-        <span class="line" data-reveal="mask" style="--d: 140ms"><span class="mask__in">Alles</span></span>
-        <span class="line" data-reveal="mask" style="--d: 240ms"><span class="mask__in">von Hand.</span></span>
-        <span class="line" data-reveal="mask" style="--d: 340ms"><em class="mask__in">Frisch vom Spieß.</em></span>
+        <span class="line" data-reveal="mask"><span class="mask__in">Alles</span></span>
+        <span class="line" data-reveal="mask"><span class="mask__in">von Hand.</span></span>
+        <span class="line" data-reveal="mask"><em class="mask__in">Frisch vom Spieß.</em></span>
       </h1>
-      <Arch framed eager reveal placeholder="Foto: Shawarma vom Spieß" class="hero__arch" style="--d: 260ms" />
-      <div class="hero__bottom" data-reveal style="--d: 720ms">
+      <Arch framed eager reveal placeholder="Foto: Shawarma vom Spieß" class="hero__arch" />
+      <div class="hero__bottom" data-reveal>
         <p class="hero__text">
           Hähnchen selbst mariniert und von Hand geschichtet. Kafta von Hand geformt. Falafel, Ayran und Joghurt aus
           unserer Küche.
@@ -81,12 +81,12 @@ const steps = [
           zubereitet.
         </p>
       </div>
-      <ol class="hand__steps" role="list">
+      <ol class="hand__steps" role="list" data-reveal-stagger="140">
         {
           steps.map((step, i) => (
             <li class="hand__step">
-              <Arch reveal placeholder={step.placeholder} class={`hand__arch hand__arch--${i + 1}`} style={`--d: ${i * 140}ms`} />
-              <div class="hand__caption" data-reveal style={`--d: ${i * 140 + 300}ms`}>
+              <Arch reveal placeholder={step.placeholder} class={`hand__arch hand__arch--${i + 1}`} />
+              <div class="hand__caption" data-reveal data-reveal-offset="250">
                 <span class="hand__num" aria-hidden="true">{step.num}</span>
                 <h3 class="hand__name">{step.title}</h3>
                 <p class="hand__desc">{step.text}</p>
@@ -192,9 +192,9 @@ const steps = [
         </p>
         <a class="link-arrow" href="/museum" data-reveal>Zum Museum<span aria-hidden="true">→</span></a>
       </div>
-      <div class="museum__images">
+      <div class="museum__images" data-reveal-stagger="140">
         {
-          museumImages.map((item, i) => (
+          museumImages.map((item) => (
             <a class="museum__link" href={item.href} aria-label={`Station ${item.id}: ${item.title}`}>
               <Arch
                 reveal
@@ -202,7 +202,6 @@ const steps = [
                 alt={item.alt}
                 sizes="(min-width: 64rem) 16rem, 30vw"
                 class:list={['museum__arch', { 'museum__arch--tall': item.tall }]}
-                style={`--d: ${i * 140}ms`}
               />
             </a>
           ))
@@ -217,6 +216,58 @@ const steps = [
   .hero {
     position: relative;
     padding-top: 1.75rem;
+  }
+
+  /* Takt beim Laden. Handy: strikt von oben nach unten, Bogen nach dem Titel */
+  .hero__label {
+    --d: 0ms;
+  }
+
+  .hero__title .line:nth-child(1) {
+    --d: 80ms;
+  }
+
+  .hero__title .line:nth-child(2) {
+    --d: 160ms;
+  }
+
+  .hero__title .line:nth-child(3) {
+    --d: 240ms;
+  }
+
+  .hero :global(.hero__arch) {
+    --d: 420ms;
+  }
+
+  .hero__bottom {
+    --d: 600ms;
+  }
+
+  /* Desktop: Bogen steht neben dem Titel und öffnet sich parallel */
+  @media (min-width: 64rem) {
+    .hero__label {
+      --d: 60ms;
+    }
+
+    .hero__title .line:nth-child(1) {
+      --d: 140ms;
+    }
+
+    .hero__title .line:nth-child(2) {
+      --d: 240ms;
+    }
+
+    .hero__title .line:nth-child(3) {
+      --d: 340ms;
+    }
+
+    .hero :global(.hero__arch) {
+      --d: 260ms;
+    }
+
+    .hero__bottom {
+      --d: 720ms;
+    }
   }
 
   .hero__label {

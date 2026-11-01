@@ -42,8 +42,24 @@
   /* Bewegung: weich auslaufend, eher langsam, nie verspielt */
   --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
   --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+  /* Bewegungswerte: auf dem Handy kürzer und schneller, ab 64rem großzügiger */
+  --reveal-dist: 0.875rem;
+  --reveal-dur: 750ms;
+  --mask-dur: 950ms;
+  --arch-dur: 1000ms;
+  --zoom-dur: 1400ms;
 
   color-scheme: dark;
+}
+
+@media (min-width: 64rem) {
+  :root {
+    --reveal-dist: 1.75rem;
+    --reveal-dur: 1100ms;
+    --mask-dur: 1250ms;
+    --arch-dur: 1400ms;
+    --zoom-dur: 2000ms;
+  }
 }
 
 *,
@@ -322,35 +338,16 @@ p {
    data-reveal="fade"   nur einblenden
    data-reveal="arch"   Bogen öffnet sich von unten, Bild zoomt sanft zurück
    data-reveal="mask"   große Überschrift steigt aus einer Maske (Kind .mask__in)
-   data-reveal-stagger  Kinder mit data-reveal nacheinander (Abstand in ms)
-   data-parallax        Bild bewegt sich beim Scrollen leicht mit
+   data-reveal-stagger  Abstand in ms, wenn mehrere Kinder gleichzeitig ins Bild
+                        kommen; wer allein kommt, startet sofort
+   data-parallax        Bild bewegt sich beim Scrollen leicht mit (nur Desktop)
 
    Ohne JS oder mit „Bewegung reduzieren“ ist alles sofort sichtbar.
    --------------------------------------------------------------------------- */
 
-@keyframes rise {
-  from {
-    opacity: 0;
-    transform: translate3d(0, 1.25rem, 0);
-  }
-}
-
 @keyframes fade {
   from {
     opacity: 0;
-  }
-}
-
-
-@keyframes arch-open {
-  from {
-    clip-path: inset(100% 0 0 0);
-  }
-}
-
-@keyframes settle {
-  from {
-    transform: scale(1.12);
   }
 }
 
@@ -371,10 +368,10 @@ p {
 @media (prefers-reduced-motion: no-preference) {
   .js [data-reveal] {
     opacity: 0;
-    transform: translate3d(0, 1.75rem, 0);
+    transform: translate3d(0, var(--reveal-dist), 0);
     transition:
-      opacity 900ms var(--ease-out),
-      transform 1200ms var(--ease-out);
+      opacity calc(var(--reveal-dur) * 0.8) var(--ease-out),
+      transform var(--reveal-dur) var(--ease-out);
     transition-delay: var(--d, 0ms);
   }
 
@@ -391,7 +388,7 @@ p {
     opacity: 1;
     transform: none;
     clip-path: inset(100% 0 0 0);
-    transition: clip-path 1400ms var(--ease-out);
+    transition: clip-path var(--arch-dur) var(--ease-out);
     transition-delay: var(--d, 0ms);
   }
 
@@ -401,7 +398,7 @@ p {
 
   .js [data-reveal='arch'] img {
     transform: scale(1.12);
-    transition: transform 2000ms var(--ease-out);
+    transition: transform var(--zoom-dur) var(--ease-out);
     transition-delay: var(--d, 0ms);
   }
 
@@ -415,10 +412,13 @@ p {
     transition: none;
   }
 
-  /* Start weit genug unten, damit keine Oberlänge vorher in die Maske ragt */
+  /*
+   * Start gerade eben unter der Maske (eigene Höhe plus Luft für Oberlängen):
+   * gleicher kurzer Weg für ein- und mehrzeilige Überschriften.
+   */
   .js [data-reveal='mask'] > .mask__in {
-    transform: translate3d(0, 165%, 0);
-    transition: transform 1300ms var(--ease-out);
+    transform: translate3d(0, calc(100% + 0.35em), 0);
+    transition: transform var(--mask-dur) var(--ease-out);
     transition-delay: var(--d, 0ms);
   }
 
@@ -426,14 +426,13 @@ p {
     transform: none;
   }
 
-  .js [data-parallax] {
-    transform: scale(1.12);
-    will-change: transform;
+  /* Kopfzeile bleibt beim Seitenwechsel stehen, nur der Inhalt blendet über */
+  .header {
+    view-transition-name: site-header;
   }
 
-  /* Kopfzeile beim Laden sanft einblenden */
-  .js .header {
-    animation: fade 900ms var(--ease-out) both;
+  ::view-transition-group(site-header) {
+    animation: none;
   }
 
   /* Weiche Übergänge zwischen den Seiten (moderne Browser, ohne JS) */
@@ -453,6 +452,14 @@ p {
 @keyframes fade-out {
   to {
     opacity: 0;
+  }
+}
+
+/* Parallax nur am Desktop mit Maus; auf Touch-Geräten steht das Bild ruhig */
+@media (min-width: 64rem) and (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
+  .js [data-parallax] {
+    transform: scale(1.12);
+    will-change: transform;
   }
 }
 

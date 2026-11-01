@@ -273,17 +273,18 @@ const sheetItems = [{ href: '/', label: 'Start' }, ...NAV, { href: '/gutscheine'
    * ältere Browser zeigen das Menü einfach ohne Bewegung.
    */
   @media (prefers-reduced-motion: no-preference) {
+    /* Schließen 380 ms, Öffnen 600 ms; alles zusammen unter einer Sekunde */
     .sheet {
       clip-path: inset(0 0 100% 0);
       transition:
-        clip-path 520ms var(--ease-in-out),
-        overlay 520ms allow-discrete,
-        display 520ms allow-discrete;
+        clip-path 380ms var(--ease-in-out),
+        overlay 380ms allow-discrete,
+        display 380ms allow-discrete;
     }
 
     .sheet:popover-open {
       clip-path: inset(0 0 0 0);
-      transition-duration: 760ms;
+      transition-duration: 600ms;
     }
 
     @starting-style {
@@ -295,9 +296,9 @@ const sheetItems = [{ href: '/', label: 'Start' }, ...NAV, { href: '/gutscheine'
     .sheet::backdrop {
       background: rgba(0, 0, 0, 0);
       transition:
-        background-color 520ms var(--ease-in-out),
-        overlay 520ms allow-discrete,
-        display 520ms allow-discrete;
+        background-color 380ms var(--ease-in-out),
+        overlay 380ms allow-discrete,
+        display 380ms allow-discrete;
     }
 
     .sheet:popover-open::backdrop {
@@ -326,36 +327,36 @@ const sheetItems = [{ href: '/', label: 'Start' }, ...NAV, { href: '/gutscheine'
     .sheet:popover-open .sheet__top {
       opacity: 1;
       transform: none;
-      transition-delay: 200ms;
+      transition-delay: 120ms;
     }
 
     .sheet:popover-open .sheet__foot {
       opacity: 1;
       transform: none;
-      transition-delay: calc(420ms + 7 * 55ms);
+      transition-delay: calc(250ms + 7 * 40ms);
     }
 
     .sheet__in {
       transform: translate3d(0, 110%, 0);
-      transition: transform 380ms var(--ease-in-out);
+      transition: transform 300ms var(--ease-in-out);
     }
 
     .sheet__nav a::after {
       transform: scaleX(0);
       transform-origin: left;
-      transition: transform 380ms var(--ease-in-out);
+      transition: transform 300ms var(--ease-in-out);
     }
 
     .sheet:popover-open .sheet__in {
       transform: none;
-      transition: transform 900ms var(--ease-out);
-      transition-delay: calc(300ms + var(--i) * 55ms);
+      transition: transform 650ms var(--ease-out);
+      transition-delay: calc(150ms + var(--i) * 40ms);
     }
 
     .sheet:popover-open a::after {
       transform: scaleX(1);
-      transition: transform 1000ms var(--ease-out);
-      transition-delay: calc(360ms + var(--i) * 55ms);
+      transition: transform 700ms var(--ease-out);
+      transition-delay: calc(190ms + var(--i) * 40ms);
     }
 
     @starting-style {

@@ -17,9 +17,9 @@ const { label, title, ar, intro, id = 'page-title' } = Astro.props;
 const hasAside = Astro.slots.has('aside');
 ---
 
-<section class:list={['phero page', { 'phero--aside': hasAside }]} aria-labelledby={id}>
+<section class:list={['phero page', { 'phero--aside': hasAside }]} aria-labelledby={id} data-reveal-intro>
   <div class="phero__main">
-    <div class="phero__label" data-reveal style="--d: 60ms">
+    <div class="phero__label" data-reveal>
       <p class="label">{label}</p>
       {
         ar && (
@@ -32,14 +32,60 @@ const hasAside = Astro.slots.has('aside');
         )
       }
     </div>
-    <h1 id={id} class="display phero__title" data-reveal="mask" style="--d: 140ms"><span class="mask__in" set:html={title} /></h1>
-    {intro && <p class="phero__intro" data-reveal style="--d: 320ms">{intro}</p>}
-    <div data-reveal style="--d: 440ms"><slot /></div>
+    <h1 id={id} class="display phero__title" data-reveal="mask"><span class="mask__in" set:html={title} /></h1>
+    {intro && <p class="phero__intro" data-reveal>{intro}</p>}
+    <div class="phero__extra" data-reveal><slot /></div>
   </div>
   {hasAside && <div class="phero__aside"><slot name="aside" /></div>}
 </section>
 
 <style>
+  /*
+   * Takt beim Laden. Handy: von oben nach unten, der Bogen unter dem Text kommt
+   * zuletzt. Desktop: Bogen rechts öffnet sich parallel zum Titel.
+   */
+  .phero__label {
+    --d: 0ms;
+  }
+
+  .phero__title {
+    --d: 80ms;
+  }
+
+  .phero__intro {
+    --d: 220ms;
+  }
+
+  .phero__extra {
+    --d: 320ms;
+  }
+
+  .phero__aside {
+    --d: 460ms;
+  }
+
+  @media (min-width: 64rem) {
+    .phero__label {
+      --d: 60ms;
+    }
+
+    .phero__title {
+      --d: 140ms;
+    }
+
+    .phero__intro {
+      --d: 320ms;
+    }
+
+    .phero__extra {
+      --d: 440ms;
+    }
+
+    .phero__aside {
+      --d: 240ms;
+    }
+  }
+
   .phero {
     display: grid;
     gap: 2.5rem;

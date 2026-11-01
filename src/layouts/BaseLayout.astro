@@ -95,27 +95,68 @@ const showCanonical = !noindex;
       // Bewegung nur mit JS und ohne „Bewegung reduzieren“ (siehe global.css).
       const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-      // Gruppen: Kinder nacheinander einblenden (data-reveal-stagger="80" = 80 ms Abstand).
-      document.querySelectorAll<HTMLElement>('[data-reveal-stagger]').forEach((group) => {
-        const step = Number(group.dataset.revealStagger) || 90;
-        group.querySelectorAll<HTMLElement>('[data-reveal]').forEach((item, i) => {
-          if (!item.style.getPropertyValue('--d')) item.style.setProperty('--d', `${i * step}ms`);
-        });
-      });
-
       // Museum: .reveal → .is-visible; Website: [data-reveal] → .is-in
       const museum = document.querySelectorAll<HTMLElement>('.reveal');
       const site = document.querySelectorAll<HTMLElement>('[data-reveal]');
 
+      /*
+       * Staffelung nach Eintritt: Nur Elemente, die im selben Moment ins Bild
+       * kommen, starten nacheinander (data-reveal-stagger am Elternteil, Abstand
+       * in ms, höchstens 3 Stufen). Wer allein kommt, startet sofort. So passt es
+       * auf dem Desktop (nebeneinander) und auf dem Handy (untereinander).
+       * data-reveal-offset: feste Zusatzverzögerung, z. B. Bildunterschrift.
+       */
+      const stagger = (batch: HTMLElement[]) => {
+        const groups = new Map<HTMLElement, HTMLElement[]>();
+        for (const el of batch) {
+          const parent = el.closest<HTMLElement>('[data-reveal-stagger]');
+          if (!parent) continue;
+          if (!groups.has(parent)) groups.set(parent, []);
+          groups.get(parent)!.push(el);
+        }
+        groups.forEach((els, parent) => {
+          const step = Number(parent.dataset.revealStagger) || 80;
+          const itemOf = (el: HTMLElement) => {
+            let item = el;
+            while (item.parentElement && item.parentElement !== parent) item = item.parentElement;
+            return item;
+          };
+          const items = [...new Set(els.map(itemOf))].sort((a, b) =>
+            a.compareDocumentPosition(b) & Node.DOCUMENT_POSITION_FOLLOWING ? -1 : 1,
+          );
+          for (const el of els) {
+            const index = Math.min(items.indexOf(itemOf(el)), 3);
+            const offset = Number(el.dataset.revealOffset) || 0;
+            el.style.setProperty('--d', `${index * step + offset}ms`);
+          }
+        });
+      };
+
       if ('IntersectionObserver' in window && !reduced) {
+        // Verzögerungen im Seitenkopf (data-reveal-intro) gelten nur beim Laden;
+        // wer erst später ins Bild gescrollt wird, startet sofort.
+        let initial = true;
         const observer = new IntersectionObserver(
           (entries) => {
+            const batch: HTMLElement[] = [];
             for (const entry of entries) {
               if (!entry.isIntersecting) continue;
               const el = entry.target as HTMLElement;
-              el.classList.add(el.classList.contains('reveal') ? 'is-visible' : 'is-in');
               observer.unobserve(el);
+              if (el.classList.contains('reveal')) {
+                el.classList.add('is-visible');
+                continue;
+              }
+              if (!initial && el.closest('[data-reveal-intro]')) el.style.setProperty('--d', '0ms');
+              batch.push(el);
             }
+            stagger(batch);
+            const reveal = () => batch.forEach((el) => el.classList.add('is-in'));
+            // Beim ersten Mal zwei Frames warten: Der Browser muss den Startzustand
+            // einmal gezeichnet haben, sonst springt der Seitenkopf ohne Übergang.
+            if (initial) requestAnimationFrame(() => requestAnimationFrame(reveal));
+            else reveal();
+            initial = false;
           },
           { rootMargin: '0px 0px -8% 0px' },
         );
@@ -128,7 +169,8 @@ const showCanonical = !noindex;
 
       // Parallax: Bild wandert beim Scrollen um wenige Prozent gegen die Scrollrichtung.
       const layers = document.querySelectorAll<HTMLElement>('[data-parallax]');
-      if (layers.length && !reduced) {
+      const desktop = window.matchMedia('(min-width: 64rem) and (hover: hover) and (pointer: fine)').matches;
+      if (layers.length && !reduced && desktop) {
         let queued = false;
         const update = () => {
           queued = false;
