@@ -1,0 +1,152 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHero from '../components/site/PageHero.astro';
+import Arch from '../components/site/Arch.astro';
+import HoursTable from '../components/site/HoursTable.astro';
+import OpenStatus from '../components/site/OpenStatus.astro';
+import Todo from '../components/Todo.astro';
+import { restaurant, routeHref } from '../data/restaurant';
+
+// TODO: Daten von Momo: Parken, Bus, Zahlungsarten, E-Mail, barrierefrei ja oder nein.
+---
+
+<BaseLayout
+  title="Kontakt und Anfahrt"
+  description={`Elmo Shawarma, ${restaurant.street}, ${restaurant.postalCode} ${restaurant.city}. Telefon ${restaurant.phone}. Vorbestellen, abholen und reservieren per Telefon.`}
+>
+  <main>
+    <PageHero label="Kontakt und Anfahrt" title="Komm <em>vorbei.</em>" intro="Mitten in Schwäbisch Gmünd. Vorbestellen, abholen und reservieren per Telefon.">
+      <OpenStatus class="hero-status" />
+      <Arch slot="aside" framed placeholder="Foto: Außenansicht Kapuzinergasse" class="hero-arch" />
+    </PageHero>
+
+    <section class="info page" aria-label="Adresse, Telefon und Öffnungszeiten">
+      <div class="info__block">
+        <p class="label">Adresse</p>
+        <p class="display info__address">{restaurant.street}<br />{restaurant.postalCode} {restaurant.city}</p>
+        <a class="link-arrow" href={routeHref} rel="noopener">Route planen<span aria-hidden="true">→</span></a>
+      </div>
+      <div class="info__block">
+        <p class="label">Telefon</p>
+        <a class="display info__phone" href={restaurant.phoneHref}>{restaurant.phone}</a>
+        <p class="info__text">Vorbestellen, abholen und Tische reservieren nur telefonisch.</p>
+      </div>
+      <div class="info__block">
+        <p class="label">Öffnungszeiten</p>
+        <HoursTable class="info__hours" />
+      </div>
+    </section>
+
+    <section class="facts page" aria-labelledby="facts-title">
+      <h2 id="facts-title" class="display facts__title">Gut zu <em>wissen.</em></h2>
+      <dl class="facts__list">
+        <div class="facts__item">
+          <dt>Parken</dt>
+          <dd><Todo label="Parkmöglichkeiten in der Nähe" /></dd>
+        </div>
+        <div class="facts__item">
+          <dt>Bus und Bahn</dt>
+          <dd><Todo label="Haltestelle und Fußweg" /></dd>
+        </div>
+        <div class="facts__item">
+          <dt>Bezahlen</dt>
+          <dd><Todo label="Zahlungsarten, z. B. bar und Karte" /></dd>
+        </div>
+        <div class="facts__item">
+          <dt>E-Mail</dt>
+          <dd><Todo label="E-Mail-Adresse" /></dd>
+        </div>
+      </dl>
+    </section>
+  </main>
+</BaseLayout>
+
+<style>
+  :global(.hero-arch) {
+    height: clamp(22rem, 90vw, 32rem);
+  }
+
+  :global(.hero-status) {
+    margin-top: 1.5rem;
+  }
+
+  .info {
+    display: grid;
+    gap: 3rem;
+    padding-top: clamp(5rem, 10vw, 9rem);
+  }
+
+  .info__block {
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--gold);
+  }
+
+  .info__address {
+    margin: 1rem 0 0.75rem;
+    font-size: clamp(2.5rem, 3.6vw, 3.25rem);
+    line-height: 1;
+  }
+
+  .info__phone {
+    display: inline-block;
+    margin-top: 1rem;
+    font-size: clamp(3rem, 4.4vw, 4rem);
+    line-height: 1;
+    color: var(--text);
+    text-decoration: none;
+    white-space: nowrap;
+  }
+
+  .info__text {
+    margin-top: 1rem;
+    color: var(--muted);
+  }
+
+  .info :global(.info__hours) {
+    margin-top: 1rem;
+  }
+
+  .facts {
+    padding-top: clamp(5rem, 10vw, 9rem);
+  }
+
+  .facts__title {
+    font-size: clamp(3.25rem, 6.5vw, 6rem);
+  }
+
+  .facts__list {
+    display: grid;
+    gap: 0 3rem;
+    margin: 2rem 0 0;
+    border-top: 1px solid var(--line);
+  }
+
+  .facts__item {
+    display: grid;
+    gap: 0.25rem;
+    padding: 1.25rem 0;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .facts__item dt {
+    font-family: var(--font-head);
+    font-size: 1.75rem;
+    line-height: 1.1;
+  }
+
+  .facts__item dd {
+    margin: 0;
+    color: var(--muted);
+  }
+
+  @media (min-width: 64rem) {
+    .info {
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) minmax(0, 1.2fr);
+      gap: 3.5rem;
+    }
+
+    .facts__list {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+</style>

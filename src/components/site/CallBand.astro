@@ -1,0 +1,60 @@
+---
+/** Abschluss der Unterseiten: große Telefonnummer und Hauptaktion. */
+import { restaurant } from '../../data/restaurant';
+
+interface Props {
+  label?: string;
+  text?: string;
+}
+
+const {
+  label = 'Vorbestellen und abholen',
+  text = 'Ruf an und bestell vor, dann holst du dein Essen einfach ab. Tische reservieren wir dir auch telefonisch.',
+} = Astro.props;
+---
+
+<section class="band" aria-label={label}>
+  <div class="band__inner page">
+    <p class="label band__label">{label}</p>
+    <a class="band__phone display" href={restaurant.phoneHref}>{restaurant.phone}</a>
+    <p class="band__text">{text}</p>
+  </div>
+</section>
+
+<style>
+  .band {
+    margin-top: clamp(5rem, 10vw, 9rem);
+    background: var(--terracotta);
+    color: var(--on-terracotta);
+  }
+
+  .band__inner {
+    padding-top: clamp(3.5rem, 7vw, 6rem);
+    padding-bottom: clamp(3.5rem, 7vw, 6rem);
+  }
+
+  .band__label {
+    color: var(--on-terracotta);
+    opacity: 0.85;
+  }
+
+  .band__phone {
+    display: inline-block;
+    margin-top: 0.75rem;
+    font-size: clamp(3.5rem, 10vw, 9rem);
+    line-height: 0.95;
+    color: var(--on-terracotta);
+    text-decoration: none;
+    white-space: nowrap;
+  }
+
+  .band__phone:hover {
+    color: #fff;
+  }
+
+  .band__text {
+    max-width: 34rem;
+    margin-top: 1.25rem;
+    font-size: 1.0625rem;
+  }
+</style>

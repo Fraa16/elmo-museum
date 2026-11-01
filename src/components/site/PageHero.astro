@@ -1,0 +1,88 @@
+---
+/**
+ * Kopf der Unterseiten: Label, große Antiqua-Überschrift (HTML erlaubt für
+ * <em>), optional arabische Zeile und Einleitung. Rechts optional ein Slot
+ * (z. B. ein Bogen).
+ */
+interface Props {
+  label: string;
+  /** Überschrift; `<em>` setzt die Gold-Kursive. */
+  title: string;
+  ar?: string;
+  intro?: string;
+  id?: string;
+}
+
+const { label, title, ar, intro, id = 'page-title' } = Astro.props;
+const hasAside = Astro.slots.has('aside');
+---
+
+<section class:list={['phero page', { 'phero--aside': hasAside }]} aria-labelledby={id}>
+  <div class="phero__main">
+    <div class="phero__label">
+      <p class="label">{label}</p>
+      {
+        ar && (
+          <>
+            <span class="phero__rule" aria-hidden="true" />
+            <p class="kufi phero__ar" lang="ar" dir="rtl">
+              {ar}
+            </p>
+          </>
+        )
+      }
+    </div>
+    <h1 id={id} class="display phero__title" set:html={title} />
+    {intro && <p class="phero__intro">{intro}</p>}
+    <slot />
+  </div>
+  {hasAside && <div class="phero__aside"><slot name="aside" /></div>}
+</section>
+
+<style>
+  .phero {
+    display: grid;
+    gap: 2.5rem;
+    padding-top: clamp(2rem, 5vw, 4.5rem);
+  }
+
+  .phero__label {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.75rem 1rem;
+  }
+
+  .phero__rule {
+    width: 2rem;
+    height: 1px;
+    background: var(--gold-line);
+  }
+
+  .phero__ar {
+    font-size: 1.375rem;
+    line-height: 1;
+    color: var(--gold-soft);
+  }
+
+  .phero__title {
+    margin-top: 1.25rem;
+    font-size: clamp(3.75rem, 10vw, 9.5rem);
+    line-height: 0.88;
+  }
+
+  .phero__intro {
+    max-width: 34rem;
+    margin-top: 1.5rem;
+    font-size: 1.125rem;
+    color: var(--muted);
+  }
+
+  @media (min-width: 64rem) {
+    .phero--aside {
+      grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+      gap: 4rem;
+      align-items: end;
+    }
+  }
+</style>

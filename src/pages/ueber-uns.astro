@@ -1,0 +1,265 @@
+---
+import '@fontsource/reem-kufi/arabic-600.css';
+import { Picture } from 'astro:assets';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHero from '../components/site/PageHero.astro';
+import Arch from '../components/site/Arch.astro';
+import CallBand from '../components/site/CallBand.astro';
+import Todo from '../components/Todo.astro';
+import { restaurant } from '../data/restaurant';
+import { stationImage } from '../lib/images';
+
+// TODO: Freigabe Momo: Jahreszahlen und Orte (laut Gmünder Tagespost), Herkunft Al Bayada,
+// Familiengeschichte und woher der Name Elmo kommt.
+const roots = stationImage('01.jpg');
+
+const timeline = [
+  { year: '2017', text: 'Elmo Shawarma öffnet im City-Center am Höferlesbach.' },
+  { year: '2026', text: 'Neustart in der Kapuzinergasse 6: mehr Platz, neue Küche, größere Karte.' },
+];
+
+const hands = [
+  { title: 'Selbst mariniert', text: 'Das Hähnchen für den Spieß marinieren wir selbst.' },
+  { title: 'Von Hand geschichtet', text: 'Schicht für Schicht auf den Spieß.' },
+  { title: 'Von Hand geformt', text: 'Kafta nach libanesischer Art, frisch gegrillt.' },
+  { title: 'Von Hand geschnitten', text: 'Batata, unsere Kartoffeln.' },
+  { title: 'Selbst gemacht', text: 'Falafel, Ayran und Joghurt aus unserer Küche.' },
+];
+---
+
+<BaseLayout
+  title="Über uns"
+  description="Elmo Shawarma: libanesische und palästinensische Küche in Schwäbisch Gmünd, seit 2017. Unsere Familie stammt aus Al Bayada im Südlibanon."
+>
+  <main>
+    <PageHero
+      label="Über uns"
+      title={`Seit ${restaurant.since} <em>in Gmünd.</em>`}
+      ar="أهلاً وسهلاً"
+      intro="Libanesische und palästinensische Küche, alles handgemacht und frisch zubereitet. Von einer Familie, die ihre Heimat mitgebracht hat."
+    >
+      <Arch slot="aside" framed placeholder="Foto: Familie und Team" class="hero-arch" />
+    </PageHero>
+
+    <section class="time page" aria-labelledby="time-title">
+      <h2 id="time-title" class="visually-hidden">Unser Weg</h2>
+      <ol class="time__list" role="list">
+        {
+          timeline.map((item) => (
+            <li class="time__item">
+              <span class="display time__year">{item.year}</span>
+              <p class="time__text">{item.text}</p>
+            </li>
+          ))
+        }
+      </ol>
+    </section>
+
+    <section class="roots" aria-labelledby="roots-title">
+      <Picture
+        src={roots}
+        alt="Sonnenuntergang über dem Mittelmeer an der Küste von Al Bayada im Südlibanon"
+        formats={['avif', 'webp']}
+        widths={[640, 960, 1440, 2000]}
+        sizes="100vw"
+        quality={55}
+        loading="lazy"
+        decoding="async"
+        class="roots__img"
+      />
+      <div class="roots__shade" aria-hidden="true"></div>
+      <div class="roots__body page">
+        <p class="label roots__label">Al Bayada, Südlibanon</p>
+        <h2 id="roots-title" class="display roots__title">Du siehst einen Sonnenuntergang. <em>Wir sehen unsere Heimat.</em></h2>
+        <p class="roots__text">
+          Aus dieser Gegend stammt unsere Familie, lange bevor es {restaurant.name} in {restaurant.city} gab. Tausende Kilometer
+          liegen zwischen diesem Ort und unserem Restaurant. Doch manche Verbindungen bleiben bestehen.
+        </p>
+        <a class="link-arrow" href="/museum/01-al-bayada-heimat">Die ganze Geschichte im Museum<span aria-hidden="true">→</span></a>
+      </div>
+    </section>
+
+    <section class="hands page" aria-labelledby="hands-title">
+      <h2 id="hands-title" class="display hands__title">Bei uns entsteht <em>alles von Hand.</em></h2>
+      <ol class="hands__list" role="list">
+        {
+          hands.map((item, i) => (
+            <li class="hands__item">
+              <span class="hands__num" aria-hidden="true">{String(i + 1).padStart(2, '0')}</span>
+              <h3 class="hands__name">{item.title}</h3>
+              <p class="hands__text">{item.text}</p>
+            </li>
+          ))
+        }
+      </ol>
+      <p class="hands__story">Unsere Familiengeschichte und woher der Name Elmo kommt: <Todo label="Text von Momo" /></p>
+    </section>
+
+    <CallBand />
+  </main>
+</BaseLayout>
+
+<style>
+  :global(.hero-arch) {
+    height: clamp(22rem, 90vw, 34rem);
+  }
+
+  .time {
+    padding-top: clamp(4.5rem, 9vw, 8rem);
+  }
+
+  .time__list {
+    display: grid;
+    gap: 2rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .time__item {
+    padding-top: 1.25rem;
+    border-top: 1px solid var(--gold);
+  }
+
+  .time__year {
+    display: block;
+    font-size: clamp(4.5rem, 9vw, 8rem);
+    color: var(--gold-soft);
+  }
+
+  .time__text {
+    max-width: 26rem;
+    margin-top: 0.75rem;
+    font-size: 1.125rem;
+    color: var(--muted);
+  }
+
+  .roots {
+    position: relative;
+    display: flex;
+    min-height: 38rem;
+    margin-top: clamp(5rem, 10vw, 9rem);
+    overflow: hidden;
+  }
+
+  .roots :global(picture),
+  .roots__img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+  }
+
+  .roots__img {
+    object-fit: cover;
+  }
+
+  .roots__shade {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(0deg, rgba(20, 18, 14, 0.95) 0%, rgba(20, 18, 14, 0.65) 50%, rgba(20, 18, 14, 0.1) 80%);
+  }
+
+  .roots__body {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    align-items: flex-start;
+    padding-bottom: 2.5rem;
+  }
+
+  .roots__label {
+    color: var(--gold-soft);
+  }
+
+  .roots__title {
+    max-width: 50rem;
+    margin-top: 0.875rem;
+    font-size: clamp(3rem, 6.5vw, 6rem);
+  }
+
+  .roots__text {
+    max-width: 32rem;
+    margin: 1.25rem 0 0.5rem;
+    color: #e2d8c4;
+  }
+
+  .hands {
+    padding-top: clamp(5rem, 10vw, 9rem);
+  }
+
+  .hands__title {
+    max-width: 52rem;
+    font-size: clamp(3.25rem, 6.5vw, 6rem);
+  }
+
+  .hands__list {
+    display: grid;
+    gap: 0;
+    margin: 2.5rem 0 0;
+    padding: 0;
+    list-style: none;
+    border-top: 1px solid var(--line);
+  }
+
+  .hands__item {
+    display: grid;
+    grid-template-columns: 3rem minmax(0, 1fr);
+    gap: 0.25rem 1rem;
+    padding: 1.25rem 0;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .hands__num {
+    grid-row: span 2;
+    font-family: var(--font-head);
+    font-style: italic;
+    font-size: 2rem;
+    line-height: 1;
+    color: var(--gold);
+  }
+
+  .hands__name {
+    font-size: clamp(1.75rem, 2.6vw, 2.25rem);
+    line-height: 1.05;
+  }
+
+  .hands__text {
+    color: var(--muted);
+  }
+
+  .hands__story {
+    margin-top: 2rem;
+    color: var(--muted-2);
+  }
+
+  @media (min-width: 64rem) {
+    .time__list {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 4rem;
+    }
+
+    .roots {
+      min-height: 46rem;
+    }
+
+    .roots__shade {
+      background: linear-gradient(90deg, rgba(20, 18, 14, 0.92) 0%, rgba(20, 18, 14, 0.6) 50%, rgba(20, 18, 14, 0) 80%);
+    }
+
+    .roots__body {
+      justify-content: center;
+      padding-bottom: 0;
+    }
+
+    .hands__item {
+      grid-template-columns: 4rem minmax(0, 5fr) minmax(0, 6fr);
+      align-items: baseline;
+    }
+
+    .hands__num {
+      grid-row: auto;
+    }
+  }
+</style>
