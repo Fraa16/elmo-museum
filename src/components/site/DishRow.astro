@@ -1,0 +1,100 @@
+---
+import { formatPrice, priceLabel, type Dish } from '../../data/menu';
+
+interface Props {
+  dish: Dish;
+  /** Arabischen Namen zeigen, falls vorhanden. */
+  showAr?: boolean;
+}
+
+const { dish, showAr = true } = Astro.props;
+---
+
+<div class="dish">
+  <div class="dish__head">
+    <h3 class="dish__name">{dish.name}</h3>
+    {showAr && dish.ar && <span class="dish__ar" lang="ar" dir="rtl">{dish.ar}</span>}
+    <span class="dish__price">
+      {priceLabel(dish)}
+      {dish.unit && <span class="dish__unit"> {dish.unit}</span>}
+    </span>
+  </div>
+  {
+    (dish.description || dish.diet || dish.extras) && (
+      <p class="dish__desc">
+        {dish.description}
+        {dish.diet && <span class:list={['dish__diet', `dish__diet--${dish.diet}`]}> {dish.diet === 'vegan' ? 'Vegan' : 'Vegetarisch'}</span>}
+        {dish.extras?.map((extra) => (
+          <span class="dish__extra">
+            {' '}
+            {extra.label} +{formatPrice(extra.price)}
+          </span>
+        ))}
+      </p>
+    )
+  }
+</div>
+
+<style>
+  .dish {
+    padding: 1.4rem 0;
+    border-bottom: 1px solid var(--dish-line, var(--ink-line));
+  }
+
+  .dish__head {
+    display: flex;
+    align-items: baseline;
+    gap: 0.5rem 0.875rem;
+  }
+
+  .dish__name {
+    font-family: var(--font-head);
+    font-weight: 400;
+    font-size: clamp(1.625rem, 2.4vw, 2.25rem);
+    line-height: 1.1;
+    letter-spacing: -0.005em;
+  }
+
+  .dish__ar {
+    font-family: var(--font-arabic);
+    font-weight: 500;
+    font-size: 1.125rem;
+    color: var(--dish-gold, var(--ink-gold));
+    white-space: nowrap;
+  }
+
+  .dish__price {
+    margin-left: auto;
+    font-weight: 600;
+    font-size: 1.0625rem;
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+  }
+
+  .dish__unit {
+    font-weight: 400;
+    font-size: 0.875rem;
+    color: var(--dish-muted, var(--ink-muted));
+  }
+
+  .dish__desc {
+    margin-top: 0.35rem;
+    font-size: 0.9375rem;
+    color: var(--dish-muted, var(--ink-muted));
+  }
+
+  .dish__diet {
+    font-weight: 600;
+    color: var(--dish-leaf, var(--leaf));
+  }
+
+  .dish__extra {
+    white-space: nowrap;
+  }
+
+  @media (max-width: 30rem) {
+    .dish__ar {
+      display: none;
+    }
+  }
+</style>

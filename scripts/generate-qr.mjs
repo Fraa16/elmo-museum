@@ -17,7 +17,7 @@ import { join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import QRCode from 'qrcode';
 
-import { SITE_URL, SITE_URL_CONFIRMED } from '../src/config.ts';
+import { QR_BASE_URL, SITE_URL_CONFIRMED } from '../src/config.ts';
 import { QR_OPTIONS, QR_PNG_WIDTH, qrEntries, qrUrl, siteUrlProblem } from '../src/lib/qr.ts';
 
 const dryRun = process.argv.includes('--dry-run');
@@ -27,12 +27,12 @@ function abort(message) {
   process.exit(1);
 }
 
-const problem = siteUrlProblem(SITE_URL);
-if (problem) abort(`${problem}\n  → Domain in src/config.ts (SITE_URL) eintragen.`);
+const problem = siteUrlProblem(QR_BASE_URL);
+if (problem) abort(`${problem}\n  → Domain in src/config.ts (QR_BASE_URL) eintragen.`);
 
 if (!SITE_URL_CONFIRMED && !dryRun) {
   abort(
-    `Die Domain ${SITE_URL} ist noch nicht bestätigt.\n` +
+    `Die Domain ${QR_BASE_URL} ist noch nicht bestätigt.\n` +
       '  → Erst wenn das Vercel-Projekt angelegt und die Domain fix ist,\n' +
       '    in src/config.ts SITE_URL_CONFIRMED = true setzen.\n' +
       '  → Zum Testen: npm run qr -- --dry-run',
@@ -47,7 +47,7 @@ await mkdir(outDir, { recursive: true });
 const manifest = [['qr_id', 'url', 'svg', 'png']];
 
 for (const entry of qrEntries) {
-  const url = qrUrl(SITE_URL, entry);
+  const url = qrUrl(QR_BASE_URL, entry);
   const svgFile = `${entry.fileBase}.svg`;
   const pngFile = `${entry.fileBase}.png`;
 

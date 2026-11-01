@@ -1,0 +1,81 @@
+---
+/** Terrakotta-Band mit Gerichten, läuft langsam durch (nicht bei reduzierter Bewegung). */
+interface Props {
+  words?: string[];
+}
+
+const { words = ['Shawarma', 'Falafel', 'Kafta', 'Hummus', 'Mujaddara', 'Fatteh', 'Taboulé', 'Batata Harra'] } = Astro.props;
+const star =
+  'M10 0 L12.4 5.6 L18 3.3 L15.6 8.9 L20 10 L15.6 11.1 L18 16.7 L12.4 14.4 L10 20 L7.6 14.4 L2 16.7 L4.4 11.1 L0 10 L4.4 8.9 L2 3.3 L7.6 5.6 Z';
+---
+
+<div class="ticker">
+  <p class="visually-hidden">Aus unserer Küche: {words.join(', ')}.</p>
+  <div class="ticker__track" aria-hidden="true">
+    {
+      [0, 1].map(() => (
+        <ul class="ticker__list">
+          {words.map((word) => (
+            <li>
+              <span>{word}</span>
+              <svg class="ticker__star" viewBox="0 0 20 20">
+                <path d={star} />
+              </svg>
+            </li>
+          ))}
+        </ul>
+      ))
+    }
+  </div>
+</div>
+
+<style>
+  .ticker {
+    overflow: hidden;
+    background: var(--terracotta);
+    color: var(--on-terracotta);
+  }
+
+  .ticker__track {
+    display: flex;
+    width: max-content;
+  }
+
+  .ticker__list {
+    display: flex;
+    align-items: center;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .ticker__list li {
+    display: flex;
+    align-items: center;
+    gap: clamp(1.25rem, 2.5vw, 2.25rem);
+    padding-right: clamp(1.25rem, 2.5vw, 2.25rem);
+    height: clamp(4.25rem, 7vw, 6.5rem);
+    font-family: var(--font-head);
+    font-style: italic;
+    font-size: clamp(1.875rem, 3.4vw, 2.875rem);
+    white-space: nowrap;
+  }
+
+  .ticker__star {
+    width: clamp(0.875rem, 1.4vw, 1.25rem);
+    height: auto;
+    fill: currentColor;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .ticker__track {
+      animation: ticker 60s linear infinite;
+    }
+  }
+
+  @keyframes ticker {
+    to {
+      transform: translateX(-50%);
+    }
+  }
+</style>

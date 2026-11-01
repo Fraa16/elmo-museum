@@ -1,37 +1,43 @@
 ---
-import '@fontsource/cinzel/latin-500.css';
-import '@fontsource/cormorant-garamond/latin-600.css';
-import '@fontsource/source-sans-3/latin-400.css';
-import '@fontsource/source-sans-3/latin-600.css';
+import '@fontsource/instrument-sans/latin-400.css';
+import '@fontsource/instrument-sans/latin-500.css';
+import '@fontsource/instrument-sans/latin-600.css';
+import '@fontsource/instrument-serif/latin-400.css';
+import '@fontsource/instrument-serif/latin-400-italic.css';
 import '../styles/global.css';
 // Fließtext- und Headline-Schrift vorladen: verhindert Layoutsprünge beim Schriftwechsel.
-import sans400 from '@fontsource/source-sans-3/files/source-sans-3-latin-400-normal.woff2?url';
-import sans600 from '@fontsource/source-sans-3/files/source-sans-3-latin-600-normal.woff2?url';
-import head600 from '@fontsource/cormorant-garamond/files/cormorant-garamond-latin-600-normal.woff2?url';
+import sans400 from '@fontsource/instrument-sans/files/instrument-sans-latin-400-normal.woff2?url';
+import sans600 from '@fontsource/instrument-sans/files/instrument-sans-latin-600-normal.woff2?url';
+import serif400 from '@fontsource/instrument-serif/files/instrument-serif-latin-400-normal.woff2?url';
 
-import Topbar from '../components/Topbar.astro';
-import Footer from '../components/Footer.astro';
-import { INDEXABLE, SITE_NAME, SITE_URL } from '../config';
+import SiteHeader from '../components/site/SiteHeader.astro';
+import SiteFooter from '../components/site/SiteFooter.astro';
+import CallBar from '../components/site/CallBar.astro';
+import MuseumBar from '../components/MuseumBar.astro';
+import { INDEXABLE, MUSEUM_NAME, SITE_NAME, SITE_URL } from '../config';
 
 interface Props {
-  /** Seitentitel ohne Zusatz; „| Elmo Museum“ wird angehängt. */
+  /** Seitentitel ohne Zusatz; „| Elmo Shawarma“ bzw. „| Elmo Museum“ wird angehängt. */
   title: string;
+  /** Kompletter Titel ohne Zusatz (Startseite). */
+  fullTitle?: string;
   description?: string;
   /** Absolute URL des Open-Graph-Bilds (WhatsApp-Vorschau). */
   ogImage?: string;
   ogImageAlt?: string;
   /** Erzwingt noindex, auch wenn INDEXABLE = true (z. B. QR-Bogen, 404). */
   noindex?: boolean;
-  /** Topbar rechts, z. B. { current: 2, total: 9 }. */
+  /** Museumsleiste rechts, z. B. { current: 2, total: 11 }. */
   counter?: { current: number; total: number };
-  /** Topbar und Footer anzeigen (für die Druckseite abschaltbar). */
+  /** Kopfzeile, Fußzeile und Handy-Leiste anzeigen (für die Druckseite abschaltbar). */
   chrome?: boolean;
   bodyClass?: string;
 }
 
 const {
   title,
-  description = 'Scan den Code neben einem Bild und entdecke seine Geschichte. Das kleine Museum im Flur von Elmo Shawarma in Schwäbisch Gmünd.',
+  fullTitle: fullTitleProp,
+  description = 'Libanesische und palästinensische Küche in Schwäbisch Gmünd. Shawarma vom Spieß, Grillteller und Mezze, alles handgemacht und frisch zubereitet.',
   ogImage,
   ogImageAlt,
   noindex = false,
@@ -40,9 +46,11 @@ const {
   bodyClass,
 } = Astro.props;
 
-const fullTitle = title === SITE_NAME ? title : `${title} | ${SITE_NAME}`;
-const robots = INDEXABLE && !noindex ? 'index, follow' : 'noindex, nofollow';
 const path = Astro.url.pathname.replace(/\/+$/, '') || '/';
+const inMuseum = path === '/museum' || path.startsWith('/museum/');
+const suffix = inMuseum ? MUSEUM_NAME : SITE_NAME;
+const fullTitle = fullTitleProp ?? (title === suffix ? title : `${title} | ${suffix}`);
+const robots = INDEXABLE && !noindex ? 'index, follow' : 'noindex, nofollow';
 const canonical = new URL(path, SITE_URL).href;
 // Fehlerseite und Druckbogen bekommen keinen Canonical-Link.
 const showCanonical = !noindex;
@@ -59,11 +67,11 @@ const showCanonical = !noindex;
     <meta name="description" content={description} />
     <meta name="robots" content={robots} />
     {showCanonical && <link rel="canonical" href={canonical} />}
-    <meta name="theme-color" content="#141413" />
+    <meta name="theme-color" content="#14120e" />
     <meta name="color-scheme" content="dark" />
     <meta name="format-detection" content="telephone=no" />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
-    {[sans400, sans600, head600].map((href) => <link rel="preload" href={href} as="font" type="font/woff2" crossorigin />)}
+    {[sans400, sans600, serif400].map((href) => <link rel="preload" href={href} as="font" type="font/woff2" crossorigin />)}
 
     <meta property="og:type" content="website" />
     <meta property="og:locale" content="de_DE" />
@@ -78,10 +86,12 @@ const showCanonical = !noindex;
     <script is:inline>document.documentElement.classList.add('js');</script>
     <slot name="head" />
   </head>
-  <body class={bodyClass}>
-    {chrome && <Topbar counter={counter} />}
+  <body class:list={[bodyClass, { 'has-callbar': chrome }]}>
+    {chrome && <SiteHeader />}
+    {chrome && inMuseum && <MuseumBar counter={counter} />}
     <slot />
-    {chrome && <Footer />}
+    {chrome && <SiteFooter />}
+    {chrome && <CallBar />}
 
     <script>
       // Textabsätze beim Scrollen leicht einblenden (nur mit JS, siehe .reveal in global.css).

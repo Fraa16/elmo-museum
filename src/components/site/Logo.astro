@@ -1,0 +1,42 @@
+---
+import { Image } from 'astro:assets';
+import emblem from '../../assets/brand/elmo-emblem.png';
+
+interface Props {
+  /** Höhe des Emblems in px. */
+  height?: number;
+  /** „SHAWARMA“ neben dem Emblem zeigen. */
+  wordmark?: boolean;
+  class?: string;
+}
+
+const { height = 48, wordmark = true, class: className } = Astro.props;
+const width = Math.round((height * emblem.width) / emblem.height);
+---
+
+<span class:list={['logo', className]}>
+  <Image src={emblem} alt="" width={width} height={height} densities={[1, 2]} loading="eager" class="logo__emblem" />
+  {wordmark && <span class="logo__word">Shawarma</span>}
+</span>
+
+<style>
+  .logo {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.875rem;
+  }
+
+  .logo__emblem {
+    display: block;
+    width: auto;
+  }
+
+  .logo__word {
+    font-family: var(--font-body);
+    font-weight: 600;
+    font-size: 0.75rem;
+    letter-spacing: 0.32em;
+    text-transform: uppercase;
+    color: var(--gold);
+  }
+</style>

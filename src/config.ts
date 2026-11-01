@@ -6,14 +6,21 @@
  */
 
 /**
- * Öffentliche Basis-URL ohne abschließenden Slash.
- * Wird in jeden QR-Code gedruckt und darf nach dem QR-Export nie mehr geändert
- * werden. Auch in astro.config.mjs (`site`) eingebunden.
+ * Hauptadresse der Website ohne abschließenden Slash: Canonical-Links,
+ * Open Graph und `site` in astro.config.mjs.
  */
-export const SITE_URL = 'https://elmo-museum.vercel.app';
+export const SITE_URL = 'https://elmo-shawarma.de';
 
 /**
- * Erst auf `true` setzen, wenn der Vercel-Projektname (und damit SITE_URL)
+ * Basis-URL in den gedruckten QR-Codes. Darf nie mehr geändert werden: Die
+ * Schilder hängen im Flur. Dieselbe Website ist unter dieser Adresse
+ * dauerhaft erreichbar (gleiches Vercel-Projekt), damit die Codes nicht von
+ * der Domain elmo-shawarma.de abhängen.
+ */
+export const QR_BASE_URL = 'https://elmo-museum.vercel.app';
+
+/**
+ * Erst auf `true` setzen, wenn der Vercel-Projektname (und damit QR_BASE_URL)
  * mit Francesco abgestimmt und das Projekt angelegt ist. Solange `false`,
  * verweigert `npm run qr` den Export und der QR-Bogen zeigt einen
  * „Entwurf, nicht drucken“-Hinweis.
@@ -29,6 +36,7 @@ export const QUIZ_ENABLED = true;
  */
 export const INDEXABLE = false;
 
-export const SITE_NAME = 'Elmo Museum';
+export const SITE_NAME = 'Elmo Shawarma';
+export const MUSEUM_NAME = 'Elmo Museum';
 export const RESTAURANT = 'Elmo Shawarma';
 export const CITY = 'Schwäbisch Gmünd';

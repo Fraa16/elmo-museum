@@ -4,12 +4,17 @@
  * Schilder 70 × 90 mm mit Schnittmarken, Startschild ELMO-00 im Format A6.
  */
 import '@fontsource/noto-naskh-arabic/arabic-500.css';
+// Die Schilder sind mit den Museumsschriften gedruckt: hier fest, unabhängig vom Website-Design.
+import '@fontsource/cinzel/latin-500.css';
+import '@fontsource/cormorant-garamond/latin-600.css';
+import '@fontsource/source-sans-3/latin-400.css';
+import '@fontsource/source-sans-3/latin-600.css';
 import QRCode from 'qrcode';
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import { SITE_URL, SITE_URL_CONFIRMED } from '../../config';
+import { QR_BASE_URL, SITE_URL_CONFIRMED } from '../../config';
 import { QR_OPTIONS, qrEntries, qrUrl, siteUrlProblem, type QrEntry } from '../../lib/qr';
 
-const urlProblem = siteUrlProblem(SITE_URL);
+const urlProblem = siteUrlProblem(QR_BASE_URL);
 const draft = !SITE_URL_CONFIRMED || urlProblem !== null;
 
 interface Sign extends QrEntry {
@@ -23,7 +28,7 @@ interface Sign extends QrEntry {
 
 const signs: Sign[] = await Promise.all(
   qrEntries.map(async (entry) => {
-    const url = qrUrl(SITE_URL, entry);
+    const url = qrUrl(QR_BASE_URL, entry);
     const start = entry.number === '00';
     return {
       ...entry,
@@ -70,7 +75,7 @@ const marks = (w: number, h: number) => {
   {
     draft && (
       <p class="draft-banner" role="alert">
-        Entwurf, nicht drucken. {urlProblem ?? `Die Domain ${SITE_URL} ist noch nicht bestätigt (SITE_URL_CONFIRMED).`}
+        Entwurf, nicht drucken. {urlProblem ?? `Die Domain ${QR_BASE_URL} ist noch nicht bestätigt (SITE_URL_CONFIRMED).`}
       </p>
     )
   }
@@ -129,6 +134,9 @@ const marks = (w: number, h: number) => {
   }
 
   .qr-body {
+    --font-display: 'Cinzel', 'Times New Roman', serif;
+    --font-head: 'Cormorant Garamond', Georgia, 'Times New Roman', serif;
+    --font-body: 'Source Sans 3', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
     --paper: #f6f1e7;
     --ink: #1d1c1a;
     --ink-muted: #5c564d;

@@ -42,24 +42,24 @@ export function qrUrl(siteUrl: string, entry: Pick<QrEntry, 'path'>): string {
 }
 
 /**
- * Prüft die Basis-URL für den QR-Export. Gibt eine Fehlermeldung zurück oder
+ * Prüft die Basis-URL für den QR-Export (QR_BASE_URL). Gibt eine Fehlermeldung zurück oder
  * `null`, wenn die URL verwendbar ist.
  */
 export function siteUrlProblem(siteUrl: string): string | null {
-  if (!siteUrl || !siteUrl.trim()) return 'SITE_URL ist nicht gesetzt.';
+  if (!siteUrl || !siteUrl.trim()) return 'QR_BASE_URL ist nicht gesetzt.';
   let url: URL;
   try {
     url = new URL(siteUrl);
   } catch {
-    return `SITE_URL ist keine gültige URL: „${siteUrl}“.`;
+    return `QR_BASE_URL ist keine gültige URL: „${siteUrl}“.`;
   }
   const host = url.hostname.replace(/^\[|\]$/g, '');
   if (host === 'localhost' || host.endsWith('.localhost') || host.endsWith('.local') || /^(127\.|0\.0\.0\.0$|::1$|10\.|192\.168\.)/.test(host)) {
-    return `SITE_URL zeigt noch auf eine lokale Adresse (${url.host}).`;
+    return `QR_BASE_URL zeigt noch auf eine lokale Adresse (${url.host}).`;
   }
-  if (url.protocol !== 'https:') return 'SITE_URL muss mit https:// beginnen.';
+  if (url.protocol !== 'https:') return 'QR_BASE_URL muss mit https:// beginnen.';
   if (url.pathname !== '/' || url.search || url.hash || siteUrl.endsWith('/')) {
-    return 'SITE_URL darf nur aus Protokoll und Domain bestehen (ohne Pfad, Query oder Slash am Ende).';
+    return 'QR_BASE_URL darf nur aus Protokoll und Domain bestehen (ohne Pfad, Query oder Slash am Ende).';
   }
   return null;
 }

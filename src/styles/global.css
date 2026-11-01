@@ -1,28 +1,45 @@
 /* ---------------------------------------------------------------------------
-   Elmo Museum: Design-Tokens & Basis
-   Digitale Verlängerung des Flurs: Anthrazit, warmes Gold, klassische Antiqua.
+   Elmo Shawarma: Design-Tokens & Basis (Design B2 „Libanesisches Haus“)
+   Warmes Fast-Schwarz, Gold aus dem Emblem, Terrakotta wie Dachziegel,
+   Kalkstein für die Karte. Große Antiqua, ruhige Grotesk, Bogen als Motiv.
    --------------------------------------------------------------------------- */
 
 :root {
-  --bg: #141413;        /* Anthrazit, fast schwarz */
-  --surface: #1d1c1a;
-  --surface-2: #24221f;
-  --line: #2e2c28;
-  --text: #f2ece1;      /* warmes Creme */
-  --muted: #aaa297;
+  --bg: #14120e;        /* warmes Fast-Schwarz */
+  --surface: #1d1a15;
+  --surface-2: #26221b;
+  --line: #3a3227;
+  --text: #ece3d2;      /* Kalkstein */
+  --muted: #c9bea9;
+  --muted-2: #a99f8c;
   --gold: #c9a45c;
   --gold-soft: #e3c98f;
+  --gold-line: #6d5a36;
+  --terracotta: #a5432b;
+  --on-terracotta: #f3e9d8;
+  --stone: #ece3d2;     /* heller Grund der Karte */
+  --ink: #1b1814;
+  --ink-muted: #6b6253;
+  --ink-line: #cbbea6;
+  --ink-gold: #94702f;
+  --leaf: #4f7a3e;
+  --open: #7fae6a;
 
-  --font-display: 'Cinzel', 'Times New Roman', serif;
-  --font-head: 'Cormorant Garamond', Georgia, 'Times New Roman', serif;
-  --font-body: 'Source Sans 3', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  --font-head: 'Instrument Serif', Georgia, 'Times New Roman', serif;
+  --font-body: 'Instrument Sans', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  /* Labels in Versalien (früher Cinzel) */
+  --font-display: var(--font-body);
   --font-arabic: 'Noto Naskh Arabic', 'Geeza Pro', 'Arabic Typesetting', serif;
+  --font-kufi: 'Reem Kufi', var(--font-arabic);
 
   --measure: 62ch;
   --gutter: 1.25rem;
-  --radius: 4px;
+  --page: 82rem;        /* 1312 px Inhaltsbreite */
+  --page-pad: clamp(1.25rem, 4.5vw, 4rem);
+  --radius: 0;
   --tap: 44px;
   --ease: cubic-bezier(0.2, 0.6, 0.2, 1);
+  --callbar: 0px;
 
   color-scheme: dark;
 }
@@ -47,7 +64,7 @@ body {
   background: var(--bg);
   color: var(--text);
   font-family: var(--font-body);
-  font-size: 1.125rem; /* 18px */
+  font-size: 1.0625rem; /* 17px */
   line-height: 1.6;
   font-weight: 400;
   overflow-wrap: break-word;
@@ -95,11 +112,17 @@ h1,
 h2,
 h3 {
   font-family: var(--font-head);
-  font-weight: 600;
-  line-height: 1.12;
-  letter-spacing: 0.005em;
+  font-weight: 400;
+  line-height: 1.05;
+  letter-spacing: -0.01em;
   margin: 0;
   text-wrap: balance;
+}
+
+h1 em,
+h2 em,
+h3 em {
+  color: var(--gold-soft);
 }
 
 p {
@@ -121,10 +144,10 @@ p {
 /* Kicker / Ortsangabe, wie die Goldbuchstaben an der Wand */
 .kicker {
   font-family: var(--font-display);
-  font-weight: 500;
-  font-size: 0.8125rem;
+  font-weight: 600;
+  font-size: 0.75rem;
   line-height: 1.5;
-  letter-spacing: 0.22em;
+  letter-spacing: 0.18em;
   text-transform: uppercase;
   color: var(--gold);
 }
@@ -151,29 +174,109 @@ p {
   background: var(--gold);
 }
 
-/* Button-artiger Link */
+/* Button-artiger Link: eckig, Pfeil rechts */
 .btn {
   display: inline-flex;
   align-items: center;
-  justify-content: center;
-  gap: 0.5em;
-  min-height: var(--tap);
-  padding: 0.6rem 1.4rem;
+  justify-content: space-between;
+  gap: 1.75rem;
+  min-height: 3.5rem;
+  padding: 0 1.5rem;
   border: 1px solid var(--gold);
   border-radius: var(--radius);
   color: var(--gold-soft);
-  font-family: var(--font-display);
-  font-weight: 500;
-  font-size: 0.8125rem;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: 1rem;
   text-decoration: none;
-  transition: background-color 200ms var(--ease), color 200ms var(--ease);
+  transition: background-color 200ms var(--ease), color 200ms var(--ease), border-color 200ms var(--ease);
 }
 
 .btn:hover {
   background: var(--gold);
   color: var(--bg);
+}
+
+.btn--solid {
+  background: var(--gold);
+  color: var(--bg);
+}
+
+.btn--solid:hover {
+  background: var(--gold-soft);
+  border-color: var(--gold-soft);
+  color: var(--bg);
+}
+
+.btn--ink {
+  background: var(--ink);
+  border-color: var(--ink);
+  color: var(--stone);
+}
+
+.btn--ink:hover {
+  background: #000;
+  border-color: #000;
+  color: var(--stone);
+}
+
+/* Textlink mit Pfeil und Goldlinie */
+.link-arrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  min-height: var(--tap);
+  font-weight: 600;
+  font-size: 1rem;
+  color: var(--gold-soft);
+  text-decoration: none;
+  border-bottom: 1px solid var(--gold);
+}
+
+.link-arrow:hover {
+  color: var(--text);
+}
+
+/* Seitenbreite der Website */
+.page {
+  width: 100%;
+  max-width: calc(var(--page) + 2 * var(--page-pad));
+  margin-inline: auto;
+  padding-inline: var(--page-pad);
+}
+
+/* Label in Versalien, z. B. „ÖFFNUNGSZEITEN“ */
+.label {
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: 0.8125rem;
+  line-height: 1.4;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--gold);
+}
+
+/* Große Antiqua-Überschriften */
+.display {
+  font-family: var(--font-head);
+  font-weight: 400;
+  line-height: 0.9;
+  letter-spacing: -0.02em;
+}
+
+/* Bogen libanesischer Häuser */
+.arch {
+  border-radius: 9999px 9999px 0 0;
+  overflow: hidden;
+}
+
+[lang='ar'] {
+  font-family: var(--font-arabic);
+}
+
+.kufi {
+  font-family: var(--font-kufi);
+  font-weight: 600;
 }
 
 .visually-hidden {
@@ -205,5 +308,12 @@ p {
   .js .reveal.is-visible {
     opacity: 1;
     transform: none;
+  }
+}
+
+/* Platz für die fixierte Handy-Leiste (CallBar) */
+@media (max-width: 63.99rem) {
+  body.has-callbar {
+    padding-bottom: calc(3.75rem + env(safe-area-inset-bottom, 0));
   }
 }

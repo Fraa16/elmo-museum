@@ -13,9 +13,5 @@ export default defineConfig({
     // Kleine Seiten: CSS direkt einbetten spart einen Request (Lighthouse).
     inlineStylesheets: 'always',
   },
-  // Lokaler Fallback; auf Vercel greift die Weiterleitung aus vercel.json zuerst.
-  redirects: {
-    '/': '/museum',
-  },
   devToolbar: { enabled: false },
 });

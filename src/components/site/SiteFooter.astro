@@ -1,0 +1,114 @@
+---
+import HoursTable from './HoursTable.astro';
+import { restaurant } from '../../data/restaurant';
+---
+
+<footer class="footer">
+  <div class="page">
+    <p class="footer__word" aria-hidden="true">Elmo Shawarma</p>
+
+    <div class="footer__grid">
+      <div>
+        <p class="label">Besuch uns</p>
+        <p class="footer__text">
+          {restaurant.name}<br />
+          {restaurant.street}<br />
+          {restaurant.postalCode} {restaurant.city}<br />
+          <a href={restaurant.phoneHref}>{restaurant.phone}</a>
+        </p>
+      </div>
+      <div>
+        <p class="label">Öffnungszeiten</p>
+        <HoursTable short class="footer__hours" />
+      </div>
+      <nav aria-label="Seiten">
+        <p class="label">Seiten</p>
+        <ul class="footer__links">
+          <li><a href="/speisekarte">Speisekarte</a></li>
+          <li><a href="/catering">Catering</a></li>
+          <li><a href="/gutscheine">Gutscheine</a></li>
+          <li><a href="/ueber-uns">Über uns</a></li>
+          <li><a href="/museum">Museum</a></li>
+          <li><a href="/kontakt">Kontakt</a></li>
+        </ul>
+      </nav>
+      <div>
+        <p class="label">{restaurant.slogan}</p>
+        <p class="footer__text footer__claim">{restaurant.claim}</p>
+        <ul class="footer__links footer__legal">
+          <li><a href="/impressum">Impressum</a></li>
+          <li><a href="/datenschutz">Datenschutz</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<style>
+  .footer {
+    margin-top: clamp(6rem, 11vw, 11rem);
+    padding: clamp(3rem, 5vw, 4.5rem) 0 2.5rem;
+    border-top: 1px solid var(--line);
+    color: var(--muted-2);
+    font-size: 0.9375rem;
+  }
+
+  .footer__word {
+    font-family: var(--font-head);
+    font-size: clamp(3.75rem, 16.4vw, 14.75rem);
+    line-height: 0.8;
+    letter-spacing: -0.03em;
+    color: var(--text);
+    white-space: nowrap;
+  }
+
+  .footer__grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr));
+    gap: 2.5rem;
+    margin-top: clamp(2.5rem, 5vw, 4.5rem);
+  }
+
+  .footer__grid .label {
+    margin-bottom: 0.875rem;
+  }
+
+  .footer__text a {
+    color: var(--text);
+    text-decoration: none;
+  }
+
+  .footer__claim {
+    font-family: var(--font-head);
+    font-style: italic;
+    font-size: 1.375rem;
+    line-height: 1.25;
+    color: var(--text);
+  }
+
+  .footer :global(.footer__hours .hours__row) {
+    padding: 0.5rem 0;
+  }
+
+  .footer__links {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .footer__links a {
+    display: inline-flex;
+    align-items: center;
+    min-height: 2.25rem;
+    color: var(--muted-2);
+    text-decoration: none;
+  }
+
+  .footer__links a:hover {
+    color: var(--text);
+  }
+
+  .footer__legal {
+    margin-top: 1rem;
+  }
+</style>

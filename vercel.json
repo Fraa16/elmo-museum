@@ -1,7 +1,6 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "trailingSlash": false,
-  "redirects": [{ "source": "/", "destination": "/museum", "permanent": false }],
   "headers": [
     {
       "source": "/_astro/(.*)",

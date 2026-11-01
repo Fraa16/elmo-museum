@@ -1,0 +1,81 @@
+---
+/**
+ * „Heute bis 22:00 geöffnet“: Ohne JS steht „Täglich geöffnet“ (stimmt
+ * immer), mit JS rechnet ein kleines Skript aus den Öffnungszeiten in
+ * Europe/Berlin den genauen Stand aus. Markiert außerdem die heutige Zeile
+ * in jeder HoursTable.
+ */
+interface Props {
+  class?: string;
+}
+
+const { class: className } = Astro.props;
+---
+
+<span class:list={['open', className]} data-open-status>
+  <span class="open__dot" aria-hidden="true"></span>
+  <span class="open__text">Täglich geöffnet</span>
+</span>
+
+<script>
+  import { openingHours } from '../../data/restaurant';
+
+  const parts = new Intl.DateTimeFormat('en-GB', {
+    timeZone: 'Europe/Berlin',
+    weekday: 'short',
+    hour: '2-digit',
+    minute: '2-digit',
+    hourCycle: 'h23',
+  }).formatToParts(new Date());
+  const get = (type: string) => parts.find((p) => p.type === type)?.value ?? '';
+  const day = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].indexOf(get('weekday'));
+  const minutes = Number(get('hour')) * 60 + Number(get('minute'));
+  const toMin = (t: string) => Number(t.slice(0, 2)) * 60 + Number(t.slice(3, 5));
+  const slotFor = (d: number) => openingHours.find((s) => s.days.includes(d));
+
+  const today = slotFor(day);
+  let text = 'Täglich geöffnet';
+  let open = false;
+  if (today) {
+    if (minutes < toMin(today.opens)) {
+      text = `Heute ab ${today.opens} geöffnet`;
+    } else if (minutes < toMin(today.closes)) {
+      text = `Heute bis ${today.closes} geöffnet`;
+      open = true;
+    } else {
+      const next = slotFor((day + 1) % 7);
+      if (next) text = `Morgen ab ${next.opens} geöffnet`;
+    }
+  }
+
+  document.querySelectorAll<HTMLElement>('[data-open-status]').forEach((el) => {
+    el.classList.toggle('is-open', open);
+    const label = el.querySelector('.open__text');
+    if (label) label.textContent = text;
+  });
+  document.querySelectorAll<HTMLElement>('[data-hours-days]').forEach((row) => {
+    const days = (row.dataset.hoursDays ?? '').split(',').map(Number);
+    row.classList.toggle('is-today', days.includes(day));
+  });
+</script>
+
+<style>
+  .open {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.625rem;
+    font-size: 0.9375rem;
+    color: var(--muted);
+  }
+
+  .open__dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--muted-2);
+  }
+
+  .open.is-open .open__dot {
+    background: var(--open);
+  }
+</style>

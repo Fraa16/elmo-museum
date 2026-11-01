@@ -1,0 +1,38 @@
+---
+/**
+ * Platzhalter für Fotos, die erst mit dem Shooting kommen: warmer Verlauf wie
+ * Glut, darauf eine gestrichelte Beschriftung. Füllt seinen Container.
+ */
+interface Props {
+  label: string;
+  class?: string;
+}
+
+const { label, class: className } = Astro.props;
+---
+
+<div class:list={['ph', className]} role="img" aria-label={`Platzhalter: ${label}`}>
+  <span class="ph__label">{label}</span>
+</div>
+
+<style>
+  .ph {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    padding: 1.25rem;
+    background: radial-gradient(130% 88% at 50% 80%, #6e4527 0%, #42291b 50%, #261e17 100%);
+  }
+
+  .ph__label {
+    padding: 0.35rem 0.75rem;
+    border: 1px dashed rgba(236, 227, 210, 0.45);
+    font-size: 0.8125rem;
+    line-height: 1.4;
+    color: rgba(236, 227, 210, 0.8);
+    text-align: center;
+  }
+</style>
