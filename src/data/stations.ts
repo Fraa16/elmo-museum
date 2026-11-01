@@ -228,7 +228,7 @@ export const stations: Station[] = [
       'Beirut ist eine Stadt voller Gegensätze, Erinnerungen und Lebensfreude. Die beiden Felsen sind zu einem Symbol für ihre Küste geworden.',
       '**Manchmal erzählt ein einziger Sonnenuntergang mehr über eine Stadt als tausend Worte.**',
     ],
-    image: '06.jpg',
+    image: '06.webp',
     alt: 'Die zwei Raouché-Felsen ragen vor Beirut aus dem Mittelmeer, dahinter geht die Sonne unter',
     quiz: {
       question: 'Wo stehen diese Felsen?',

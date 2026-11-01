@@ -85,8 +85,7 @@ Neu erzeugen (nur nötig, wenn sich Pfade oder das Schild-Design ändern):
 
 ## Offene Punkte (TODO)
 
-- **Bilder:** Original für 06 Raouché fehlt noch (Platzhalter). Bildrechte und ggf.
-  KI-Herkunft aller Bilder klären.
+- **Bilder:** Bildrechte und ggf. KI-Herkunft aller Bilder klären.
 - **Impressum / Datenschutz:** Daten von Momo eintragen (markierte Platzhalter),
   rechtlich prüfen lassen.
 - **Freigaben Momo:** Intro-Text der Startseite, persönliche Aussagen (Station 01),
