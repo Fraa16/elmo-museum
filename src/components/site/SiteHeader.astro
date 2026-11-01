@@ -33,7 +33,7 @@ const isCurrent = (href: string) => (href === '/' ? current === '/' : current ==
 
   <div id="site-menu" class="sheet" popover>
     <div class="sheet__top page">
-      <Logo height={38} />
+      <Logo small />
       <button class="header__menu" type="button" popovertarget="site-menu" popovertargetaction="hide" aria-label="Menü schließen">
         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true">
           <path d="M6 6l12 12M18 6L6 18"></path>
@@ -128,13 +128,8 @@ const isCurrent = (href: string) => (href === '/' ? current === '/' : current ==
   }
 
   @media (max-width: 47.99rem) {
-    .header :global(.header__logo .logo__emblem) {
-      height: 38px;
-      width: auto;
-    }
-
-    .header :global(.header__logo .logo__word) {
-      font-size: 0.625rem;
+    .header :global(.header__logo) {
+      --logo-h: 38px;
     }
   }
 

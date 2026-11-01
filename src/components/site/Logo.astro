@@ -3,39 +3,53 @@ import { Image } from 'astro:assets';
 import emblem from '../../assets/brand/elmo-emblem.png';
 
 interface Props {
-  /** Höhe des Emblems in px. */
+  /** Höhe des Emblems in px (Bildauflösung; angezeigt wird --logo-h). */
   height?: number;
+  /** Kleine Fassung (38 px), z. B. im Handy-Menü. */
+  small?: boolean;
   /** „SHAWARMA“ neben dem Emblem zeigen. */
   wordmark?: boolean;
   class?: string;
 }
 
-const { height = 48, wordmark = true, class: className } = Astro.props;
+const { height = 48, small = false, wordmark = true, class: className } = Astro.props;
 const width = Math.round((height * emblem.width) / emblem.height);
 ---
 
-<span class:list={['logo', className]}>
+<span class:list={['logo', { 'logo--sm': small }, className]}>
   <Image src={emblem} alt="" width={width} height={height} densities={[1, 2]} loading="eager" class="logo__emblem" />
   {wordmark && <span class="logo__word">Shawarma</span>}
 </span>
 
 <style>
+  /* Wie auf dem Ladenschild: SHAWARMA mittig unter ELMO */
   .logo {
+    --logo-h: 48px;
     display: inline-flex;
+    flex-direction: column;
     align-items: center;
-    gap: 0.875rem;
+    gap: calc(var(--logo-h) * 0.05);
+  }
+
+  .logo--sm {
+    --logo-h: 38px;
   }
 
   .logo__emblem {
     display: block;
     width: auto;
+    height: var(--logo-h);
   }
 
   .logo__word {
     font-family: var(--font-body);
     font-weight: 600;
-    font-size: 0.75rem;
-    letter-spacing: 0.32em;
+    /* Schriftzug so breit wie ELMO, wächst mit dem Emblem */
+    font-size: calc(var(--logo-h) * 0.21);
+    line-height: 1;
+    letter-spacing: 0.42em;
+    /* gleicht den Abstand nach dem letzten Buchstaben aus, damit das Wort mittig steht */
+    padding-left: 0.42em;
     text-transform: uppercase;
     color: var(--gold);
   }
