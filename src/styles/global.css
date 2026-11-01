@@ -240,6 +240,19 @@ p {
   color: var(--stone);
 }
 
+/* Pfeil als Grafik statt Zeichen (nicht jede Schrift hat „→“) */
+.i-arrow {
+  display: block;
+  width: 1em;
+  height: 1em;
+  flex: 0 0 auto;
+}
+
+.btn > span[aria-hidden],
+.link-arrow > span[aria-hidden] {
+  display: inline-flex;
+}
+
 /* Textlink mit Pfeil und Goldlinie */
 .link-arrow {
   display: inline-flex;

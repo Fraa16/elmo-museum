@@ -92,6 +92,7 @@ const steps = [
         alt="Aufgeschnittenes Shawarma im Fladenbrot mit Hähnchen, Tomate und Sauce, daneben Batata, im Hintergrund der Spieß"
         position="42% 50%"
         sizes="(min-width: 64rem) 33rem, 85vw"
+        shade
         class="hero__arch"
       />
       <div class="hero__bottom" data-reveal>
@@ -100,7 +101,7 @@ const steps = [
           unserer Küche.
         </p>
         <div class="hero__actions">
-          <a class="btn btn--solid" href={restaurant.phoneHref}>Anrufen und abholen<span aria-hidden="true">→</span></a>
+          <a class="btn btn--solid" href={restaurant.phoneHref}>Anrufen und abholen<span aria-hidden="true"><svg class="i-arrow" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2.5 8h11M9 3.5 13.5 8 9 12.5"></path></svg></span></a>
           <OpenStatus />
         </div>
       </div>
@@ -161,7 +162,7 @@ const steps = [
           }
         </div>
         <div class="menu__foot" data-reveal>
-          <a class="btn btn--ink" href="/speisekarte">Ganze Speisekarte<span aria-hidden="true">→</span></a>
+          <a class="btn btn--ink" href="/speisekarte">Ganze Speisekarte<span aria-hidden="true"><svg class="i-arrow" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2.5 8h11M9 3.5 13.5 8 9 12.5"></path></svg></span></a>
           <p>Vorbestellen und abholen: <a href={restaurant.phoneHref}>{restaurant.phone}</a></p>
         </div>
       </div>
@@ -185,7 +186,7 @@ const steps = [
         <p class="label roots__label" data-reveal>Al Bayada, Südlibanon</p>
         <h2 id="roots-title" class="display roots__title" data-reveal="mask"><span class="mask__in">Hier liegen unsere <em>Wurzeln.</em></span></h2>
         <p class="roots__text" data-reveal>Aus dieser Gegend stammt unsere Familie, lange bevor es {restaurant.name} in {restaurant.city} gab.</p>
-        <a class="link-arrow" href="/ueber-uns" data-reveal>Unsere Geschichte<span aria-hidden="true">→</span></a>
+        <a class="link-arrow" href="/ueber-uns" data-reveal>Unsere Geschichte<span aria-hidden="true"><svg class="i-arrow" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2.5 8h11M9 3.5 13.5 8 9 12.5"></path></svg></span></a>
       </div>
     </section>
 
@@ -195,7 +196,7 @@ const steps = [
         <a class="visit__phone display" href={restaurant.phoneHref}>{restaurant.phone}</a>
         <p class="visit__text">Ruf an und bestell vor, dann holst du dein Essen einfach ab. Tische reservieren wir dir auch telefonisch.</p>
         <p class="visit__address">{restaurant.name}<br />{restaurant.street}<br />{restaurant.postalCode} {restaurant.city}</p>
-        <a class="link-arrow" href={routeHref} rel="noopener">Route planen<span aria-hidden="true">→</span></a>
+        <a class="link-arrow" href={routeHref} rel="noopener">Route planen<span aria-hidden="true"><svg class="i-arrow" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2.5 8h11M9 3.5 13.5 8 9 12.5"></path></svg></span></a>
       </div>
       <div class="visit__hours" data-reveal style="--d: 150ms">
         <p class="label">Öffnungszeiten</p>
@@ -214,13 +215,13 @@ const steps = [
         <p class="label">Catering und Firmen</p>
         <p class="offer__mid display">Ab 10 Shawarma liefern wir.</p>
         <p class="offer__text">An Firmen in {restaurant.city}. Für Feiern: die Elmo-Grill Platte für 4 Personen, 80,00 €.</p>
-        <a class="link-arrow offer__link" href="/catering">Catering anfragen<span aria-hidden="true">→</span></a>
+        <a class="link-arrow offer__link" href="/catering">Catering anfragen<span aria-hidden="true"><svg class="i-arrow" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2.5 8h11M9 3.5 13.5 8 9 12.5"></path></svg></span></a>
       </div>
       <div class="offer" data-reveal>
         <p class="label">Gutscheine</p>
         <p class="offer__mid display">Genuss <em>verschenken.</em></p>
         <p class="offer__text">Im Restaurant oder auf Anfrage am Telefon.</p>
-        <a class="link-arrow offer__link" href="/gutscheine">Zu den Gutscheinen<span aria-hidden="true">→</span></a>
+        <a class="link-arrow offer__link" href="/gutscheine">Zu den Gutscheinen<span aria-hidden="true"><svg class="i-arrow" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2.5 8h11M9 3.5 13.5 8 9 12.5"></path></svg></span></a>
       </div>
     </section>
 
@@ -232,7 +233,7 @@ const steps = [
           Orte aus dem Libanon und aus Jerusalem hängen bei uns im Flur. Scan den Code neben einem Bild oder lies alle
           Geschichten hier.
         </p>
-        <a class="link-arrow" href="/museum" data-reveal>Zum Museum<span aria-hidden="true">→</span></a>
+        <a class="link-arrow" href="/museum" data-reveal>Zum Museum<span aria-hidden="true"><svg class="i-arrow" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2.5 8h11M9 3.5 13.5 8 9 12.5"></path></svg></span></a>
       </div>
       <div class="museum__images" data-reveal-stagger="140">
         {
@@ -350,8 +351,6 @@ const steps = [
     margin-top: 1.25rem;
     font-size: clamp(4.5rem, 21.5vw, 11rem);
     line-height: 0.86;
-    /* weicher Schatten: Titel bleibt lesbar, wo er über das Foto im Bogen läuft */
-    text-shadow: 0 0.04em 0.35em rgba(20, 18, 14, 0.55);
   }
 
   /* normaler Umbruch („Frisch vom / Spieß.“), nicht ausbalanciert */
@@ -362,6 +361,17 @@ const steps = [
   .hero :global(.hero__arch) {
     height: clamp(24rem, 112vw, 34rem);
     margin: -2.4rem 0 0 3rem;
+  }
+
+  /* Verlauf nur am Desktop: dort läuft „Frisch vom Spieß.“ über das Foto */
+  .hero :global(.archbox__shade) {
+    display: none;
+  }
+
+  @media (min-width: 64rem) {
+    .hero :global(.archbox__shade) {
+      display: block;
+    }
   }
 
   .hero__bottom {

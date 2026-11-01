@@ -23,6 +23,8 @@ interface Props {
   position?: string;
   /** Bogen öffnet sich beim Einblenden von unten (data-reveal="arch"). */
   reveal?: boolean;
+  /** Dunkler Verlauf von links, damit darüber laufender Text lesbar bleibt. */
+  shade?: boolean;
   class?: string;
   style?: string;
 }
@@ -37,6 +39,7 @@ const {
   priority = false,
   position,
   reveal = false,
+  shade = false,
   class: className,
   style,
 } = Astro.props;
@@ -63,6 +66,7 @@ const {
         <PhotoPlaceholder label={placeholder} />
       )
     }
+    {shade && <div class="archbox__shade" aria-hidden="true" />}
   </div>
 </div>
 
@@ -72,8 +76,22 @@ const {
   }
 
   .archbox__inner {
+    position: relative;
     width: 100%;
     height: 100%;
+  }
+
+  .archbox__shade {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background: linear-gradient(
+      90deg,
+      rgba(20, 18, 14, 0.82) 0%,
+      rgba(20, 18, 14, 0.55) 30%,
+      rgba(20, 18, 14, 0.18) 52%,
+      rgba(20, 18, 14, 0) 66%
+    );
   }
 
   .archbox--framed {

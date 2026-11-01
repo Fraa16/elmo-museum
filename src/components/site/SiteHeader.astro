@@ -58,7 +58,7 @@ const sheetItems = [{ href: '/', label: 'Start' }, ...NAV, { href: '/gutscheine'
       }
     </nav>
     <div class="sheet__foot page">
-      <a class="btn btn--solid" href={restaurant.phoneHref}>Anrufen: {restaurant.phone}<span aria-hidden="true">→</span></a>
+      <a class="btn btn--solid" href={restaurant.phoneHref}>Anrufen: {restaurant.phone}<span aria-hidden="true"><svg class="i-arrow" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2.5 8h11M9 3.5 13.5 8 9 12.5"></path></svg></span></a>
       <p>{restaurant.street}, {restaurant.postalCode} {restaurant.city}</p>
     </div>
   </div>
