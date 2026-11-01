@@ -6,7 +6,7 @@ import CallBand from '../components/site/CallBand.astro';
 import Todo from '../components/Todo.astro';
 import { restaurant } from '../data/restaurant';
 
-// TODO: Freigabe Momo; Vorlaufzeit, Personenzahl und E-Mail für Anfragen fehlen noch.
+// TODO: Freigabe Momo; Vorlaufzeit und Personenzahl fehlen noch.
 const steps = [
   { num: '01', title: 'Anrufen', text: 'Sag uns, wie viele ihr seid, was ihr essen möchtet und wann.' },
   { num: '02', title: 'Wir bereiten zu', text: 'Alles handgemacht und frisch zubereitet, in unserer Küche in der Kapuzinergasse.' },
@@ -60,8 +60,13 @@ const steps = [
         }
       </ol>
       <p class="flow__open">
-        Noch offen: Vorlaufzeit <Todo label="z. B. 2 Tage vorher" />, ab wie vielen Personen <Todo label="Personenzahl" />,
-        E-Mail für Anfragen <Todo label="E-Mail-Adresse" />.
+        Noch offen: Vorlaufzeit <Todo label="z. B. 2 Tage vorher" />, ab wie vielen Personen <Todo label="Personenzahl" />.
+      </p>
+    </section>
+
+    <section class="mail page" aria-label="Anfrage per E-Mail">
+      <p class="mail__text">
+        Lieber schriftlich? Schreib uns an <a href={`mailto:${restaurant.email}?subject=Catering-Anfrage`}>{restaurant.email}</a>.
       </p>
     </section>
 
@@ -140,6 +145,21 @@ const steps = [
 
   .flow__text {
     color: var(--muted);
+  }
+
+  .mail {
+    padding-top: 2.5rem;
+  }
+
+  .mail__text {
+    font-family: var(--font-head);
+    font-size: clamp(1.625rem, 2.6vw, 2.25rem);
+    line-height: 1.25;
+  }
+
+  .mail__text a {
+    color: var(--gold-soft);
+    overflow-wrap: anywhere;
   }
 
   .flow__open {

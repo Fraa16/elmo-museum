@@ -3,6 +3,7 @@ import '../styles/legal.css';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Todo from '../components/Todo.astro';
 import { CITY, RESTAURANT } from '../config';
+import { restaurant } from '../data/restaurant';
 
 // TODO: Daten von Momo: Verantwortlicher ergänzen; Text vor Veröffentlichung rechtlich prüfen lassen.
 ---
@@ -31,7 +32,7 @@ import { CITY, RESTAURANT } from '../config';
       K. El-Abdallah<br />
       Kapuzinergasse 6<br />
       73525 {CITY}<br />
-      E-Mail: <Todo label="E-Mail-Adresse" />
+      E-Mail: <a href={`mailto:${restaurant.email}`}>{restaurant.email}</a>
     </address>
 
     <h2>Hosting und Server-Logfiles</h2>

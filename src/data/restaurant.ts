@@ -12,8 +12,7 @@ export const restaurant = {
   city: 'Schwäbisch Gmünd',
   phone: '07171 9039994',
   phoneHref: 'tel:+4971719039994',
-  /** TODO: E-Mail-Adresse von Momo. */
-  email: null as string | null,
+  email: 'elmoshawarma2016@hotmail.com',
   /** TODO: Instagram-Profil von Momo. */
   instagram: null as string | null,
   since: 2017,
@@ -53,6 +52,7 @@ export function restaurantJsonLd(siteUrl: string) {
     name: restaurant.name,
     url: `${siteUrl}/`,
     telephone: '+49 7171 9039994',
+    email: restaurant.email,
     servesCuisine: ['Libanesisch', 'Palästinensisch', 'Arabisch'],
     menu: `${siteUrl}/speisekarte`,
     acceptsReservations: 'True',

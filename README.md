@@ -101,7 +101,7 @@ Hauptadresse umleiten. `elmo-museum.vercel.app` **nie entfernen** (QR-Schilder).
 
 ## Offene Punkte (TODO)
 
-- **Website vor dem Start:** Fotos (Platzhalter im Bogen), E-Mail, Zahlungsweg für
+- **Website vor dem Start:** Fotos (Platzhalter im Bogen), Zahlungsweg für
   Online-Gutscheine, Catering-Details (Vorlaufzeit, Personenzahl), Parken, Bus,
   Zahlungsarten, Familiengeschichte; Rückfragen zur Speisekarte (vegan, Allergene,
   Halal, Schreibweisen); Wörterbuch und Jahreszahlen von Momo freigeben lassen.

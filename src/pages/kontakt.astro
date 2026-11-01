@@ -7,7 +7,7 @@ import OpenStatus from '../components/site/OpenStatus.astro';
 import Todo from '../components/Todo.astro';
 import { restaurant, routeHref } from '../data/restaurant';
 
-// TODO: Daten von Momo: Parken, Bus, Zahlungsarten, E-Mail, barrierefrei ja oder nein.
+// TODO: Daten von Momo: Parken, Bus, Zahlungsarten, barrierefrei ja oder nein.
 ---
 
 <BaseLayout
@@ -54,7 +54,7 @@ import { restaurant, routeHref } from '../data/restaurant';
         </div>
         <div class="facts__item">
           <dt>E-Mail</dt>
-          <dd><Todo label="E-Mail-Adresse" /></dd>
+          <dd><a href={`mailto:${restaurant.email}`}>{restaurant.email}</a></dd>
         </div>
       </dl>
     </section>
