@@ -12,7 +12,7 @@ import { SITE_URL } from '../config';
 import { restaurant, restaurantJsonLd, routeHref } from '../data/restaurant';
 import { dishCount, featuredDishes } from '../data/menu';
 import { stationPath, stations } from '../data/stations';
-import { stationImage } from '../lib/images';
+import { ARCH_QUALITY, ARCH_WIDTHS, stationImage, widthsFor } from '../lib/images';
 // Fotos der Gerichte und der Küche (mit KI erstellt, Serviervorschläge)
 import heroFood from '../assets/food/shawarma-teller.webp';
 import imgMarinieren from '../assets/food/marinieren.webp';
@@ -34,6 +34,10 @@ const count = numberWords[stations.length] ?? String(stations.length);
 const featured = featuredDishes();
 
 const og = await getImage({ src: heroFood, width: 1200, format: 'jpg', quality: 80 });
+
+// Titelbild vorab laden: gleiche Breiten und Qualität wie im Bogen, damit der Browser dieselbe Datei nimmt
+const heroSizes = '(min-width: 64rem) 33rem, 85vw';
+const heroPreload = await getImage({ src: heroFood, widths: widthsFor(heroFood, ARCH_WIDTHS), format: 'avif', quality: ARCH_QUALITY });
 const ogImage = new URL(og.src, SITE_URL).href;
 
 const steps = [
@@ -71,6 +75,15 @@ const steps = [
   ogImageAlt="Shawarma im Fladenbrot mit Batata, im Hintergrund der Spieß"
 >
   <script type="application/ld+json" slot="head" set:html={JSON.stringify(restaurantJsonLd(SITE_URL))} />
+  <link
+    slot="head"
+    rel="preload"
+    as="image"
+    type="image/avif"
+    imagesrcset={heroPreload.srcSet.attribute}
+    imagesizes={heroSizes}
+    fetchpriority="high"
+  />
 
   <main>
     <section class="hero page" aria-labelledby="hero-title" data-reveal-intro>
@@ -91,7 +104,7 @@ const steps = [
         image={heroFood}
         alt="Aufgeschnittenes Shawarma im Fladenbrot mit Hähnchen, Tomate und Sauce, daneben Batata, im Hintergrund der Spieß"
         position="42% 50%"
-        sizes="(min-width: 64rem) 33rem, 85vw"
+        sizes={heroSizes}
         shade
         class="hero__arch"
       />
@@ -173,9 +186,9 @@ const steps = [
         src={roots}
         alt="Sonnenuntergang über dem Mittelmeer an der Küste von Al Bayada im Südlibanon"
         formats={['avif', 'webp']}
-        widths={[640, 960, 1440, 2000]}
+        widths={[640, 960, 1280, 1600]}
         sizes="100vw"
-        quality={55}
+        quality={45}
         loading="lazy"
         decoding="async"
         class="roots__img"
@@ -267,49 +280,49 @@ const steps = [
   }
 
   .hero__title .line:nth-child(1) {
-    --d: 80ms;
+    --d: 60ms;
   }
 
   .hero__title .line:nth-child(2) {
-    --d: 160ms;
+    --d: 120ms;
   }
 
   .hero__title .line:nth-child(3) {
-    --d: 240ms;
+    --d: 180ms;
   }
 
   .hero :global(.hero__arch) {
-    --d: 420ms;
+    --d: 300ms;
   }
 
   .hero__bottom {
-    --d: 600ms;
+    --d: 420ms;
   }
 
   /* Desktop: Bogen steht neben dem Titel und öffnet sich parallel */
   @media (min-width: 64rem) {
     .hero__label {
-      --d: 60ms;
+      --d: 40ms;
     }
 
     .hero__title .line:nth-child(1) {
-      --d: 140ms;
+      --d: 100ms;
     }
 
     .hero__title .line:nth-child(2) {
-      --d: 240ms;
+      --d: 170ms;
     }
 
     .hero__title .line:nth-child(3) {
-      --d: 340ms;
+      --d: 240ms;
     }
 
     .hero :global(.hero__arch) {
-      --d: 260ms;
+      --d: 180ms;
     }
 
     .hero__bottom {
-      --d: 720ms;
+      --d: 500ms;
     }
   }
 

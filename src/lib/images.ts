@@ -21,3 +21,11 @@ export function widthsFor(image: ImageMetadata, candidates: number[]): number[] 
   const max = Math.min(image.width, Math.max(...candidates));
   return [...new Set([...candidates.filter((w) => w < max), max])];
 }
+
+/**
+ * Bilder im Bogen: höchstens 960 px breit (reicht für den Bogen auch auf
+ * 3x-Handys und am Desktop), AVIF-Qualität 50. Die Vorab-Ladung des
+ * Titelbilds nutzt dieselben Werte, damit der Browser dieselbe Datei nimmt.
+ */
+export const ARCH_WIDTHS = [480, 640, 800, 960];
+export const ARCH_QUALITY = 50;

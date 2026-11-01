@@ -43,22 +43,22 @@
   --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
   --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
   /* Bewegungswerte: auf dem Handy kürzer und schneller, ab 64rem großzügiger */
-  --reveal-dist: 0.875rem;
-  --reveal-dur: 750ms;
-  --mask-dur: 950ms;
-  --arch-dur: 1000ms;
-  --zoom-dur: 1400ms;
+  --reveal-dist: 0.75rem;
+  --reveal-dur: 600ms;
+  --mask-dur: 750ms;
+  --arch-dur: 800ms;
+  --zoom-dur: 1100ms;
 
   color-scheme: dark;
 }
 
 @media (min-width: 64rem) {
   :root {
-    --reveal-dist: 1.75rem;
-    --reveal-dur: 1100ms;
-    --mask-dur: 1250ms;
-    --arch-dur: 1400ms;
-    --zoom-dur: 2000ms;
+    --reveal-dist: 1.5rem;
+    --reveal-dur: 850ms;
+    --mask-dur: 1000ms;
+    --arch-dur: 1100ms;
+    --zoom-dur: 1500ms;
   }
 }
 
@@ -397,16 +397,31 @@ p {
     transform: none;
   }
 
+  /*
+   * Bogen öffnet sich von unten: eine Blende in Hintergrundfarbe zieht sich nach
+   * oben zurück. Bewusst kein clip-path am Bogen: weggeschnittene Bilder hält der
+   * Browser für unsichtbar und lädt sie dann nicht vorab.
+   */
   .js [data-reveal='arch'] {
     opacity: 1;
     transform: none;
-    clip-path: inset(100% 0 0 0);
-    transition: clip-path var(--arch-dur) var(--ease-out);
-    transition-delay: var(--d, 0ms);
+    transition: none;
   }
 
-  .js [data-reveal='arch'].is-in {
-    clip-path: inset(0 0 0 0);
+  .js [data-reveal='arch']::after {
+    content: '';
+    position: absolute;
+    inset: -2px;
+    z-index: 2;
+    background: var(--arch-cover, var(--bg));
+    transform-origin: 50% 0;
+    transition: transform var(--arch-dur) var(--ease-out);
+    transition-delay: var(--d, 0ms);
+    pointer-events: none;
+  }
+
+  .js [data-reveal='arch'].is-in::after {
+    transform: scaleY(0);
   }
 
   .js [data-reveal='arch'] img {
