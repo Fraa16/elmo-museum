@@ -341,11 +341,6 @@ p {
   }
 }
 
-@keyframes line-up {
-  from {
-    transform: translate3d(0, 108%, 0);
-  }
-}
 
 @keyframes arch-open {
   from {
@@ -359,13 +354,13 @@ p {
   }
 }
 
-/* Masken für Zeilen und große Überschriften: etwas Luft für Unterlängen und Kursive */
+/* Masken für Zeilen und große Überschriften: Luft für Ober- und Unterlängen und Kursive */
 .line,
 [data-reveal='mask'] {
   display: block;
   overflow: hidden;
-  padding: 0 0.12em 0.14em 0;
-  margin: 0 -0.12em -0.14em 0;
+  padding: 0.1em 0.12em 0.14em 0;
+  margin: -0.1em -0.12em -0.14em 0;
 }
 
 .line__in,
@@ -420,8 +415,9 @@ p {
     transition: none;
   }
 
+  /* Start weit genug unten, damit keine Oberlänge vorher in die Maske ragt */
   .js [data-reveal='mask'] > .mask__in {
-    transform: translate3d(0, 108%, 0);
+    transform: translate3d(0, 165%, 0);
     transition: transform 1300ms var(--ease-out);
     transition-delay: var(--d, 0ms);
   }

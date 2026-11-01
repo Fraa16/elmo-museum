@@ -251,9 +251,17 @@ const steps = [
   .hero__title {
     position: relative;
     z-index: 1;
+    /* Flex: die Ränder der Zeilenmasken fallen nicht zusammen, Abstände bleiben wie gesetzt */
+    display: flex;
+    flex-direction: column;
     margin-top: 1.25rem;
     font-size: clamp(4.5rem, 21.5vw, 11rem);
     line-height: 0.86;
+  }
+
+  /* normaler Umbruch („Frisch vom / Spieß.“), nicht ausbalanciert */
+  .hero__title :global(.mask__in) {
+    text-wrap: wrap;
   }
 
   .hero :global(.hero__arch) {
