@@ -38,12 +38,16 @@ export interface Station {
   slug: string;
   number: number;
   title: string;
+  /** Arabischer Titel, steht auf der Stationsseite unter dem Kicker. */
+  titleAr?: string;
   kicker: string;
   headline: string;
   subline: string;
   paragraphs: string[];
   /** Dateiname in src/assets/stations/ (Nummer = QR-ID, nicht Position im Flur). */
   image: string;
+  /** CSS `object-position` für die zugeschnittenen Karten, z. B. bei Hochformat. */
+  imagePosition?: string;
   alt: string;
   /** `null` blendet das Rate-Element für diese Station aus. */
   quiz: Quiz | null;
@@ -366,6 +370,42 @@ export const stations: Station[] = [
       wrong: 'Überraschend, oder? Sie besteht aus 15 Tonnen Bronze.',
     },
     sources: [],
+  },
+  {
+    // TODO: Freigabe Momo: Station 11 (Text, Bild). Bildrechte Sliman Mansour klären.
+    id: '11',
+    qrId: 'ELMO-11',
+    slug: '11-jamal-al-mahamel',
+    number: 11,
+    title: 'Jamal al-Mahamel',
+    titleAr: 'جمل المحامل',
+    kicker: 'SLIMAN MANSOUR, PALÄSTINA, 1973',
+    headline: 'Der Mann, der Jerusalem auf seinen Schultern trägt.',
+    subline: 'Wie schwer muss eine Erinnerung sein, wenn ein Mensch eine ganze Stadt auf seinem Rücken trägt?',
+    paragraphs: [
+      'Ein alter Mann. Barfuß. Sein Rücken ist gebeugt, seine Hände umklammern die Tragegurte. Doch was er trägt, ist kein gewöhnliches Gepäck.',
+      '**Es ist Jerusalem.**',
+      'Im Zentrum seiner Last leuchtet der Felsendom, umgeben von den Häusern und Gassen der heiligen Stadt.',
+      '1973 erschuf der palästinensische Künstler Sliman Mansour dieses außergewöhnliche Gemälde.',
+      'Die Idee entstand aus einer alltäglichen Beobachtung: Als junger Kunststudent hatte Mansour einen alten Lastenträger auf dem Markt von Jerusalem gezeichnet.',
+      'Später verwandelte er diese einfache Szene in ein Symbol für ein ganzes Volk.',
+      'Der Mann trägt nicht nur Jerusalem. Er trägt seine Geschichte, seine Wurzeln, den Schmerz des Verlustes und die Hoffnung auf Rückkehr.',
+      'Besonders eindrucksvoll ist die Form seiner Last: Sie erinnert an ein menschliches Auge. Jerusalem wird damit zum kostbaren Gut, das man niemals aus den Augen verlieren möchte.',
+      'Das Gemälde verbreitete sich auf Postern und Postkarten und wurde für Generationen von Palästinensern zu einem Symbol ihrer Identität.',
+      'In der palästinensischen Kultur gibt es dafür ein Wort: **Sumud** (صمود).',
+      'Es bedeutet Standhaftigkeit. Die Kraft, trotz aller Schwierigkeiten weiterzumachen.',
+      '**Denn manchmal ist Heimat kein Ort, an dem man gerade lebt. Sondern ein Ort, den man für immer in seinem Herzen trägt.**',
+    ],
+    image: '11.webp',
+    imagePosition: 'center 25%',
+    alt: 'Gemälde von Sliman Mansour: Ein alter Mann geht barfuß und gebeugt und trägt Jerusalem mit dem Felsendom als riesige Last auf dem Rücken',
+    quiz: null,
+    sources: [
+      {
+        label: 'Dalloul Art Foundation: Sliman Mansour, Jamal al-Mahamel III',
+        url: 'https://dafbeirut.org/collection/sliman-anis-mansour/jamal-al-mahamel-iii-camelcarrier-hardships',
+      },
+    ],
   },
 ];
 

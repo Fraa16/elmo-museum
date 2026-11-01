@@ -24,6 +24,7 @@ const image = stationImage(station.image);
     loading={eager ? 'eager' : 'lazy'}
     decoding="async"
     class="card__img"
+    style={station.imagePosition && `object-position: ${station.imagePosition}`}
   />
   <span class="card__body">
     <span class="card__title"><span class="card__num">{station.id}</span>{station.title}</span>

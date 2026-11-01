@@ -15,8 +15,12 @@ Astro erzeugt daraus AVIF/WebP in mehreren Größen (höchstens 1600 px breit).
 | 08.jpg  | Moschee & Kirche   | Original (2000 × 1333)                             |
 | 09.jpg  | Seeburg von Sidon  | Original (2000 × 1333)                             |
 | 10.jpg  | Harissa & Jounieh  | Aus dem Druck-PDF 25 × 20 cm, auf 2000 × 1600 verkleinert |
+| 11.webp | Jamal al-Mahamel   | Gemälde von Sliman Mansour, Hochformat (1289 × 2000), Quelle Dalloul Art Foundation |
+
+Alle Bilder sind mit KI bearbeitet (Hinweis im Impressum). Hochformat-Bilder bekommen in
+`src/data/stations.ts` ein `imagePosition` für den Ausschnitt in den Karten.
 
 ## TODO
 
-- **Vor Veröffentlichung:** Bildrechte und ggf. KI-Herkunft aller Bilder klären
-  (Kunden-PDF, S. 14). Die Dateien enthalten keine Metadaten zur Herkunft.
+- **Vor Veröffentlichung:** Bildrechte aller Bilder klären (Kunden-PDF, S. 14), bei 11
+  Erlaubnis der Rechteinhaber von Sliman Mansour. Die Dateien enthalten keine Metadaten zur Herkunft.

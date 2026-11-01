@@ -2,7 +2,7 @@
 /**
  * QR-Codes für alle Stationen erzeugen: `npm run qr`
  *
- * Erzeugt für ELMO-00 bis ELMO-09 je eine SVG und eine PNG (2000 px) in
+ * Erzeugt für den Start (ELMO-00) und jede Station je eine SVG und eine PNG (2000 px) in
  * /qr-export/, z. B. ELMO-02_baalbek-bacchustempel.svg, plus manifest.csv.
  *
  * Erst ausführen, wenn die Domain fix ist (SITE_URL_CONFIRMED = true in

@@ -43,6 +43,7 @@ keine Cookies, keine externen Requests.
 | ELMO-08 | `/museum/08-beirut-glaubensvielfalt`  |
 | ELMO-09 | `/museum/09-sidon-seeburg`            |
 | ELMO-10 | `/museum/10-harissa-jounieh`          |
+| ELMO-11 | `/museum/11-jamal-al-mahamel`         |
 
 Außerdem `/impressum`, `/datenschutz`, eine eigene 404-Seite und der Druckbogen
 `/museum/qr-bogen` (noindex, nirgends verlinkt). `/` leitet auf `/museum` weiter
@@ -53,7 +54,7 @@ Außerdem `/impressum`, `/datenschutz`, eine eigene 404-Seite und der Druckbogen
 ```
 src/config.ts              zentrale Schalter (auch von Node-Skripten gelesen)
 src/data/stations.ts       alle Inhalte (Texte aus dem Briefing, **…** = Hervorhebung)
-src/assets/stations/       Stationsbilder 01 bis 09 (noch Platzhalter, siehe README dort)
+src/assets/stations/       Stationsbilder 01 bis 11 (siehe README dort)
 src/lib/images.ts          Bild-Auflösung und srcset-Breiten
 src/lib/qr.ts              gemeinsame QR-Definitionen (Skript + Druckbogen)
 src/components/            Topbar, Footer, Quiz, Karten
@@ -70,9 +71,9 @@ gelöscht** werden, sonst führen alle gedruckten Schilder ins Leere.
 
 `qr-export/` enthält:
 
-- `ELMO-00_start.svg/.png` bis `ELMO-10_harissa-jounieh.svg/.png` (PNG 2000 px)
+- `ELMO-00_start.svg/.png` bis `ELMO-11_jamal-al-mahamel.svg/.png` (PNG 2000 px)
 - `manifest.csv`: QR-ID, URL, Dateinamen
-- `ELMO-QR-Schilder_A4.pdf`: fertiger Druckbogen (3 Seiten A4, Schilder 70 × 90 mm
+- `ELMO-QR-Schilder_A4.pdf`: fertiger Druckbogen (4 Seiten A4, Seite 4 nur ELMO-11, Schilder 70 × 90 mm
   mit Schnittmarken, Startschild A6, QR 38 mm). In 100 % / „Tatsächliche Größe“
   drucken, nicht „An Seite anpassen“.
 
@@ -85,12 +86,15 @@ Neu erzeugen (nur nötig, wenn sich Pfade oder das Schild-Design ändern):
 
 ## Offene Punkte (TODO)
 
-- **Bilder:** Bildrechte und ggf. KI-Herkunft aller Bilder klären.
+- **Bilder:** Bildrechte aller Bilder klären. Alle Bilder sind mit KI bearbeitet (steht im
+  Impressum). Station 11 zeigt ein Gemälde von Sliman Mansour (gestorben 2026, Werk
+  noch geschützt): Erlaubnis der Rechteinhaber nötig.
 - **Impressum / Datenschutz:** Daten von Momo eintragen (markierte Platzhalter),
   rechtlich prüfen lassen.
 - **Freigaben Momo:** Intro-Text der Startseite, persönliche Aussagen (Station 01),
   Ortsangaben Al Bayada / Al Mansouri (01, 05) und Tyros (07), Auflösungszeilen des Quiz,
-  Station 10 Harissa & Jounieh (Text, Quiz, Bild).
+  Station 10 Harissa & Jounieh (Text, Quiz, Bild), Station 11 Jamal al-Mahamel (Text, Bild,
+  ohne Quiz).
 - **Quelle Station 10:** fehlt noch (Höhe, Bronze, Lyon, Einweihung 1908, 104 Stufen).
 - **Scan-Test:** gedruckte Schilder vor Ort mit Android und iPhone testen.
 - **Nach Freigabe:** optional `INDEXABLE = true`.

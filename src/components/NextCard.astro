@@ -21,6 +21,7 @@ const image = stationImage(station.image);
     loading="lazy"
     decoding="async"
     class="next__img"
+    style={station.imagePosition && `object-position: ${station.imagePosition}`}
   />
   <span class="next__body">
     <span class="next__label">Nächste Geschichte</span>
