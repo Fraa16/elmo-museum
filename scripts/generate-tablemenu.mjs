@@ -6,8 +6,8 @@
  * - A „Zwei Seiten“, für Tische 70 × 70 und 80 × 80 cm: zwei Hälften, jede zum
  *   Gast auf ihrer Seite lesbar (die obere steht auf dem Kopf); dazwischen ein
  *   dunkles Band mit Medaillon für die Kerze in der Tischmitte.
- * - B „Eine Richtung“, DIN A2 Hochformat (42 × 59,4 cm), eine Karte pro Tisch:
- *   drei Spalten, in der Blattmitte ein Goldring als Platz für die Kerze.
+ * - B „Eine Richtung“, DIN A2 Querformat (59,4 × 42 cm), eine Karte pro Tisch:
+ *   fünf Spalten, in der Blattmitte ein Goldring als Platz für die Kerze.
  *
  * Schreibt nach /print/speisekarte-tisch/: Druck-PDFs mit 3 mm Beschnitt und
  * PNG-Vorschauen. Inhalte und Preise kommen aus src/data/menu.ts.
@@ -278,34 +278,38 @@ const A = {
 
 const B = {
   name: 'B_eine-Richtung',
-  base: { w: 420, h: 594 },
-  formats: [{ label: 'A2', w: 420, h: 594 }],
+  base: { w: 594, h: 420 },
+  formats: [{ label: 'A2-quer', w: 594, h: 420 }],
   vars: `--logo: 17mm; --label: 2.6mm; --cat: 10.4mm; --name: 5mm; --price: 4.5mm; --desc: 3.15mm; --tag: 2.45mm;
     --note: 2.7mm; --cat-gap: 8mm; --dish-pad: 1.9mm; --head-pad: 2.4mm; --rule: 0.55mm; --thin: 0.3mm;
     --thumb-w: 21mm; --thumb-h: 26mm; --thumb-pad: 0.9mm; --thumb-gap: 4mm; --ring: 0.5mm; --ring-inset: 4.5mm;`,
-  // links | Mitte oben | Mitte unten (unter dem Kerzenring) | rechts
+  // fünf Spalten; die mittlere ist um den Kerzenring geteilt (oben, unten)
   cols: [
-    [{ id: 'sandwiches', to: 12 }, { id: 'sandwiches', from: 12, title: 'Vegetarische Sandwiches' }, 'tageskueche'],
-    ['burger', 'broasted'],
-    ['suppen', 'schueler', 'getraenke'],
-    ['teller', 'mezze', 'story'],
+    [{ id: 'sandwiches', to: 12 }, 'schueler'],
+    [{ id: 'sandwiches', from: 12, title: 'Vegetarische Sandwiches' }, 'burger'],
+    ['broasted'],
+    ['suppen', 'getraenke'],
+    ['teller', 'story'],
+    ['mezze', 'tageskueche'],
   ],
   css: `
-.head { position: absolute; left: -${BLEED}mm; right: -${BLEED}mm; top: -${BLEED}mm; height: calc(52mm + ${BLEED}mm); background: #14120e; color: #ece3d2; }
-.head .logo { position: absolute; left: calc(20mm + ${BLEED}mm); bottom: 9mm; }
-.head__title { position: absolute; left: 50%; bottom: 9mm; transform: translateX(-50%); display: flex; align-items: baseline; gap: 5mm; white-space: nowrap; }
+.head { position: absolute; left: -${BLEED}mm; right: -${BLEED}mm; top: -${BLEED}mm; height: calc(46mm + ${BLEED}mm); background: #14120e; color: #ece3d2; }
+.head .logo { position: absolute; left: calc(20mm + ${BLEED}mm); bottom: 8mm; }
+.head__title { position: absolute; left: 50%; bottom: 8mm; transform: translateX(-50%); display: flex; align-items: baseline; gap: 5mm; white-space: nowrap; }
 .head__title .serif { font-size: 19mm; line-height: 0.9; letter-spacing: -0.02em; }
 .head__title .serif em { color: #e3c98f; }
 .head__title .ar { font-family: 'Reem Kufi', sans-serif; font-weight: 600; font-size: 7mm; line-height: 1; color: #e3c98f; }
-.head__call { position: absolute; right: calc(20mm + ${BLEED}mm); bottom: 9mm; text-align: right; }
+.head__call { position: absolute; right: calc(20mm + ${BLEED}mm); bottom: 8mm; text-align: right; }
 .head__call .serif { margin-top: 1mm; font-size: 8.5mm; line-height: 1; }
-.col { width: 118mm; }
-.col--1 { left: 20mm; top: 64mm; height: 500mm; }
-.col--2 { left: 151mm; top: 64mm; height: 179mm; }
-.col--3 { left: 151mm; top: 351mm; height: 213mm; }
-.col--4 { left: 282mm; top: 64mm; height: 500mm; }
-/* Kerzenplatz genau in der Blattmitte (Tischmitte) */
-.design > .medal { left: 162mm; top: 249mm; width: 96mm; height: 96mm; background: transparent; border: 0.3mm solid #b8975a; }
+.col { width: 102mm; top: 58mm; height: 336mm; }
+.col--1 { left: 20mm; }
+.col--2 { left: 133mm; }
+.col--3 { left: 246mm; height: 96mm; }
+.col--4 { left: 246mm; top: 266mm; height: 128mm; }
+.col--5 { left: 359mm; }
+.col--6 { left: 472mm; }
+/* Kerzenplatz genau in der Blattmitte (Tischmitte), zwischen Spalte 3 oben und unten */
+.design > .medal { left: 249mm; top: 162mm; width: 96mm; height: 96mm; background: transparent; border: 0.3mm solid #b8975a; }
 .design > .medal::after { border-color: #b8975a; border-width: 0.6mm; }
 .story { margin-top: auto; display: grid; grid-template-columns: auto minmax(0, 1fr); align-items: end; gap: 5mm;
   padding-top: 4mm; border-top: var(--rule) solid #1b1814; }
@@ -318,7 +322,7 @@ const B = {
 .words div:last-child { border-bottom: 0; }
 .words dt { display: inline; font-family: 'Instrument Serif', Georgia, serif; font-size: 4mm; line-height: 1.2; }
 .words dd { display: inline; margin: 0 0 0 1.5mm; font-size: 2.8mm; line-height: 1.3; color: #6b6253; }
-.foot { position: absolute; left: 20mm; right: 20mm; bottom: 14mm; display: flex; justify-content: space-between; align-items: flex-end;
+.foot { position: absolute; left: 20mm; right: 20mm; bottom: 13mm; display: flex; justify-content: space-between; align-items: flex-end;
   gap: 14mm; padding-top: 2.5mm; border-top: 0.3mm solid #cbbea6; }
 .foot .note:last-child { text-align: right; font-weight: 600; color: #1b1814; white-space: nowrap; }
 `,
