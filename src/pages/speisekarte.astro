@@ -31,50 +31,58 @@ const half = (n: number) => Math.ceil(n / 2);
       </div>
     </PageHero>
 
-    <nav class="jump" aria-label="Kategorien">
-      <ul class="jump__list page">
+    <!--
+      Die Sprungleiste klebt nur innerhalb dieses Bereichs: Nach der letzten
+      Kategorie scrollt sie mit weg, beim Hochscrollen erscheint sie wieder.
+    -->
+    <div class="menuwrap">
+      <nav class="jump" aria-label="Kategorien">
+        <ul class="jump__list page">
+          {
+            menu.map((cat) => (
+              <li>
+                <a href={`#${cat.id}`} data-jump={cat.id}>
+                  {cat.title}
+                </a>
+              </li>
+            ))
+          }
+        </ul>
+      </nav>
+
+      <div class="card card--cats">
         {
           menu.map((cat) => (
-            <li>
-              <a href={`#${cat.id}`} data-jump={cat.id}>
-                {cat.title}
-              </a>
-            </li>
+            <section id={cat.id} class="cat page" aria-labelledby={`${cat.id}-title`}>
+              <header class="cat__head" data-reveal>
+                <h2 id={`${cat.id}-title`} class="display cat__title">
+                  {cat.title}
+                </h2>
+                {(cat.intro || cat.extras) && (
+                  <p class="cat__intro">
+                    {cat.intro}
+                    {cat.extras && (
+                      <span class="cat__extras">Extra: {cat.extras.map((e) => `${e.label} +${formatPrice(e.price)}`).join(', ')}</span>
+                    )}
+                  </p>
+                )}
+              </header>
+              <div class="cat__grid">
+                {[cat.items.slice(0, half(cat.items.length)), cat.items.slice(half(cat.items.length))].map((column) => (
+                  <div class="cat__col">
+                    {column.map((dish) => (
+                      <DishRow dish={dish} reveal={false} />
+                    ))}
+                  </div>
+                ))}
+              </div>
+            </section>
           ))
         }
-      </ul>
-    </nav>
+      </div>
+    </div>
 
-    <div class="card">
-      {
-        menu.map((cat) => (
-          <section id={cat.id} class="cat page" aria-labelledby={`${cat.id}-title`}>
-            <header class="cat__head" data-reveal>
-              <h2 id={`${cat.id}-title`} class="display cat__title">
-                {cat.title}
-              </h2>
-              {(cat.intro || cat.extras) && (
-                <p class="cat__intro">
-                  {cat.intro}
-                  {cat.extras && (
-                    <span class="cat__extras">Extra: {cat.extras.map((e) => `${e.label} +${formatPrice(e.price)}`).join(', ')}</span>
-                  )}
-                </p>
-              )}
-            </header>
-            <div class="cat__grid">
-              {[cat.items.slice(0, half(cat.items.length)), cat.items.slice(half(cat.items.length))].map((column) => (
-                <div class="cat__col">
-                  {column.map((dish) => (
-                    <DishRow dish={dish} reveal={false} />
-                  ))}
-                </div>
-              ))}
-            </div>
-          </section>
-        ))
-      }
-
+    <div class="card card--words">
       <section class="words page" aria-labelledby="words-title">
         <h2 id="words-title" class="display words__title" data-reveal="mask"><span class="mask__in">Kleines <em>Wörterbuch.</em></span></h2>
         <dl class="words__list" data-reveal-stagger="50">
@@ -149,11 +157,14 @@ const half = (n: number) => Math.ceil(n / 2);
   }
 
   /* Sprungleiste */
+  .menuwrap {
+    margin-top: clamp(3rem, 6vw, 5rem);
+  }
+
   .jump {
     position: sticky;
     top: 0;
     z-index: 5;
-    margin-top: clamp(3rem, 6vw, 5rem);
     background: var(--stone);
     border-bottom: 1px solid var(--ink-line);
   }
@@ -218,6 +229,9 @@ const half = (n: number) => Math.ceil(n / 2);
   .card {
     background: var(--stone);
     color: var(--ink);
+  }
+
+  .card--words {
     padding-bottom: clamp(3rem, 6vw, 5rem);
   }
 
@@ -256,7 +270,6 @@ const half = (n: number) => Math.ceil(n / 2);
 
   .words {
     padding-top: clamp(4.5rem, 9vw, 7.5rem);
-    scroll-margin-top: 4rem;
   }
 
   .words__title {
