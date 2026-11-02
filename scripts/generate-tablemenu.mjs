@@ -8,6 +8,7 @@
  *   dunkles Band mit Medaillon für die Kerze in der Tischmitte.
  * - B „Eine Richtung“, DIN A2 Querformat (59,4 × 42 cm), eine Karte pro Tisch:
  *   fünf Spalten, in der Blattmitte ein Goldring als Platz für die Kerze.
+ *   Dazu B „dunkel“: gleicher Aufbau in den Farben der dunklen Website-Abschnitte.
  *
  * Schreibt nach /print/speisekarte-tisch/: Druck-PDFs mit 3 mm Beschnitt und
  * PNG-Vorschauen. Inhalte und Preise kommen aus src/data/menu.ts.
@@ -338,6 +339,33 @@ ${columnsHtml(this.cols, images)}
   },
 };
 
+/* --------------------------------------------- Variante B dunkel (A2 quer) */
+
+/** Farben der dunklen Website-Abschnitte: Fast-Schwarz, Kalkstein, Gold. */
+const darkCss = `
+.sheet { background: #14120e; }
+body { color: #ece3d2; }
+.head { background: #14120e; border-bottom: 0.3mm solid #6d5a36; }
+.cat__head { border-bottom-color: #c9a45c; }
+.cat__intro, .story__text { color: #c9bea9; }
+.cat__extras { color: #ece3d2; }
+.dish { border-bottom-color: #3a3227; }
+.dish__desc, .dish__unit { color: #b5aa95; }
+.dish__ar { color: #e3c98f; }
+.tag { color: #b5aa95; }
+.tag--leaf { color: #8fbf7a; }
+.thumb { border-color: #8f7543; }
+.design > .medal { border-color: #8f7543; }
+.design > .medal::after { border-color: #c9a45c; }
+.story { border-top-color: #c9a45c; }
+.story__title em { color: #e3c98f; }
+.foot { border-top-color: #3a3227; }
+.foot .note { color: #a99f8c; }
+.foot .note:last-child { color: #ece3d2; }
+`;
+
+const BDark = { ...B, name: 'B_eine-Richtung_dunkel', css: B.css + darkCss };
+
 /* ------------------------------------------------------------------ Bauen */
 
 const images = await categoryImages();
@@ -351,7 +379,7 @@ const browser = await chromium.launch();
 const page = await browser.newPage();
 let problems = 0;
 
-for (const variant of [A, B]) {
+for (const variant of [A, B, BDark]) {
   for (const format of variant.formats) {
     const scale = format.w / variant.base.w;
     const W = format.w + 2 * BLEED;
