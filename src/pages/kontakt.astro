@@ -4,10 +4,9 @@ import PageHero from '../components/site/PageHero.astro';
 import Arch from '../components/site/Arch.astro';
 import HoursTable from '../components/site/HoursTable.astro';
 import OpenStatus from '../components/site/OpenStatus.astro';
-import Todo from '../components/Todo.astro';
 import { restaurant, routeHref } from '../data/restaurant';
 
-// TODO: Daten von Momo: Parken, Bus, Zahlungsarten, barrierefrei ja oder nein.
+// TODO: Daten von Momo: barrierefrei ja oder nein.
 ---
 
 <BaseLayout
@@ -43,19 +42,23 @@ import { restaurant, routeHref } from '../data/restaurant';
       <dl class="facts__list" data-reveal-stagger="70">
         <div class="facts__item" data-reveal>
           <dt>Parken</dt>
-          <dd><Todo label="Parkmöglichkeiten in der Nähe" /></dd>
+          <dd>Öffentliche Parkplätze rund um das Restaurant.</dd>
         </div>
         <div class="facts__item" data-reveal>
           <dt>Bus und Bahn</dt>
-          <dd><Todo label="Haltestelle und Fußweg" /></dd>
+          <dd>Bahn und Bus in unmittelbarer Nähe.</dd>
         </div>
         <div class="facts__item" data-reveal>
           <dt>Bezahlen</dt>
-          <dd><Todo label="Zahlungsarten, z. B. bar und Karte" /></dd>
+          <dd>Alle gängigen Zahlungsarten.</dd>
         </div>
         <div class="facts__item" data-reveal>
           <dt>E-Mail</dt>
           <dd><a href={`mailto:${restaurant.email}`}>{restaurant.email}</a></dd>
+        </div>
+        <div class="facts__item" data-reveal>
+          <dt>Instagram</dt>
+          <dd><a href={restaurant.instagram} rel="noopener">{restaurant.instagramHandle}</a></dd>
         </div>
       </dl>
     </section>

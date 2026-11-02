@@ -3,10 +3,9 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import PageHero from '../components/site/PageHero.astro';
 import Arch from '../components/site/Arch.astro';
 import CallBand from '../components/site/CallBand.astro';
-import Todo from '../components/Todo.astro';
 import { restaurant } from '../data/restaurant';
 
-// TODO: Freigabe Momo; Vorlaufzeit und Personenzahl fehlen noch.
+// TODO: Freigabe Momo.
 const steps = [
   { num: '01', title: 'Anrufen', text: 'Sag uns, wie viele ihr seid, was ihr essen möchtet und wann.' },
   { num: '02', title: 'Wir bereiten zu', text: 'Alles handgemacht und frisch zubereitet, in unserer Küche in der Kapuzinergasse.' },
@@ -60,9 +59,19 @@ const steps = [
           ))
         }
       </ol>
-      <p class="flow__open" data-reveal>
-        Noch offen: Vorlaufzeit <Todo label="z. B. 2 Tage vorher" />, ab wie vielen Personen <Todo label="Personenzahl" />.
-      </p>
+      <div class="when" data-reveal>
+        <p class="label">Wann anrufen?</p>
+        <dl class="when__list">
+          <div class="when__item">
+            <dt>Mittagessen für Firmen</dt>
+            <dd>eine Stunde vorher</dd>
+          </div>
+          <div class="when__item">
+            <dt>Events und Feiern</dt>
+            <dd>eine Woche im Voraus</dd>
+          </div>
+        </dl>
+      </div>
     </section>
 
     <section class="mail page" aria-label="Anfrage per E-Mail">
@@ -163,10 +172,36 @@ const steps = [
     overflow-wrap: anywhere;
   }
 
-  .flow__open {
-    margin-top: 2.5rem;
-    font-size: 0.9375rem;
-    color: var(--muted-2);
+  .when {
+    margin-top: 3rem;
+    max-width: 44rem;
+  }
+
+  .when__list {
+    margin: 0.875rem 0 0;
+    border-top: 1px solid var(--line);
+  }
+
+  .when__item {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 0.25rem 1.5rem;
+    padding: 1rem 0;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .when__item dt {
+    font-family: var(--font-head);
+    font-size: clamp(1.5rem, 2.4vw, 2rem);
+    line-height: 1.1;
+  }
+
+  .when__item dd {
+    margin: 0;
+    color: var(--gold-soft);
+    font-weight: 600;
   }
 
   @media (min-width: 64rem) {

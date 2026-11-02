@@ -5,12 +5,10 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import PageHero from '../components/site/PageHero.astro';
 import Arch from '../components/site/Arch.astro';
 import CallBand from '../components/site/CallBand.astro';
-import Todo from '../components/Todo.astro';
 import { restaurant } from '../data/restaurant';
 import { stationImage } from '../lib/images';
 
-// TODO: Freigabe Momo: Jahreszahlen und Orte (laut Gmünder Tagespost), Herkunft Al Bayada,
-// Familiengeschichte und woher der Name Elmo kommt.
+// TODO: Freigabe Momo: Jahreszahlen und Orte (laut Gmünder Tagespost), Herkunft Al Bayada.
 const roots = stationImage('01.jpg');
 
 const timeline = [
@@ -23,7 +21,7 @@ const hands = [
   { title: 'Von Hand geschichtet', text: 'Schicht für Schicht auf den Spieß.' },
   { title: 'Von Hand geformt', text: 'Kafta nach libanesischer Art, frisch gegrillt.' },
   { title: 'Von Hand geschnitten', text: 'Batata, unsere Kartoffeln.' },
-  { title: 'Selbst gemacht', text: 'Falafel, Ayran und Joghurt aus unserer Küche.' },
+  { title: 'Selbst gemacht', text: 'Falafel und Labban aus unserem selbstgemachten Joghurt.' },
 ];
 ---
 
@@ -94,7 +92,6 @@ const hands = [
           ))
         }
       </ol>
-      <p class="hands__story" data-reveal>Unsere Familiengeschichte und woher der Name Elmo kommt: <Todo label="Text von Momo" /></p>
     </section>
 
     <CallBand />

@@ -107,8 +107,8 @@ const steps = [
       />
       <div class="hero__bottom" data-reveal>
         <p class="hero__text">
-          Hähnchen selbst mariniert und von Hand geschichtet. Kafta von Hand geformt. Falafel, Ayran und Joghurt aus
-          unserer Küche.
+          Hähnchen selbst mariniert und von Hand geschichtet. Kafta von Hand geformt. Falafel und Labban aus unserer
+          Küche.
         </p>
         <div class="hero__actions">
           <a class="btn btn--solid" href={restaurant.phoneHref}>Anrufen und abholen<span aria-hidden="true"><svg class="i-arrow" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2.5 8h11M9 3.5 13.5 8 9 12.5"></path></svg></span></a>
@@ -122,9 +122,8 @@ const steps = [
     <section class="hand page" aria-labelledby="hand-title">
       <div class="hand__head">
         <h2 id="hand-title" class="display hand__title" data-reveal="mask"><span class="mask__in">Was bei uns <em>von Hand</em> passiert.</span></h2>
-        <p class="hand__text" data-reveal style="--d: 150ms">
-          Wir marinieren, schichten und formen selbst, in unserer Küche in {restaurant.city}. Alles handgemacht und frisch
-          zubereitet.
+        <p class="hand__lead" data-reveal style="--d: 150ms">
+          <span class="hand__lead-line" aria-hidden="true"></span>Drei Schritte, bevor etwas auf den Grill kommt.
         </p>
       </div>
       <ol class="hand__steps" role="list" data-reveal-stagger="140">
@@ -148,7 +147,10 @@ const steps = [
           ))
         }
       </ol>
-      <p class="hand__more" data-reveal>Außerdem aus unserer Küche: Falafel, Ayran und Joghurt. Und die Batata schneiden wir von Hand.</p>
+      <p class="hand__more" data-reveal>
+        Außerdem aus unserer Küche: selbstgemachte Falafel, Labban aus eigenem Joghurt, handgeschnittene Batata und
+        arabischer Reis.
+      </p>
     </section>
 
     <section class="menu" aria-labelledby="menu-title">
@@ -455,9 +457,22 @@ const steps = [
     font-size: clamp(3.5rem, 7.2vw, 6.5rem);
   }
 
-  .hand__text {
-    max-width: 30rem;
-    color: var(--muted);
+  .hand__lead {
+    display: flex;
+    align-items: center;
+    gap: 0.875rem;
+    font-family: var(--font-head);
+    font-style: italic;
+    font-size: clamp(1.5rem, 2.4vw, 2.125rem);
+    line-height: 1.2;
+    color: var(--gold-soft);
+  }
+
+  .hand__lead-line {
+    flex: 0 0 auto;
+    width: 2.5rem;
+    height: 1px;
+    background: var(--gold);
   }
 
   .hand__steps {
@@ -528,17 +543,11 @@ const steps = [
   }
 
   @media (min-width: 64rem) {
-    .hand__head {
-      grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
-      gap: 4rem;
-      align-items: end;
-    }
-
     .hand__steps {
       display: grid;
       grid-template-columns: repeat(3, minmax(0, 1fr));
       gap: 2.5rem;
-      margin: 5.5rem 0 0;
+      margin: 3.5rem 0 0;
       padding: 0;
       overflow: visible;
     }

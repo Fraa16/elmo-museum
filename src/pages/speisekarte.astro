@@ -36,7 +36,9 @@ const half = (n: number) => Math.ceil(n / 2);
         {
           menu.map((cat) => (
             <li>
-              <a href={`#${cat.id}`}>{cat.title}</a>
+              <a href={`#${cat.id}`} data-jump={cat.id}>
+                {cat.title}
+              </a>
             </li>
           ))
         }
@@ -55,19 +57,16 @@ const half = (n: number) => Math.ceil(n / 2);
                 <p class="cat__intro">
                   {cat.intro}
                   {cat.extras && (
-                    <span class="cat__extras">
-                      {' '}
-                      Extra: {cat.extras.map((e) => `${e.label} +${formatPrice(e.price)}`).join(', ')}.
-                    </span>
+                    <span class="cat__extras">Extra: {cat.extras.map((e) => `${e.label} +${formatPrice(e.price)}`).join(', ')}</span>
                   )}
                 </p>
               )}
             </header>
             <div class="cat__grid">
               {[cat.items.slice(0, half(cat.items.length)), cat.items.slice(half(cat.items.length))].map((column) => (
-                <div class="cat__col" data-reveal-stagger="60">
+                <div class="cat__col">
                   {column.map((dish) => (
-                    <DishRow dish={dish} />
+                    <DishRow dish={dish} reveal={false} />
                   ))}
                 </div>
               ))}
@@ -95,6 +94,32 @@ const half = (n: number) => Math.ceil(n / 2);
     <CallBand />
   </main>
 </BaseLayout>
+
+<script>
+  // Sprungleiste: aktive Kategorie markieren und ihren Knopf in der Leiste sichtbar halten.
+  const list = document.querySelector<HTMLElement>('.jump__list');
+  const links = new Map(
+    [...document.querySelectorAll<HTMLAnchorElement>('[data-jump]')].map((a) => [a.dataset.jump!, a]),
+  );
+  let active = '';
+  const activate = (id: string) => {
+    if (id === active) return;
+    active = id;
+    links.forEach((a, key) => (key === id ? a.setAttribute('aria-current', 'true') : a.removeAttribute('aria-current')));
+    const chip = links.get(id);
+    if (list && chip) list.scrollTo({ left: chip.offsetLeft - list.clientWidth / 2 + chip.offsetWidth / 2, behavior: 'smooth' });
+  };
+  if ('IntersectionObserver' in window) {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries) if (entry.isIntersecting) activate((entry.target as HTMLElement).id);
+      },
+      // aktiv ist die Kategorie, die gerade die Mitte des Bildschirms kreuzt
+      { rootMargin: '-45% 0px -50% 0px' },
+    );
+    document.querySelectorAll('.cat').forEach((section) => observer.observe(section));
+  }
+</script>
 
 <style>
   .legend {
@@ -133,6 +158,18 @@ const half = (n: number) => Math.ceil(n / 2);
     border-bottom: 1px solid var(--ink-line);
   }
 
+  /* weicher Rand rechts: zeigt, dass man die Leiste wischen kann */
+  .jump::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    width: 2.5rem;
+    background: linear-gradient(90deg, rgba(236, 227, 210, 0), var(--stone));
+    pointer-events: none;
+  }
+
   .jump__list {
     display: flex;
     gap: 0.5rem;
@@ -157,10 +194,24 @@ const half = (n: number) => Math.ceil(n / 2);
     white-space: nowrap;
   }
 
-  .jump a:hover {
+  .jump a:hover,
+  .jump a[aria-current='true'] {
     background: var(--ink);
     border-color: var(--ink);
     color: var(--stone);
+  }
+
+  .jump a {
+    transition:
+      background-color 300ms var(--ease-out),
+      color 300ms var(--ease-out),
+      border-color 300ms var(--ease-out);
+  }
+
+  @media (min-width: 64rem) {
+    .jump::after {
+      display: none;
+    }
   }
 
   /* Karte auf Kalkstein */
@@ -193,7 +244,10 @@ const half = (n: number) => Math.ceil(n / 2);
   }
 
   .cat__extras {
-    white-space: nowrap;
+    display: block;
+    margin-top: 0.35rem;
+    font-weight: 600;
+    color: var(--ink);
   }
 
   .cat__col > :global(:last-child) {

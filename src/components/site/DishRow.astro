@@ -14,21 +14,22 @@ const { dish, showAr = true, reveal = true } = Astro.props;
 
 <div class="dish" data-reveal={reveal ? '' : undefined}>
   <div class="dish__head">
-    <h3 class="dish__name">{dish.name}</h3>
-    {showAr && dish.ar && <span class="dish__ar" lang="ar" dir="rtl">{dish.ar}</span>}
-    <span class="dish__price">
+    <div class="dish__title">
+      <h3 class="dish__name">{dish.name}</h3>
+      {showAr && dish.ar && <span class="dish__ar" lang="ar" dir="rtl">{dish.ar}</span>}
+    </div>
+    <p class="dish__price">
       {priceLabel(dish)}
-      {dish.unit && <span class="dish__unit"> {dish.unit}</span>}
-    </span>
+      {dish.unit && <span class="dish__unit">{dish.unit}</span>}
+    </p>
   </div>
+  {dish.description && <p class="dish__desc">{dish.description}</p>}
   {
-    (dish.description || dish.diet || dish.extras) && (
-      <p class="dish__desc">
-        {dish.description}
-        {dish.diet && <span class:list={['dish__diet', `dish__diet--${dish.diet}`]}> {dish.diet === 'vegan' ? 'Vegan' : 'Vegetarisch'}</span>}
+    (dish.diet || dish.extras) && (
+      <p class="dish__meta">
+        {dish.diet && <span class:list={['dish__tag', `dish__tag--${dish.diet}`]}>{dish.diet === 'vegan' ? 'Vegan' : 'Vegetarisch'}</span>}
         {dish.extras?.map((extra) => (
-          <span class="dish__extra">
-            {' '}
+          <span class="dish__tag dish__tag--extra">
             {extra.label} +{formatPrice(extra.price)}
           </span>
         ))}
@@ -43,10 +44,20 @@ const { dish, showAr = true, reveal = true } = Astro.props;
     border-bottom: 1px solid var(--dish-line, var(--ink-line));
   }
 
+  /* Name links, Preis in eigener Spalte rechts: lange Namen brechen nur in ihrer Spalte um */
   .dish__head {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: start;
+    gap: 1rem;
+  }
+
+  .dish__title {
     display: flex;
+    flex-wrap: wrap;
     align-items: baseline;
-    gap: 0.5rem 0.875rem;
+    gap: 0.15rem 0.875rem;
+    min-width: 0;
   }
 
   .dish__name {
@@ -66,32 +77,56 @@ const { dish, showAr = true, reveal = true } = Astro.props;
   }
 
   .dish__price {
-    margin-left: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    padding-top: 0.4em;
     font-weight: 600;
     font-size: 1.0625rem;
+    line-height: 1.2;
     font-variant-numeric: tabular-nums;
     white-space: nowrap;
   }
 
   .dish__unit {
     font-weight: 400;
-    font-size: 0.875rem;
+    font-size: 0.8125rem;
     color: var(--dish-muted, var(--ink-muted));
   }
 
   .dish__desc {
-    margin-top: 0.35rem;
+    margin-top: 0.4rem;
     font-size: 0.9375rem;
     color: var(--dish-muted, var(--ink-muted));
   }
 
-  .dish__diet {
+  .dish__meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    margin-top: 0.7rem;
+  }
+
+  .dish__tag {
+    display: inline-flex;
+    align-items: center;
+    min-height: 1.5rem;
+    padding: 0 0.6rem;
+    border: 1px solid currentColor;
+    border-radius: 999px;
+    font-size: 0.75rem;
     font-weight: 600;
+    letter-spacing: 0.02em;
+    white-space: nowrap;
+  }
+
+  .dish__tag--vegan,
+  .dish__tag--vegetarisch {
     color: var(--dish-leaf, var(--leaf));
   }
 
-  .dish__extra {
-    white-space: nowrap;
+  .dish__tag--extra {
+    color: var(--dish-muted, var(--ink-muted));
   }
 
   @media (max-width: 30rem) {

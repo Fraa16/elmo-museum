@@ -156,7 +156,7 @@ export const menu: MenuCategory[] = [
     title: "Getränke",
     intro: "",
     items: [
-      { name: "Hausgemachter Ayran", ar: "عيران", price: 250, description: "", diet: null },
+      { name: "Hausgemachter Labban (Ayran)", ar: "لبن", price: 250, description: "Aus unserem selbstgemachten Joghurt.", diet: null },
       { name: "Wasser", price: 200, description: "", diet: null },
       { name: "Softgetränke", price: 250, description: "", diet: null },
     ],
@@ -202,12 +202,13 @@ export function priceLabel(dish: Pick<Dish, 'price' | 'priceFrom'>): string {
 export const glossary: { term: string; text: string }[] = [
   { term: 'Batata', text: 'Handgeschnittene Kartoffeln.' },
   { term: 'Broasted', text: 'Paniertes Hähnchen, in der Hochdruckfritteuse gegart.' },
-  { term: 'Dibis', text: 'Dicker Sirup aus Trauben oder Datteln.' },
+  { term: 'Dibis', text: 'Dicker Sirup aus Granatapfel.' },
   { term: 'Fatteh', text: 'Geröstetes Brot mit Kichererbsen und warmer Joghurtsauce.' },
   { term: 'Frikeh', text: 'Grün geernteter, gerösteter Weizen.' },
   { term: 'Ful', text: 'Warme Ackerbohnen mit Zitrone, Knoblauch und Olivenöl.' },
   { term: 'Ghee', text: 'Geklärte Butter.' },
   { term: 'Harra', text: 'Arabisch für „scharf“.' },
+  { term: 'Labban', text: 'Erfrischendes Joghurtgetränk aus unserem selbstgemachten Joghurt, auch als Ayran bekannt.' },
   { term: 'Lefet', text: 'Eingelegte Rüben.' },
   { term: 'Loomi', text: 'Getrocknete Limette.' },
   { term: 'Sujuk', text: 'Kräftig gewürzte Wurst nach libanesischer Art.' },

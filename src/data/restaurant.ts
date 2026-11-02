@@ -13,8 +13,8 @@ export const restaurant = {
   phone: '07171 9039994',
   phoneHref: 'tel:+4971719039994',
   email: 'elmoshawarma2016@hotmail.com',
-  /** TODO: Instagram-Profil von Momo. */
-  instagram: null as string | null,
+  instagram: 'https://www.instagram.com/elmo.shawarma/',
+  instagramHandle: '@elmo.shawarma',
   since: 2017,
   slogan: 'Good food brings people together.',
   claim: 'Geschichten, die verbinden. Kultur, die bleibt.',
@@ -53,6 +53,7 @@ export function restaurantJsonLd(siteUrl: string) {
     url: `${siteUrl}/`,
     telephone: '+49 7171 9039994',
     email: restaurant.email,
+    sameAs: [restaurant.instagram],
     servesCuisine: ['Libanesisch', 'Palästinensisch', 'Arabisch'],
     menu: `${siteUrl}/speisekarte`,
     acceptsReservations: 'True',
