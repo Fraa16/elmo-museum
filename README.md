@@ -20,6 +20,7 @@ externen Requests.
 | `npm run qr`               | QR-Codes nach `qr-export/` (nur mit bestätigter Domain)      |
 | `npm run qr -- --dry-run`  | QR-Testlauf in einen temporären Ordner                       |
 | `npm run og`               | Vorschaubilder (1200 × 630) nach `public/og/`, braucht Playwright |
+| `npm run card`             | Visitenkarte 85 × 55 mm: Druck-PDF mit 3 mm Beschnitt und Vorschauen nach `print/visitenkarte/` |
 
 ## Konfiguration: `src/config.ts`
 
@@ -70,6 +71,8 @@ src/components/            Museum: Museumsleiste, Quiz, Karten
 src/pages/                 Seiten und robots.txt
 scripts/generate-qr.mjs    QR-Export (SVG + PNG 2000 px, Fehlerkorrektur Q)
 scripts/generate-og.mjs    Vorschaubilder je Seite (Logo, Titel, Foto im Bogen)
+scripts/generate-card.mjs  Visitenkarte im Website-Design (Daten aus restaurant.ts, QR zur Website)
+print/visitenkarte/        Druck-PDF (91 × 61 mm inkl. Beschnitt, 2 Seiten) und PNG-Vorschauen
 public/                    Favicon (Kuppel aus dem Emblem), Homescreen-Icons, Manifest, og/
 vercel.json                Redirect, Trailing Slash, Header
 ```

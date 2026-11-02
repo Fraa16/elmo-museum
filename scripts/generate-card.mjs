@@ -1,0 +1,187 @@
+#!/usr/bin/env node
+/**
+ * Visitenkarte 85 × 55 mm im Design der Website: `npm run card`
+ *
+ * Schreibt nach /print/visitenkarte/:
+ * - druckfertige PDF (Vorder- und Rückseite) mit 3 mm Beschnitt rundum,
+ *   Seitengröße 91 × 61 mm, ohne Schnittmarken (Standard bei Online-Druckereien)
+ * - PNG-Vorschauen beider Seiten im Endformat
+ *
+ * Inhalte kommen aus src/data/restaurant.ts, ändern sich dort Adresse oder
+ * Zeiten, einfach neu erzeugen. Braucht Playwright mit Chromium.
+ */
+import { mkdir, mkdtemp, rm, writeFile } from 'node:fs/promises';
+import { createRequire } from 'node:module';
+import { tmpdir } from 'node:os';
+import { join } from 'node:path';
+import { fileURLToPath, pathToFileURL } from 'node:url';
+import QRCode from 'qrcode';
+
+import { SITE_URL } from '../src/config.ts';
+import { openingHours, restaurant } from '../src/data/restaurant.ts';
+
+/** Beschnitt rundum in mm. */
+export const BLEED = 3;
+export const TRIM = { w: 85, h: 55 };
+/** Sichtbare Höhe des Terrakotta-Streifens: breit genug für die Schneidetoleranz. */
+const STRIPE = 2.5;
+
+const website = new URL(SITE_URL).host;
+
+/** QR-Code zur Website, dunkel auf Kalkstein, mit Ruhezone. */
+export async function cardQr() {
+  return QRCode.toString(`${SITE_URL}/`, {
+    type: 'svg',
+    errorCorrectionLevel: 'M',
+    margin: 4,
+    color: { dark: '#1b1814', light: '#ece3d2' },
+  });
+}
+
+/** CSS beider Seiten; alle Maße in mm, `b` = Beschnitt. */
+export function cardCss(b = BLEED) {
+  const mm = (n) => `${n}mm`;
+  return `
+.card { position: relative; overflow: hidden; width: ${mm(TRIM.w + 2 * b)}; height: ${mm(TRIM.h + 2 * b)};
+  font-family: 'Instrument Sans', system-ui, sans-serif; -webkit-font-smoothing: antialiased; }
+.card * { box-sizing: border-box; margin: 0; }
+.card--front { background: #14120e; color: #ece3d2; }
+.card--back { background: #ece3d2; color: #1b1814; }
+.card .label { font-weight: 600; font-size: 1.75mm; line-height: 1.3; letter-spacing: 0.18em; text-transform: uppercase; color: #c9a45c; }
+
+/* Vorderseite: Logo, Claim, Foto im Bogen, Terrakotta-Linie wie auf der Website */
+.c-logo { position: absolute; left: ${mm(b + 5)}; top: ${mm(b + 4.5)}; display: flex; flex-direction: column; align-items: center; gap: 0.5mm; }
+.c-logo img { display: block; height: 10mm; width: auto; }
+.c-logo span { font-weight: 600; font-size: 2.1mm; line-height: 1; letter-spacing: 0.42em; padding-left: 0.42em; text-transform: uppercase; color: #c9a45c; }
+.c-claim { position: absolute; left: ${mm(b + 5)}; bottom: ${mm(b + STRIPE + 4.5)}; }
+.c-title { margin-top: 1.6mm; font-family: 'Instrument Serif', Georgia, serif; font-weight: 400; font-size: 6.4mm; line-height: 0.9; letter-spacing: -0.02em; }
+.c-title em { color: #e3c98f; }
+.c-arch { position: absolute; right: ${mm(b + 5)}; top: ${mm(b + 4)}; bottom: ${mm(b + STRIPE)}; width: 29mm; padding: 1.1mm 1.1mm 0;
+  border: 0.25mm solid #8f7543; border-bottom: 0; border-radius: 999mm 999mm 0 0; }
+.c-arch div { position: relative; width: 100%; height: 100%; overflow: hidden; border-radius: 999mm 999mm 0 0; }
+.c-arch img { display: block; width: 100%; height: 100%; object-fit: cover; object-position: 44% 50%; }
+.c-arch div::after { content: ''; position: absolute; inset: 0; background: linear-gradient(90deg, rgba(20,18,14,0.45) 0%, rgba(20,18,14,0) 45%); }
+.c-stripe { position: absolute; left: 0; right: 0; bottom: 0; height: ${mm(b + STRIPE)}; background: #a5432b; }
+
+/* Rückseite: heller Kalkstein wie die Speisekarte */
+.c-inner { position: absolute; inset: ${mm(b + 4.5)}; display: flex; flex-direction: column; }
+.c-top { display: flex; align-items: center; justify-content: space-between; }
+.card--back .label { color: #7e5e22; }
+.c-ar { font-family: 'Reem Kufi', sans-serif; font-weight: 600; font-size: 3.2mm; line-height: 1; color: #7e5e22; }
+.c-phone { margin-top: 1.4mm; font-family: 'Instrument Serif', Georgia, serif; font-size: 10.5mm; line-height: 1; letter-spacing: -0.01em; color: #1b1814; text-decoration: none; }
+.c-slogan { margin-top: 1.6mm; font-family: 'Instrument Serif', Georgia, serif; font-style: italic; font-size: 3.4mm; line-height: 1.1; color: #7e5e22; }
+.c-rows { margin-top: auto; padding-top: 2.4mm; border-top: 0.45mm solid #1b1814; display: grid;
+  grid-template-columns: auto auto auto; justify-content: space-between; align-items: end; column-gap: 3mm; }
+.c-addr { font-family: 'Instrument Serif', Georgia, serif; font-size: 3.1mm; line-height: 1.12; }
+.c-web { margin-top: 1.4mm; font-size: 2.15mm; line-height: 1.4; }
+.c-web strong { font-weight: 600; }
+.c-hours .label { margin-bottom: 0.8mm; }
+.c-hours dl { display: grid; grid-template-columns: auto auto; column-gap: 2.2mm; font-size: 2.15mm; line-height: 1.42; }
+.c-hours dd { font-variant-numeric: tabular-nums; }
+.c-qr svg { display: block; width: 14mm; height: 14mm; }
+`;
+}
+
+/** Markup einer Seite. `img` = Bildquellen { emblem, photo }. */
+export function cardMarkup(side, img, qrSvg = '') {
+  if (side === 'front') {
+    return `<div class="card card--front">
+  <div class="c-logo"><img src="${img.emblem}" alt="Elmo"><span>Shawarma</span></div>
+  <div class="c-arch"><div><img src="${img.photo}" alt=""></div></div>
+  <div class="c-claim">
+    <p class="label">Libanesische Küche</p>
+    <p class="c-title">Alles von Hand.<br><em>Frisch vom Spieß.</em></p>
+  </div>
+  <div class="c-stripe"></div>
+</div>`;
+  }
+  const hours = openingHours.map((s) => `<dt>${s.short}</dt><dd>${s.opens} bis ${s.closes}</dd>`).join('');
+  return `<div class="card card--back">
+  <div class="c-inner">
+    <div class="c-top">
+      <p class="label">Vorbestellen, abholen, reservieren</p>
+      <p class="c-ar" lang="ar" dir="rtl">أهلاً وسهلاً</p>
+    </div>
+    <p class="c-phone">${restaurant.phone}</p>
+    <p class="c-slogan">${restaurant.slogan}</p>
+    <div class="c-rows">
+      <div>
+        <p class="c-addr">${restaurant.street}<br>${restaurant.postalCode} ${restaurant.city}</p>
+        <p class="c-web"><strong>${website}</strong><br>Instagram ${restaurant.instagramHandle}</p>
+      </div>
+      <div class="c-hours">
+        <p class="label">Öffnungszeiten</p>
+        <dl>${hours}</dl>
+      </div>
+      <div class="c-qr" aria-label="QR-Code zur Website">${qrSvg}</div>
+    </div>
+  </div>
+</div>`;
+}
+
+async function main() {
+  const require = createRequire(import.meta.url);
+  let chromium;
+  try {
+    ({ chromium } = require('playwright'));
+  } catch {
+    console.error('\n✖ Playwright fehlt. Einmalig installieren: npm i -g playwright && npx playwright install chromium\n');
+    process.exit(1);
+  }
+
+  const root = new URL('../', import.meta.url);
+  const file = (p) => pathToFileURL(fileURLToPath(new URL(p, root))).href;
+  const font = (pkg, name) => file(`node_modules/@fontsource/${pkg}/files/${name}.woff2`);
+  const fonts = `
+@font-face { font-family: 'Instrument Serif'; src: url('${font('instrument-serif', 'instrument-serif-latin-400-normal')}'); }
+@font-face { font-family: 'Instrument Serif'; font-style: italic; src: url('${font('instrument-serif', 'instrument-serif-latin-400-italic')}'); }
+@font-face { font-family: 'Instrument Sans'; font-weight: 400; src: url('${font('instrument-sans', 'instrument-sans-latin-400-normal')}'); }
+@font-face { font-family: 'Instrument Sans'; font-weight: 600; src: url('${font('instrument-sans', 'instrument-sans-latin-600-normal')}'); }
+@font-face { font-family: 'Reem Kufi'; font-weight: 600; src: url('${font('reem-kufi', 'reem-kufi-arabic-600-normal')}'); }`;
+  const img = { emblem: file('src/assets/brand/elmo-emblem.png'), photo: file('src/assets/food/shawarma-teller.webp') };
+  const qr = await cardQr();
+
+  const doc = (bleed, pageCss) => `<!doctype html><html lang="de"><head><meta charset="utf-8"><style>
+${fonts}
+html, body { margin: 0; padding: 0; }
+${pageCss}
+${cardCss(bleed)}
+</style></head><body>${cardMarkup('front', img)}${cardMarkup('back', img, qr)}</body></html>`;
+
+  const outDir = new URL('print/visitenkarte/', root);
+  await mkdir(outDir, { recursive: true });
+  const out = (name) => fileURLToPath(new URL(name, outDir));
+  const tmp = await mkdtemp(join(tmpdir(), 'elmo-card-'));
+  const browser = await chromium.launch();
+
+  const open = async (page, html, name) => {
+    const htmlFile = join(tmp, name);
+    await writeFile(htmlFile, html);
+    await page.goto(pathToFileURL(htmlFile).href, { waitUntil: 'load' });
+    await page.evaluate(() => document.fonts.ready);
+    const missing = await page.evaluate(() => [...document.images].filter((i) => !i.naturalWidth).map((i) => i.src));
+    if (missing.length) throw new Error(`Bild nicht geladen: ${missing.join(', ')}`);
+  };
+
+  // Druck-PDF: 91 × 61 mm je Seite (Endformat plus Beschnitt)
+  const W = TRIM.w + 2 * BLEED;
+  const H = TRIM.h + 2 * BLEED;
+  const pdfPage = await browser.newPage();
+  await open(pdfPage, doc(BLEED, `@page { size: ${W}mm ${H}mm; margin: 0; } .card { break-after: page; }`), 'print.html');
+  const pdfName = `Elmo-Shawarma_Visitenkarte_85x55mm_3mm-Beschnitt.pdf`;
+  await pdfPage.pdf({ path: out(pdfName), width: `${W}mm`, height: `${H}mm`, printBackground: true, preferCSSPageSize: true });
+  console.log(`✔ ${pdfName} (2 Seiten, ${W} × ${H} mm)`);
+
+  // Vorschau im Endformat (ohne Beschnitt), 4-fach
+  const preview = await browser.newPage({ viewport: { width: 400, height: 260 }, deviceScaleFactor: 4 });
+  await open(preview, doc(0, 'body { display: flex; flex-direction: column; gap: 4mm; }'), 'preview.html');
+  for (const [i, name] of [[0, 'Vorderseite.png'], [1, 'Rueckseite.png']]) {
+    await preview.locator('.card').nth(i).screenshot({ path: out(name) });
+    console.log(`✔ ${name}`);
+  }
+
+  await browser.close();
+  await rm(tmp, { recursive: true, force: true });
+}
+
+if (import.meta.url === pathToFileURL(process.argv[1]).href) await main();
