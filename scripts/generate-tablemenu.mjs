@@ -2,12 +2,12 @@
 /**
  * Tischkarte (Speisekarte unter der PVC-Folie) im Design der Website: `npm run tischkarte`
  *
- * Zwei Varianten, je für Tische 70 × 70 und 80 × 80 cm:
- * - A „Zwei Seiten“: zwei Hälften, jede zum Gast auf ihrer Seite lesbar (die
- *   obere steht auf dem Kopf); dazwischen ein dunkles Band mit Medaillon für
- *   die Kerze in der Tischmitte.
- * - B „Eine Richtung“: ganze Fläche in eine Leserichtung, Medaillon für die
- *   Kerze im Mittelstreifen.
+ * Zwei Varianten:
+ * - A „Zwei Seiten“, für Tische 70 × 70 und 80 × 80 cm: zwei Hälften, jede zum
+ *   Gast auf ihrer Seite lesbar (die obere steht auf dem Kopf); dazwischen ein
+ *   dunkles Band mit Medaillon für die Kerze in der Tischmitte.
+ * - B „Eine Richtung“, DIN A2 Hochformat (42 × 59,4 cm), eine Karte pro Tisch:
+ *   drei Spalten, in der Blattmitte ein Goldring als Platz für die Kerze.
  *
  * Schreibt nach /print/speisekarte-tisch/: Druck-PDFs mit 3 mm Beschnitt und
  * PNG-Vorschauen. Inhalte und Preise kommen aus src/data/menu.ts.
@@ -60,10 +60,8 @@ const file = (p) => (sized.has(p) ? sized.get(p) : pathToFileURL(fileURLToPath(n
 const exists = (p) => access(fileURLToPath(new URL(p, root))).then(() => true, () => false);
 const font = (pkg, name) => file(`node_modules/@fontsource/${pkg}/files/${name}.woff2`);
 
-/** Beschnitt rundum in mm; gestaltet wird auf 700 mm, 80 cm wird hochskaliert. */
+/** Beschnitt rundum in mm. */
 const BLEED = 3;
-const BASE = 700;
-const SIZES = [70, 80];
 
 /** Standardbilder je Kategorie (vorhandene Fotos); ergänzt durch src/assets/menu/. */
 const DEFAULT_IMAGES = {
@@ -133,8 +131,30 @@ function categoryHtml(entry, images) {
 </section>`;
 }
 
+/** Kleines Wörterbuch als eigener Spalteneintrag 'words'. */
+const wordsHtml = () => `<section class="cat words">
+  <header class="cat__head"><h2 class="cat__title cat__title--sub">Kleines Wörterbuch</h2></header>
+  <dl>${glossary.map((g) => `<div><dt>${esc(g.term)}</dt><dd>${esc(g.text)}</dd></div>`).join('')}</dl>
+</section>`;
+
+/** Kurzer Block „Alles von Hand“ mit Foto, unten bündig in einer Spalte (Eintrag 'story'). */
+const storyHtml = () => `<section class="story">
+  <div class="thumb"><div><img src="${file('src/assets/food/marinieren.webp')}" alt="" style="object-position:50% 50%"></div></div>
+  <div>
+    <p class="story__title">Alles von Hand.<br><em>Frisch vom Spieß.</em></p>
+    <p class="story__text">Selbst mariniert und von Hand geschichtet. Falafel und Labban aus unserem selbstgemachten Joghurt.</p>
+  </div>
+</section>`;
+
+const SPECIAL = { words: wordsHtml, story: storyHtml };
+
 const columnsHtml = (cols, images) =>
-  cols.map((ids, i) => `<div class="col col--${i + 1}">${ids.map((id) => categoryHtml(id, images)).join('')}</div>`).join('');
+  cols
+    .map(
+      (entries, i) =>
+        `<div class="col col--${i + 1}">${entries.map((e) => (SPECIAL[e] ? SPECIAL[e]() : categoryHtml(e, images))).join('')}</div>`,
+    )
+    .join('');
 
 const logoHtml = () =>
   `<div class="logo"><img src="${file('src/assets/brand/elmo-emblem.png')}" alt="Elmo"><span>Shawarma</span></div>`;
@@ -156,7 +176,7 @@ html, body { margin: 0; padding: 0; }
 * { box-sizing: border-box; margin: 0; }
 body { font-family: 'Instrument Sans', sans-serif; -webkit-font-smoothing: antialiased; color: #1b1814; }
 .sheet { position: relative; overflow: hidden; background: #ece3d2; }
-.design { position: absolute; width: ${BASE}mm; height: ${BASE}mm; transform-origin: 0 0; }
+.design { position: absolute; transform-origin: 0 0; }
 
 /* Logo wie auf der Website: SHAWARMA mittig unter ELMO */
 .logo { display: flex; flex-direction: column; align-items: center; gap: calc(var(--logo) * 0.05); }
@@ -203,6 +223,12 @@ body { font-family: 'Instrument Sans', sans-serif; -webkit-font-smoothing: antia
 
 const A = {
   name: 'A_zwei-Seiten',
+  /** Gestaltet auf 700 × 700 mm, 80 cm wird hochskaliert. */
+  base: { w: 700, h: 700 },
+  formats: [
+    { label: '70x70cm', w: 700, h: 700 },
+    { label: '80x80cm', w: 800, h: 800 },
+  ],
   vars: `--logo: 15mm; --label: 2.6mm; --cat: 10.4mm; --name: 5mm; --price: 4.5mm; --desc: 3.15mm; --tag: 2.45mm;
     --note: 2.7mm; --cat-gap: 8mm; --dish-pad: 1.9mm; --head-pad: 2.4mm; --rule: 0.55mm; --thin: 0.3mm;
     --thumb-w: 21mm; --thumb-h: 26mm; --thumb-pad: 0.9mm; --thumb-gap: 4mm; --ring: 0.5mm; --ring-inset: 4.5mm;`,
@@ -252,59 +278,58 @@ const A = {
 
 const B = {
   name: 'B_eine-Richtung',
-  vars: `--logo: 24mm; --label: 3.4mm; --cat: 16mm; --name: 7.7mm; --price: 6.6mm; --desc: 4.6mm; --tag: 3.5mm;
-    --note: 3.4mm; --cat-gap: 15mm; --dish-pad: 3.8mm; --head-pad: 3.4mm; --rule: 0.7mm; --thin: 0.35mm;
-    --thumb-w: 32mm; --thumb-h: 40mm; --thumb-pad: 1.3mm; --thumb-gap: 6mm; --ring: 0.6mm; --ring-inset: 5mm;`,
-  cols: [['sandwiches'], ['burger', 'teller'], ['broasted', 'mezze', 'suppen'], ['tageskueche', 'schueler', 'getraenke']],
+  base: { w: 420, h: 594 },
+  formats: [{ label: 'A2', w: 420, h: 594 }],
+  vars: `--logo: 17mm; --label: 2.6mm; --cat: 10.4mm; --name: 5mm; --price: 4.5mm; --desc: 3.15mm; --tag: 2.45mm;
+    --note: 2.7mm; --cat-gap: 8mm; --dish-pad: 1.9mm; --head-pad: 2.4mm; --rule: 0.55mm; --thin: 0.3mm;
+    --thumb-w: 21mm; --thumb-h: 26mm; --thumb-pad: 0.9mm; --thumb-gap: 4mm; --ring: 0.5mm; --ring-inset: 4.5mm;`,
+  // links | Mitte oben | Mitte unten (unter dem Kerzenring) | rechts
+  cols: [
+    [{ id: 'sandwiches', to: 12 }, { id: 'sandwiches', from: 12, title: 'Vegetarische Sandwiches' }, 'tageskueche'],
+    ['burger', 'broasted'],
+    ['suppen', 'schueler', 'getraenke'],
+    ['teller', 'mezze', 'story'],
+  ],
   css: `
-.head { position: absolute; left: 0; right: 0; top: -${BLEED}mm; height: calc(62mm + ${BLEED}mm); background: #14120e; color: #ece3d2; }
-.head .logo { position: absolute; left: 25mm; bottom: 12mm; }
-.head__title { position: absolute; left: 50%; bottom: 10mm; transform: translateX(-50%); display: flex; align-items: baseline; gap: 9mm; white-space: nowrap; }
-.head__title .serif { font-size: 26mm; line-height: 0.9; letter-spacing: -0.02em; }
+.head { position: absolute; left: -${BLEED}mm; right: -${BLEED}mm; top: -${BLEED}mm; height: calc(52mm + ${BLEED}mm); background: #14120e; color: #ece3d2; }
+.head .logo { position: absolute; left: calc(20mm + ${BLEED}mm); bottom: 9mm; }
+.head__title { position: absolute; left: 50%; bottom: 9mm; transform: translateX(-50%); display: flex; align-items: baseline; gap: 5mm; white-space: nowrap; }
+.head__title .serif { font-size: 19mm; line-height: 0.9; letter-spacing: -0.02em; }
 .head__title .serif em { color: #e3c98f; }
-.head__title .ar { font-family: 'Reem Kufi', sans-serif; font-weight: 600; font-size: 10mm; line-height: 1; color: #e3c98f; }
-.head__call { position: absolute; right: 25mm; bottom: 12mm; text-align: right; }
-.head__call .serif { margin-top: 1.5mm; font-size: 12mm; line-height: 1; }
-.col { top: 80mm; width: 120mm; height: 560mm; }
-.col--1 { left: 25mm; } .col--2 { left: 159mm; } .col--3 { left: 421mm; } .col--4 { left: 555mm; }
-.mid { position: absolute; left: 293mm; width: 114mm; }
-.mid--top { top: 80mm; display: flex; flex-direction: column; align-items: center; text-align: center; gap: 5mm; }
-.mid--top .thumb { --thumb-w: 64mm; --thumb-h: 80mm; --thumb-pad: 1.8mm; }
-.mid--top .serif { font-size: 12mm; line-height: 0.95; letter-spacing: -0.015em; }
-.mid--top .serif em { color: #7e5e22; }
-.mid--top .note { max-width: 96mm; font-size: 4.2mm; }
-.mid--top .ar { font-family: 'Reem Kufi', sans-serif; font-weight: 600; font-size: 7mm; line-height: 1; color: #7e5e22; }
-.design > .medal { left: 302mm; top: 302mm; width: 96mm; height: 96mm; background: transparent; border: 0.35mm solid #b8975a; }
-.design > .medal::after { border-color: #b8975a; border-width: 0.8mm; }
-.mid--words { top: 418mm; }
-.mid--words .cat__title { text-align: center; font-size: 11mm; }
-.words { margin-top: 3mm; }
-.words div { padding: 2.1mm 0; border-bottom: 0.35mm solid #cbbea6; }
-.words dt { font-family: 'Instrument Serif', Georgia, serif; font-size: 5mm; line-height: 1.1; }
-.words dd { margin: 0.6mm 0 0; font-size: 3.3mm; line-height: 1.3; color: #6b6253; }
-.foot { position: absolute; left: 25mm; right: 25mm; bottom: 22mm; display: flex; justify-content: space-between; align-items: flex-end;
-  gap: 20mm; padding-top: 3.5mm; border-top: 0.35mm solid #cbbea6; }
-.foot .note:last-child { text-align: right; font-weight: 600; color: #1b1814; }
+.head__title .ar { font-family: 'Reem Kufi', sans-serif; font-weight: 600; font-size: 7mm; line-height: 1; color: #e3c98f; }
+.head__call { position: absolute; right: calc(20mm + ${BLEED}mm); bottom: 9mm; text-align: right; }
+.head__call .serif { margin-top: 1mm; font-size: 8.5mm; line-height: 1; }
+.col { width: 118mm; }
+.col--1 { left: 20mm; top: 64mm; height: 500mm; }
+.col--2 { left: 151mm; top: 64mm; height: 179mm; }
+.col--3 { left: 151mm; top: 351mm; height: 213mm; }
+.col--4 { left: 282mm; top: 64mm; height: 500mm; }
+/* Kerzenplatz genau in der Blattmitte (Tischmitte) */
+.design > .medal { left: 162mm; top: 249mm; width: 96mm; height: 96mm; background: transparent; border: 0.3mm solid #b8975a; }
+.design > .medal::after { border-color: #b8975a; border-width: 0.6mm; }
+.story { margin-top: auto; display: grid; grid-template-columns: auto minmax(0, 1fr); align-items: end; gap: 5mm;
+  padding-top: 4mm; border-top: var(--rule) solid #1b1814; }
+.story .thumb { --thumb-w: 30mm; --thumb-h: 38mm; }
+.story__title { font-family: 'Instrument Serif', Georgia, serif; font-size: 7.5mm; line-height: 0.95; letter-spacing: -0.015em; }
+.story__title em { color: #7e5e22; }
+.story__text { margin-top: 2mm; font-size: var(--desc); line-height: 1.35; color: #6b6253; }
+.words dl { margin-top: 1.5mm; }
+.words div { padding: 1.4mm 0; border-bottom: 0.3mm solid #cbbea6; }
+.words div:last-child { border-bottom: 0; }
+.words dt { display: inline; font-family: 'Instrument Serif', Georgia, serif; font-size: 4mm; line-height: 1.2; }
+.words dd { display: inline; margin: 0 0 0 1.5mm; font-size: 2.8mm; line-height: 1.3; color: #6b6253; }
+.foot { position: absolute; left: 20mm; right: 20mm; bottom: 14mm; display: flex; justify-content: space-between; align-items: flex-end;
+  gap: 14mm; padding-top: 2.5mm; border-top: 0.3mm solid #cbbea6; }
+.foot .note:last-child { text-align: right; font-weight: 600; color: #1b1814; white-space: nowrap; }
 `,
   html(images) {
-    const words = glossary.map((g) => `<div><dt>${esc(g.term)}</dt><dd>${esc(g.text)}</dd></div>`).join('');
     return `<div class="head">
   ${logoHtml()}
   <div class="head__title"><p class="serif">Die <em>Karte</em></p><p class="ar" lang="ar" dir="rtl">قائمة الطعام</p></div>
   <div class="head__call"><p class="label">Vorbestellen und abholen</p><p class="serif">${restaurant.phone}</p></div>
 </div>
 ${columnsHtml(this.cols, images)}
-<div class="mid mid--top">
-  <div class="thumb"><div><img src="${file('src/assets/food/marinieren.webp')}" alt="" style="object-position:50% 50%"></div></div>
-  <p class="serif">Alles von Hand.<br><em>Frisch vom Spieß.</em></p>
-  <p class="note">Selbst mariniert und von Hand geschichtet. Falafel und Labban aus unserem selbstgemachten Joghurt.</p>
-  <p class="ar" lang="ar" dir="rtl">أهلاً وسهلاً</p>
-</div>
 <div class="medal"></div>
-<div class="mid mid--words">
-  <h2 class="cat__title">Kleines Wörterbuch</h2>
-  <dl class="words">${words}</dl>
-</div>
 <div class="foot"><p class="note">${notes.replace('\n', ' ')}</p><p class="note">${contacts}</p></div>`;
   },
 };
@@ -323,17 +348,18 @@ const page = await browser.newPage();
 let problems = 0;
 
 for (const variant of [A, B]) {
-  for (const size of SIZES) {
-    const scale = (size * 10) / BASE;
-    const S = size * 10 + 2 * BLEED;
+  for (const format of variant.formats) {
+    const scale = format.w / variant.base.w;
+    const W = format.w + 2 * BLEED;
+    const H = format.h + 2 * BLEED;
     const html = `<!doctype html><html lang="de"><head><meta charset="utf-8"><style>
 ${baseCss}
 ${variant.css}
-@page { size: ${S}mm ${S}mm; margin: 0; }
-.sheet { width: ${S}mm; height: ${S}mm; }
-.design { left: ${BLEED}mm; top: ${BLEED}mm; transform: scale(${scale}); ${variant.vars} }
+@page { size: ${W}mm ${H}mm; margin: 0; }
+.sheet { width: ${W}mm; height: ${H}mm; }
+.design { left: ${BLEED}mm; top: ${BLEED}mm; width: ${variant.base.w}mm; height: ${variant.base.h}mm; transform: scale(${scale}); ${variant.vars} }
 </style></head><body><div class="sheet"><div class="design">${variant.html(images)}</div></div></body></html>`;
-    const htmlFile = join(tmp, `${variant.name}-${size}.html`);
+    const htmlFile = join(tmp, `${variant.name}-${format.label}.html`);
     await writeFile(htmlFile, html);
     await page.goto(pathToFileURL(htmlFile).href, { waitUntil: 'load' });
     await page.evaluate(() => document.fonts.ready);
@@ -352,8 +378,8 @@ ${variant.css}
     const over = check.overflow.filter((o) => o.fill > 100);
     if (over.length) problems++;
 
-    const name = `Elmo-Shawarma_Tischkarte_${variant.name}_${size}x${size}cm`;
-    await page.pdf({ path: out(`${name}.pdf`), width: `${S}mm`, height: `${S}mm`, printBackground: true, preferCSSPageSize: true });
+    const name = `Elmo-Shawarma_Tischkarte_${variant.name}_${format.label}`;
+    await page.pdf({ path: out(`${name}.pdf`), width: `${W}mm`, height: `${H}mm`, printBackground: true, preferCSSPageSize: true });
     console.log(`${over.length ? '✖' : '✔'} ${name}.pdf  (Spalten gefüllt: ${fills})`);
   }
 }
