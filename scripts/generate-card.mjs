@@ -49,18 +49,15 @@ export function cardCss(b = BLEED) {
 .card--back { background: #ece3d2; color: #1b1814; }
 .card .label { font-weight: 600; font-size: 1.75mm; line-height: 1.3; letter-spacing: 0.18em; text-transform: uppercase; color: #c9a45c; }
 
-/* Vorderseite: Logo, Claim, Foto im Bogen, Terrakotta-Linie wie auf der Website */
-.c-logo { position: absolute; left: ${mm(b + 5)}; top: ${mm(b + 4.5)}; display: flex; flex-direction: column; align-items: center; gap: 0.5mm; }
-.c-logo img { display: block; height: 10mm; width: auto; }
-.c-logo span { font-weight: 600; font-size: 2.1mm; line-height: 1; letter-spacing: 0.42em; padding-left: 0.42em; text-transform: uppercase; color: #c9a45c; }
-.c-claim { position: absolute; left: ${mm(b + 5)}; bottom: ${mm(b + STRIPE + 4.5)}; }
-.c-title { margin-top: 1.6mm; font-family: 'Instrument Serif', Georgia, serif; font-weight: 400; font-size: 6.4mm; line-height: 0.9; letter-spacing: -0.02em; }
+/* Vorderseite: großes Logo mittig, Claim darunter, Terrakotta-Linie wie auf der Website */
+.c-center { position: absolute; left: ${mm(b)}; right: ${mm(b)}; top: ${mm(b)}; bottom: ${mm(b + STRIPE)};
+  display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; }
+.c-logo { display: flex; flex-direction: column; align-items: center; gap: 1.1mm; }
+.c-logo img { display: block; height: 22mm; width: auto; }
+.c-logo span { font-weight: 600; font-size: 4.6mm; line-height: 1; letter-spacing: 0.42em; padding-left: 0.42em; text-transform: uppercase; color: #c9a45c; }
+.c-rule { width: 14mm; height: 0.25mm; margin: 3.2mm 0 2.8mm; background: #8f7543; }
+.c-title { font-family: 'Instrument Serif', Georgia, serif; font-weight: 400; font-size: 4.6mm; line-height: 1; letter-spacing: -0.01em; }
 .c-title em { color: #e3c98f; }
-.c-arch { position: absolute; right: ${mm(b + 5)}; top: ${mm(b + 4)}; bottom: ${mm(b + STRIPE)}; width: 29mm; padding: 1.1mm 1.1mm 0;
-  border: 0.25mm solid #8f7543; border-bottom: 0; border-radius: 999mm 999mm 0 0; }
-.c-arch div { position: relative; width: 100%; height: 100%; overflow: hidden; border-radius: 999mm 999mm 0 0; }
-.c-arch img { display: block; width: 100%; height: 100%; object-fit: cover; object-position: 44% 50%; }
-.c-arch div::after { content: ''; position: absolute; inset: 0; background: linear-gradient(90deg, rgba(20,18,14,0.45) 0%, rgba(20,18,14,0) 45%); }
 .c-stripe { position: absolute; left: 0; right: 0; bottom: 0; height: ${mm(b + STRIPE)}; background: #a5432b; }
 
 /* Rückseite: heller Kalkstein wie die Speisekarte */
@@ -82,15 +79,14 @@ export function cardCss(b = BLEED) {
 `;
 }
 
-/** Markup einer Seite. `img` = Bildquellen { emblem, photo }. */
+/** Markup einer Seite. `img` = Bildquellen { emblem }. */
 export function cardMarkup(side, img, qrSvg = '') {
   if (side === 'front') {
     return `<div class="card card--front">
-  <div class="c-logo"><img src="${img.emblem}" alt="Elmo"><span>Shawarma</span></div>
-  <div class="c-arch"><div><img src="${img.photo}" alt=""></div></div>
-  <div class="c-claim">
-    <p class="label">Libanesische Küche</p>
-    <p class="c-title">Alles von Hand.<br><em>Frisch vom Spieß.</em></p>
+  <div class="c-center">
+    <div class="c-logo"><img src="${img.emblem}" alt="Elmo"><span>Shawarma</span></div>
+    <span class="c-rule"></span>
+    <p class="c-title">Alles von Hand. <em>Frisch vom Spieß.</em></p>
   </div>
   <div class="c-stripe"></div>
 </div>`;
@@ -138,7 +134,7 @@ async function main() {
 @font-face { font-family: 'Instrument Sans'; font-weight: 400; src: url('${font('instrument-sans', 'instrument-sans-latin-400-normal')}'); }
 @font-face { font-family: 'Instrument Sans'; font-weight: 600; src: url('${font('instrument-sans', 'instrument-sans-latin-600-normal')}'); }
 @font-face { font-family: 'Reem Kufi'; font-weight: 600; src: url('${font('reem-kufi', 'reem-kufi-arabic-600-normal')}'); }`;
-  const img = { emblem: file('src/assets/brand/elmo-emblem.png'), photo: file('src/assets/food/shawarma-teller.webp') };
+  const img = { emblem: file('src/assets/brand/elmo-emblem.png') };
   const qr = await cardQr();
 
   const doc = (bleed, pageCss) => `<!doctype html><html lang="de"><head><meta charset="utf-8"><style>

@@ -67,7 +67,7 @@ src/data/stations.ts       alle Inhalte (Texte aus dem Briefing, **…** = Hervo
 src/assets/stations/       Stationsbilder 01 bis 11 (siehe README dort)
 src/lib/images.ts          Bild-Auflösung und srcset-Breiten
 src/lib/qr.ts              gemeinsame QR-Definitionen (Skript + Druckbogen)
-src/components/site/       Website: Kopf- und Fußzeile, Handy-Leiste, Bogen, Karte
+src/components/site/       Website: Kopf- und Fußzeile, Bogen, Karte
 src/components/            Museum: Museumsleiste, Quiz, Karten
 src/pages/                 Seiten und robots.txt
 scripts/generate-qr.mjs    QR-Export (SVG + PNG 2000 px, Fehlerkorrektur Q)
@@ -75,7 +75,8 @@ scripts/generate-og.mjs    Vorschaubilder je Seite (Logo, Titel, Foto im Bogen)
 scripts/generate-card.mjs  Visitenkarte im Website-Design (Daten aus restaurant.ts, QR zur Website)
 print/visitenkarte/        Druck-PDF (91 × 61 mm inkl. Beschnitt, 2 Seiten) und PNG-Vorschauen
 scripts/generate-tablemenu.mjs  Tisch-Speisekarte aus src/data/menu.ts; Fotos je Kategorie
-                           optional unter src/assets/menu/<kategorie-id>.webp (z. B. mezze.webp)
+                           optional unter src/assets/menu/<kategorie-id>.webp (z. B. mezze.webp);
+                           die Schriftgröße wird automatisch so gewählt, dass die Spalten voll sind
 print/speisekarte-tisch/   Druck-PDFs (3 mm Beschnitt) und Vorschauen
 public/                    Favicon (Kuppel aus dem Emblem), Homescreen-Icons, Manifest, og/
 vercel.json                Redirect, Trailing Slash, Header

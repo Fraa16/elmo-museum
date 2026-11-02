@@ -138,7 +138,7 @@ const wordsHtml = () => `<section class="cat words">
   <dl>${glossary.map((g) => `<div><dt>${esc(g.term)}</dt><dd>${esc(g.text)}</dd></div>`).join('')}</dl>
 </section>`;
 
-/** Kurzer Block „Alles von Hand“ mit Foto, unten bündig in einer Spalte (Eintrag 'story'). */
+/** Kurzer Block „Alles von Hand“ mit Foto: bei B als Spalteneintrag 'story', bei A quer unter zwei Spalten. */
 const storyHtml = () => `<section class="story">
   <div class="thumb"><div><img src="${file('src/assets/food/marinieren.webp')}" alt="" style="object-position:50% 50%"></div></div>
   <div>
@@ -232,31 +232,42 @@ const A = {
   ],
   vars: `--logo: 15mm; --label: 2.6mm; --cat: 10.4mm; --name: 5mm; --price: 4.5mm; --desc: 3.15mm; --tag: 2.45mm;
     --note: 2.7mm; --cat-gap: 8mm; --dish-pad: 1.9mm; --head-pad: 2.4mm; --rule: 0.55mm; --thin: 0.3mm;
-    --thumb-w: 21mm; --thumb-h: 26mm; --thumb-pad: 0.9mm; --thumb-gap: 4mm; --ring: 0.5mm; --ring-inset: 4.5mm;`,
-  // Lesereihenfolge von links nach rechts; die mittlere Spalte beginnt unter dem Medaillon
+    --thumb-w: 21mm; --thumb-h: 26mm; --thumb-pad: 0.9mm; --thumb-gap: 4mm; --ring: 0.5mm; --ring-inset: 4.5mm;
+    --story-h: 40mm;`,
+  // Lesereihenfolge von links nach rechts; die mittlere Spalte beginnt unter dem Medaillon,
+  // unter Spalte 1 und 2 liegt quer der Block „Alles von Hand“
   cols: [
     [{ id: 'sandwiches', to: 12 }],
     [{ id: 'sandwiches', from: 12, title: 'Vegetarische Sandwiches' }, 'burger'],
-    ['broasted', 'teller'],
-    ['mezze', 'suppen'],
-    ['tageskueche', 'schueler', 'getraenke'],
+    ['teller', 'schueler'],
+    [{ id: 'mezze', to: 4 }, { id: 'mezze', from: 4, title: 'Vegetarische Mezze' }, 'suppen'],
+    ['broasted', 'tageskueche', 'getraenke'],
   ],
   css: `
 .half { position: absolute; left: 0; width: 700mm; height: 350mm; overflow: hidden; }
 .half--bottom { top: 350mm; }
 .half--top { top: 0; transform: rotate(180deg); }
 .band { position: absolute; left: 0; right: 0; top: 0; height: 30mm; background: #14120e; color: #ece3d2; }
-.band .logo { position: absolute; left: 25mm; top: 50%; transform: translateY(-50%); }
-.band__hello { position: absolute; left: 82mm; top: 50%; transform: translateY(-50%); }
+.band .logo { position: absolute; left: 18mm; top: 50%; transform: translateY(-50%); }
+.band__hello { position: absolute; left: 76mm; top: 50%; transform: translateY(-50%); }
 .band__hello .ar { font-family: 'Reem Kufi', sans-serif; font-weight: 600; font-size: 7mm; line-height: 1; color: #e3c98f; }
 .band__hello .serif { margin-top: 1.6mm; font-style: italic; font-size: 5.2mm; line-height: 1; color: #ece3d2; }
-.band__call { position: absolute; right: 25mm; top: 50%; transform: translateY(-50%); text-align: right; }
+.band__call { position: absolute; right: 18mm; top: 50%; transform: translateY(-50%); text-align: right; }
 .band__call .serif { margin-top: 1mm; font-size: 9mm; line-height: 1; color: #ece3d2; }
 .half .medal { left: 302mm; top: -48mm; width: 96mm; height: 96mm; }
-.col { top: 42mm; width: 120mm; height: 272mm; }
-.col--1 { left: 25mm; } .col--2 { left: 157.5mm; } .col--3 { left: 290mm; top: 56mm; height: 258mm; }
-.col--4 { left: 422.5mm; } .col--5 { left: 555mm; }
-.foot { position: absolute; left: 25mm; right: 25mm; bottom: 22mm; display: flex; justify-content: space-between; align-items: flex-end;
+.col { top: 40mm; width: 122.8mm; height: 278mm; }
+.col--1 { left: 18mm; } .col--2 { left: 153.3mm; } .col--3 { left: 288.6mm; top: 55mm; height: 263mm; }
+.col--4 { left: 423.9mm; } .col--5 { left: 559.2mm; }
+.col--1, .col--2 { height: calc(278mm - var(--story-h) - var(--cat-gap)); }
+/* „Alles von Hand“ quer unter Spalte 1 und 2, unten bündig mit den Spalten */
+.half > .story { position: absolute; left: 18mm; width: 258.1mm; top: calc(318mm - var(--story-h)); height: var(--story-h);
+  display: flex; align-items: flex-end; gap: calc(6mm * var(--k)); padding-top: calc(3.5mm * var(--k)); border-top: var(--rule) solid #1b1814; }
+.half > .story .thumb { flex: none; --thumb-h: 100%; --thumb-w: calc(var(--story-h) * 0.72); }
+.half > .story > div:last-child { display: flex; align-items: flex-end; gap: calc(8mm * var(--k)); }
+.story__title { flex: none; font-family: 'Instrument Serif', Georgia, serif; font-size: calc(var(--cat) * 0.82); line-height: 0.95; letter-spacing: -0.015em; }
+.story__title em { color: #7e5e22; }
+.story__text { font-size: var(--desc); line-height: 1.35; color: #6b6253; }
+.foot { position: absolute; left: 18mm; right: 18mm; bottom: 18mm; display: flex; justify-content: space-between; align-items: flex-end;
   gap: 20mm; padding-top: 3mm; border-top: 0.3mm solid #cbbea6; }
 .foot .note:last-child { text-align: right; font-weight: 600; color: #1b1814; }
 `,
@@ -269,6 +280,7 @@ const A = {
   </div>
   <div class="medal"></div>
   ${columnsHtml(this.cols, images)}
+  ${storyHtml()}
   <div class="foot"><p class="note">${notes.replace('\n', ' ')}</p><p class="note">${contacts}</p></div>
 </div>`;
     return half('top') + half('bottom');
@@ -284,46 +296,46 @@ const B = {
   vars: `--logo: 17mm; --label: 2.6mm; --cat: 10.4mm; --name: 5mm; --price: 4.5mm; --desc: 3.15mm; --tag: 2.45mm;
     --note: 2.7mm; --cat-gap: 8mm; --dish-pad: 1.9mm; --head-pad: 2.4mm; --rule: 0.55mm; --thin: 0.3mm;
     --thumb-w: 21mm; --thumb-h: 26mm; --thumb-pad: 0.9mm; --thumb-gap: 4mm; --ring: 0.5mm; --ring-inset: 4.5mm;`,
-  // fünf Spalten; die mittlere ist um den Kerzenring geteilt (oben, unten)
+  // fünf Spalten; die mittlere ist um den Kerzenring geteilt (oben „Alles von Hand“, unten Suppen und Getränke)
   cols: [
     [{ id: 'sandwiches', to: 12 }, 'schueler'],
-    [{ id: 'sandwiches', from: 12, title: 'Vegetarische Sandwiches' }, 'burger'],
-    ['broasted'],
+    [{ id: 'sandwiches', from: 12, title: 'Vegetarische Sandwiches' }, 'burger', 'broasted'],
+    ['story'],
     ['suppen', 'getraenke'],
-    ['teller', 'story'],
-    ['mezze', 'tageskueche'],
+    ['teller', { id: 'mezze', to: 4 }],
+    [{ id: 'mezze', from: 4, title: 'Vegetarische Mezze' }, 'tageskueche'],
   ],
   css: `
-.head { position: absolute; left: -${BLEED}mm; right: -${BLEED}mm; top: -${BLEED}mm; height: calc(46mm + ${BLEED}mm); background: #14120e; color: #ece3d2; }
-.head .logo { position: absolute; left: calc(20mm + ${BLEED}mm); bottom: 8mm; }
-.head__title { position: absolute; left: 50%; bottom: 8mm; transform: translateX(-50%); display: flex; align-items: baseline; gap: 5mm; white-space: nowrap; }
+.head { position: absolute; left: -${BLEED}mm; right: -${BLEED}mm; top: -${BLEED}mm; height: calc(40mm + ${BLEED}mm); background: #14120e; color: #ece3d2; }
+.head .logo { position: absolute; left: calc(14mm + ${BLEED}mm); bottom: 6mm; }
+.head__title { position: absolute; left: 50%; bottom: 6mm; transform: translateX(-50%); display: flex; align-items: baseline; gap: 5mm; white-space: nowrap; }
 .head__title .serif { font-size: 19mm; line-height: 0.9; letter-spacing: -0.02em; }
 .head__title .serif em { color: #e3c98f; }
 .head__title .ar { font-family: 'Reem Kufi', sans-serif; font-weight: 600; font-size: 7mm; line-height: 1; color: #e3c98f; }
-.head__call { position: absolute; right: calc(20mm + ${BLEED}mm); bottom: 8mm; text-align: right; }
+.head__call { position: absolute; right: calc(14mm + ${BLEED}mm); bottom: 6mm; text-align: right; }
 .head__call .serif { margin-top: 1mm; font-size: 8.5mm; line-height: 1; }
-.col { width: 102mm; top: 58mm; height: 336mm; }
-.col--1 { left: 20mm; }
-.col--2 { left: 133mm; }
-.col--3 { left: 246mm; height: 96mm; }
-.col--4 { left: 246mm; top: 266mm; height: 128mm; }
-.col--5 { left: 359mm; }
-.col--6 { left: 472mm; }
+.col { width: 105.2mm; top: 50mm; height: 348mm; }
+.col--1 { left: 14mm; }
+.col--2 { left: 129.2mm; }
+.col--3 { left: 244.4mm; height: 104mm; }
+.col--4 { left: 244.4mm; top: 266mm; height: 132mm; }
+.col--5 { left: 359.6mm; }
+.col--6 { left: 474.8mm; }
 /* Kerzenplatz genau in der Blattmitte (Tischmitte), zwischen Spalte 3 oben und unten */
 .design > .medal { left: 249mm; top: 162mm; width: 96mm; height: 96mm; background: transparent; border: 0.3mm solid #b8975a; }
 .design > .medal::after { border-color: #b8975a; border-width: 0.6mm; }
-.story { margin-top: auto; display: grid; grid-template-columns: auto minmax(0, 1fr); align-items: end; gap: 5mm;
-  padding-top: 4mm; border-top: var(--rule) solid #1b1814; }
-.story .thumb { --thumb-w: 30mm; --thumb-h: 38mm; }
-.story__title { font-family: 'Instrument Serif', Georgia, serif; font-size: 7.5mm; line-height: 0.95; letter-spacing: -0.015em; }
+/* „Alles von Hand“ mittig über dem Kerzenring */
+.story { margin: auto 0; display: flex; flex-direction: column; align-items: center; text-align: center; gap: calc(3mm * var(--k)); }
+.story .thumb { --thumb-w: calc(30mm * var(--k)); --thumb-h: calc(37mm * var(--k)); }
+.story__title { font-family: 'Instrument Serif', Georgia, serif; font-size: calc(7.5mm * var(--k)); line-height: 0.95; letter-spacing: -0.015em; }
 .story__title em { color: #7e5e22; }
-.story__text { margin-top: 2mm; font-size: var(--desc); line-height: 1.35; color: #6b6253; }
+.story__text { max-width: 92mm; margin-top: calc(1.5mm * var(--k)); font-size: var(--desc); line-height: 1.35; color: #6b6253; }
 .words dl { margin-top: 1.5mm; }
 .words div { padding: 1.4mm 0; border-bottom: 0.3mm solid #cbbea6; }
 .words div:last-child { border-bottom: 0; }
 .words dt { display: inline; font-family: 'Instrument Serif', Georgia, serif; font-size: 4mm; line-height: 1.2; }
 .words dd { display: inline; margin: 0 0 0 1.5mm; font-size: 2.8mm; line-height: 1.3; color: #6b6253; }
-.foot { position: absolute; left: 20mm; right: 20mm; bottom: 13mm; display: flex; justify-content: space-between; align-items: flex-end;
+.foot { position: absolute; left: 14mm; right: 14mm; bottom: 11mm; display: flex; justify-content: space-between; align-items: flex-end;
   gap: 14mm; padding-top: 2.5mm; border-top: 0.3mm solid #cbbea6; }
 .foot .note:last-child { text-align: right; font-weight: 600; color: #1b1814; white-space: nowrap; }
 `,
@@ -357,7 +369,6 @@ body { color: #ece3d2; }
 .thumb { border-color: #8f7543; }
 .design > .medal { border-color: #8f7543; }
 .design > .medal::after { border-color: #c9a45c; }
-.story { border-top-color: #c9a45c; }
 .story__title em { color: #e3c98f; }
 .foot { border-top-color: #3a3227; }
 .foot .note { color: #a99f8c; }
@@ -365,6 +376,12 @@ body { color: #ece3d2; }
 `;
 
 const BDark = { ...B, name: 'B_eine-Richtung_dunkel', css: B.css + darkCss };
+
+/**
+ * Alle Größen-Variablen einer Variante mit dem Faktor --k multiplizieren:
+ * „--name: 5mm;“ wird zu „--name: calc(5mm * var(--k));“.
+ */
+const scaled = (vars) => vars.replace(/(--[\w-]+):\s*([\d.]+)mm;/g, '$1: calc($2mm * var(--k));');
 
 /* ------------------------------------------------------------------ Bauen */
 
@@ -379,40 +396,61 @@ const browser = await chromium.launch();
 const page = await browser.newPage();
 let problems = 0;
 
-for (const variant of [A, B, BDark]) {
-  for (const format of variant.formats) {
-    const scale = format.w / variant.base.w;
-    const W = format.w + 2 * BLEED;
-    const H = format.h + 2 * BLEED;
-    const html = `<!doctype html><html lang="de"><head><meta charset="utf-8"><style>
+/** Seite für eine Variante, ein Format und einen Größenfaktor erzeugen und Spaltenfüllung messen. */
+async function render(variant, format, k) {
+  const scale = format.w / variant.base.w;
+  const W = format.w + 2 * BLEED;
+  const H = format.h + 2 * BLEED;
+  const html = `<!doctype html><html lang="de"><head><meta charset="utf-8"><style>
 ${baseCss}
 ${variant.css}
 @page { size: ${W}mm ${H}mm; margin: 0; }
 .sheet { width: ${W}mm; height: ${H}mm; }
-.design { left: ${BLEED}mm; top: ${BLEED}mm; width: ${variant.base.w}mm; height: ${variant.base.h}mm; transform: scale(${scale}); ${variant.vars} }
+.design { left: ${BLEED}mm; top: ${BLEED}mm; width: ${variant.base.w}mm; height: ${variant.base.h}mm; transform: scale(${scale});
+  --k: ${k}; ${scaled(variant.vars)} }
 </style></head><body><div class="sheet"><div class="design">${variant.html(images)}</div></div></body></html>`;
-    const htmlFile = join(tmp, `${variant.name}-${format.label}.html`);
-    await writeFile(htmlFile, html);
-    await page.goto(pathToFileURL(htmlFile).href, { waitUntil: 'load' });
-    await page.evaluate(() => document.fonts.ready);
+  const htmlFile = join(tmp, `${variant.name}-${format.label}.html`);
+  await writeFile(htmlFile, html);
+  await page.goto(pathToFileURL(htmlFile).href, { waitUntil: 'load' });
+  await page.evaluate(() => document.fonts.ready);
+  const check = await page.evaluate(() => ({
+    missing: [...document.images].filter((i) => !i.naturalWidth).map((i) => i.src),
+    // Inhaltshöhe je Spalte: Summe der Blöcke plus Abstände (ohne automatische Ränder);
+    // offsetHeight ignoriert Transformationen (obere Hälfte von A ist gedreht)
+    fills: [...document.querySelectorAll('.half--bottom .col, .design > .col')].map((c) => {
+      const kids = [...c.children];
+      const gap = parseFloat(getComputedStyle(c).rowGap) || 0;
+      const content = kids.reduce((n, el) => n + el.offsetHeight, 0) + gap * (kids.length - 1);
+      return Math.round((content / c.clientHeight) * 100);
+    }),
+  }));
+  if (check.missing.length) throw new Error(`Bild nicht geladen: ${check.missing.join(', ')}`);
+  return { ...check, W, H };
+}
 
-    // Prüfen: Bilder geladen, keine Spalte läuft über
-    const check = await page.evaluate(() => ({
-      missing: [...document.images].filter((i) => !i.naturalWidth).map((i) => i.src),
-      // offsetTop/offsetHeight ignorieren Transformationen (obere Hälfte ist gedreht)
-      overflow: [...document.querySelectorAll('.half--bottom .col, .design > .col')].map((c) => {
-        const last = c.lastElementChild;
-        return { col: c.className, fill: Math.round(((last.offsetTop + last.offsetHeight) / c.clientHeight) * 100) };
-      }),
-    }));
-    if (check.missing.length) throw new Error(`Bild nicht geladen: ${check.missing.join(', ')}`);
-    const fills = check.overflow.map((o) => `${o.fill}%`).join(' ');
-    const over = check.overflow.filter((o) => o.fill > 100);
+/** Größter Faktor, bei dem keine Spalte über MAX_FILL % kommt (Halbierung zwischen 0,8 und 1,6). */
+const MAX_FILL = 97;
+async function bestFactor(variant) {
+  let lo = 0.8;
+  let hi = 1.6;
+  for (let step = 0; step < 9; step++) {
+    const mid = (lo + hi) / 2;
+    const { fills } = await render(variant, variant.formats[0], mid);
+    if (Math.max(...fills) <= MAX_FILL) lo = mid;
+    else hi = mid;
+  }
+  return Math.floor(lo * 100) / 100;
+}
+
+for (const variant of [A, B, BDark]) {
+  const k = await bestFactor(variant);
+  for (const format of variant.formats) {
+    const { fills, W, H } = await render(variant, format, k);
+    const over = fills.filter((f) => f > 100);
     if (over.length) problems++;
-
     const name = `Elmo-Shawarma_Tischkarte_${variant.name}_${format.label}`;
     await page.pdf({ path: out(`${name}.pdf`), width: `${W}mm`, height: `${H}mm`, printBackground: true, preferCSSPageSize: true });
-    console.log(`${over.length ? '✖' : '✔'} ${name}.pdf  (Spalten gefüllt: ${fills})`);
+    console.log(`${over.length ? '✖' : '✔'} ${name}.pdf  (Schriftfaktor ${k.toFixed(2)}, Spalten gefüllt: ${fills.map((f) => `${f}%`).join(' ')})`);
   }
 }
 
