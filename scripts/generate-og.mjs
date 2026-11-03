@@ -36,10 +36,10 @@ const count = numberWords[stations.length] ?? String(stations.length);
 const pages = [
   { name: 'start', label: 'Libanesische Küche in Schwäbisch Gmünd', title: 'Alles von Hand.<br><em>Frisch vom Spieß.</em>', photo: 'src/assets/food/shawarma-teller.webp', pos: '42% 50%' },
   { name: 'speisekarte', label: 'Speisekarte', title: 'Die <em>Karte.</em>', sub: '55 Gerichte, alles handgemacht und frisch zubereitet.', photo: 'src/assets/food/spiess.webp', pos: '50% 40%' },
-  { name: 'catering', label: 'Catering und Firmen', title: 'Für eure Feier.<br><em>Für euer Team.</em>', photo: 'src/assets/food/kafta-formen.webp', pos: '55% 50%' },
-  { name: 'gutscheine', label: 'Gutscheine', title: 'Genuss<br><em>verschenken.</em>', photo: 'src/assets/food/shawarma-teller.webp', pos: '60% 50%' },
+  { name: 'catering', label: 'Catering und Firmen', title: 'Für eure Feier.<br><em>Für euer Team.</em>', photo: 'src/assets/photos/catering-drk.webp', pos: '50% 22%' },
+  { name: 'gutscheine', label: 'Gutscheine', title: 'Genuss<br><em>verschenken.</em>', photo: 'src/assets/photos/kerze.webp', pos: '50% 60%' },
   { name: 'ueber-uns', label: 'Über uns', title: 'Seit 2017<br><em>in Gmünd.</em>', photo: 'src/assets/stations/01.jpg', pos: '60% 50%' },
-  { name: 'kontakt', label: 'Kontakt und Anfahrt', title: 'Komm <em>vorbei.</em>', sub: 'Kapuzinergasse 6, 73525 Schwäbisch Gmünd', photo: 'src/assets/food/marinieren.webp', pos: '50% 50%' },
+  { name: 'kontakt', label: 'Kontakt und Anfahrt', title: 'Komm <em>vorbei.</em>', sub: 'Kapuzinergasse 6, 73525 Schwäbisch Gmünd', photo: 'src/assets/photos/gastraum.webp', pos: '50% 18%' },
   { name: 'museum', label: 'Das Museum im Flur', title: `${count} Bilder,<br><em>${count.toLowerCase()} Geschichten.</em>`, photo: 'src/assets/stations/04.jpg', pos: '50% 50%' },
 ];
 

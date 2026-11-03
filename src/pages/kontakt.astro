@@ -5,6 +5,7 @@ import Arch from '../components/site/Arch.astro';
 import HoursTable from '../components/site/HoursTable.astro';
 import OpenStatus from '../components/site/OpenStatus.astro';
 import { restaurant, routeHref } from '../data/restaurant';
+import imgGastraum from '../assets/photos/gastraum.webp';
 
 // TODO: Daten von Momo: barrierefrei ja oder nein.
 ---
@@ -17,7 +18,16 @@ import { restaurant, routeHref } from '../data/restaurant';
   <main>
     <PageHero label="Kontakt und Anfahrt" title="Komm <em>vorbei.</em>" intro="Mitten in Schwäbisch Gmünd. Vorbestellen, abholen und reservieren per Telefon.">
       <OpenStatus class="hero-status" />
-      <Arch slot="aside" framed reveal placeholder="Foto: Außenansicht Kapuzinergasse" class="hero-arch" />
+      <Arch
+        slot="aside"
+        framed
+        reveal
+        eager
+        image={imgGastraum}
+        alt="Gastraum von Elmo Shawarma in der Kapuzinergasse: Laterne über dem Tisch, blau-goldene Wand und gemusterte Fliesen"
+        position="50% 18%"
+        class="hero-arch"
+      />
     </PageHero>
 
     <section class="info page" aria-label="Adresse, Telefon und Öffnungszeiten" data-reveal-stagger="120">

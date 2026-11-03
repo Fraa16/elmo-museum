@@ -7,6 +7,7 @@ import Arch from '../components/site/Arch.astro';
 import CallBand from '../components/site/CallBand.astro';
 import { restaurant } from '../data/restaurant';
 import { stationImage } from '../lib/images';
+import imgTheke from '../assets/photos/theke.webp';
 
 // TODO: Freigabe Momo: Jahreszahlen und Orte (laut Gmünder Tagespost), Herkunft Al Bayada.
 const roots = stationImage('01.jpg');
@@ -37,7 +38,16 @@ const hands = [
       ar="أهلاً وسهلاً"
       intro="Libanesische und palästinensische Küche, alles handgemacht und frisch zubereitet. Von einer Familie, die ihre Heimat mitgebracht hat."
     >
-      <Arch slot="aside" framed reveal placeholder="Foto: Familie und Team" class="hero-arch" />
+      <Arch
+        slot="aside"
+        framed
+        reveal
+        eager
+        image={imgTheke}
+        alt="An der Theke von Elmo Shawarma: Shawarma kommt frisch auf die Fladenbrote, daneben Platten mit gerollten Sandwiches"
+        position="50% 14%"
+        class="hero-arch"
+      />
     </PageHero>
 
     <section class="time page" aria-labelledby="time-title">

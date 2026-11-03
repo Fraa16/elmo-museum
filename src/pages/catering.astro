@@ -4,6 +4,7 @@ import PageHero from '../components/site/PageHero.astro';
 import Arch from '../components/site/Arch.astro';
 import CallBand from '../components/site/CallBand.astro';
 import { restaurant } from '../data/restaurant';
+import imgCatering from '../assets/photos/catering-drk.webp';
 
 // TODO: Freigabe Momo.
 const steps = [
@@ -25,7 +26,16 @@ const steps = [
       intro="Grillplatten für Feiern und Shawarma für Firmen in Schwäbisch Gmünd. Alles handgemacht und frisch zubereitet."
     >
       <a class="btn btn--solid hero-cta" href={restaurant.phoneHref}>Catering anfragen<span aria-hidden="true"><svg class="i-arrow" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2.5 8h11M9 3.5 13.5 8 9 12.5"></path></svg></span></a>
-      <Arch slot="aside" framed reveal placeholder="Foto: Grillplatte" class="hero-arch" />
+      <Arch
+        slot="aside"
+        framed
+        reveal
+        eager
+        image={imgCatering}
+        alt="Catering-Buffet von Elmo Shawarma für das DRK mit Shawarma-Rollen, Falafel und Hummus"
+        position="50% 24%"
+        class="hero-arch"
+      />
     </PageHero>
 
     <section class="offers page" aria-label="Angebote" data-reveal-stagger="120">
@@ -89,8 +99,9 @@ const steps = [
     margin-top: 2rem;
   }
 
+  /* etwas höher als auf den anderen Seiten: Gesicht und Buffet passen so gemeinsam in den Bogen */
   :global(.hero-arch) {
-    height: clamp(22rem, 90vw, 34rem);
+    height: clamp(24rem, 112vw, 38rem);
   }
 
   .offers {
