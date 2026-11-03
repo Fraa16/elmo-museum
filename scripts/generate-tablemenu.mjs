@@ -213,14 +213,14 @@ const CARD = {
 .welcome__rule { width: 10mm; height: 0.3mm; margin: 3mm 0 2.8mm; background: #b8975a; }
 .welcome__title { font-family: 'Instrument Serif', Georgia, serif; font-size: 6mm; line-height: 0.95; letter-spacing: -0.015em; }
 .welcome__title em { color: #7e5e22; }
-/* QR-Hinweis als dunkle Kachel wie Kopfleiste und Medaillon; feste Größen, damit er auffällt
-   und am Tisch sicher scannbar bleibt (Code samt Ruhezone 28 mm, hell auf eigener Fläche) */
-.qr { display: flex; align-items: center; gap: 4mm; padding: 3mm; background: #14120e; color: #ece3d2; }
-.qr__code { flex: none; width: 28mm; height: 28mm; }
+.qr__label { font-weight: 600; font-size: 1.9mm; line-height: 1.3; letter-spacing: 0.18em; text-transform: uppercase; color: #7e5e22; }
+/* QR-Hinweis direkt auf dem Kalkstein; feste Größen, damit er auffällt und am Tisch sicher
+   scannbar bleibt (Code samt Ruhezone 36 mm, die Ruhezone geht im Papier auf) */
+.qr { display: flex; align-items: center; gap: 2.5mm; padding-top: 1mm; border-top: var(--thin) solid #cbbea6; }
+.qr__code { flex: none; width: 36mm; height: 36mm; margin-left: -3.9mm; }
 .qr__code svg { display: block; width: 100%; height: 100%; }
-.qr__label { font-weight: 600; font-size: 1.9mm; line-height: 1.3; letter-spacing: 0.18em; text-transform: uppercase; color: #c9a45c; }
-.qr__title { margin-top: 1.2mm; font-family: 'Instrument Serif', Georgia, serif; font-size: 5.2mm; line-height: 1.02; letter-spacing: -0.01em; }
-.qr__text { margin-top: 1.6mm; font-size: 2.5mm; line-height: 1.35; color: #c9bea9; }
+.qr__title { margin-top: 1.2mm; font-family: 'Instrument Serif', Georgia, serif; font-size: 5.2mm; line-height: 1.02; letter-spacing: -0.01em; color: #1b1814; }
+.qr__text { margin-top: 1.6mm; font-size: 2.5mm; line-height: 1.35; color: #6b6253; }
 .nowrap { white-space: nowrap; }
 .foot { position: absolute; left: 6mm; right: 6mm; bottom: 4.5mm; display: flex; justify-content: space-between; align-items: flex-end;
   gap: 10mm; padding-top: 1.6mm; border-top: 0.25mm solid #cbbea6; }
@@ -278,7 +278,10 @@ body { color: #ece3d2; }
 .foot { border-top-color: #3a3227; }
 .foot .note { color: #a99f8c; }
 .foot .note:last-child { color: #ece3d2; }
-.qr { border: 0.25mm solid #6d5a36; }
+.qr { border-top-color: #3a3227; }
+.qr__label { color: #c9a45c; }
+.qr__title { color: #ece3d2; }
+.qr__text { color: #b5aa95; }
 `;
 
 /**
