@@ -126,8 +126,7 @@ const columnsHtml = (cols, withDesc) =>
 /** Logo wie auf der Website; `emblem` ist die für den Druck verkleinerte Bilddatei. */
 const logoHtml = () => `<div class="logo"><img src="${emblem}" alt="Elmo"><span>Shawarma</span></div>`;
 
-const notes = `Preise in Euro inkl. MwSt. Getränke zzgl. Pfand. Batata sind handgeschnittene Kartoffeln.
-Fragen zu Allergenen beantworten wir dir gern.`;
+const notes = `Preise in Euro inkl. MwSt. Getränke zzgl. Pfand. Fragen zu Allergenen beantworten wir dir gern.`;
 const website = new URL(SITE_URL).host;
 
 /* ------------------------------------------------------------------ CSS */
@@ -236,7 +235,7 @@ const CARD = {
 </div>
 ${columnsHtml(this.cols, this.withDesc)}
 <div class="medal">${logoHtml()}</div>
-<div class="foot"><p class="note">${notes.replace('\n', ' ')}</p><p class="foot__contact"><span>${website}</span><span>Instagram ${restaurant.instagramHandle}</span></p></div>`;
+<div class="foot"><p class="note">${notes}</p><p class="foot__contact"><span>${website}</span><span>Instagram ${restaurant.instagramHandle}</span></p></div>`;
   },
 };
 
