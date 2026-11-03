@@ -128,7 +128,7 @@ const logoHtml = () => `<div class="logo"><img src="${emblem}" alt="Elmo"><span>
 
 const notes = `Preise in Euro inkl. MwSt. Getränke zzgl. Pfand. Batata sind handgeschnittene Kartoffeln.
 Fragen zu Allergenen beantworten wir dir gern.`;
-const contacts = `${new URL(SITE_URL).host}&nbsp;&nbsp;&nbsp;Instagram ${restaurant.instagramHandle}`;
+const website = new URL(SITE_URL).host;
 
 /* ------------------------------------------------------------------ CSS */
 
@@ -185,20 +185,21 @@ const CARD = {
   vars: `--label: 2.6mm; --cat: 10.4mm; --name: 5mm; --price: 4.5mm; --desc: 3.15mm; --tag: 2.45mm;
     --note: 2.7mm; --cat-gap: 6.5mm; --dish-pad: 1.5mm; --head-pad: 2mm; --rule: 0.55mm; --thin: 0.35mm;`,
   css: `
-.head { position: absolute; left: -${BLEED}mm; right: -${BLEED}mm; top: -${BLEED}mm; height: calc(16mm + ${BLEED}mm); background: #14120e; color: #ece3d2; }
-.head__title { position: absolute; left: calc(6mm + ${BLEED}mm); bottom: 3.2mm; display: flex; align-items: baseline; gap: 3mm; white-space: nowrap; }
-.head__title .serif { font-size: 9.5mm; line-height: 0.9; letter-spacing: -0.02em; }
-.head__title .serif em { color: #e3c98f; }
-.head__title .ar { font-family: 'Reem Kufi', sans-serif; font-weight: 600; font-size: 4mm; line-height: 1; color: #e3c98f; }
-.head__call { position: absolute; right: calc(6mm + ${BLEED}mm); bottom: 3.2mm; text-align: right; }
-.head__call .label { font-size: 1.7mm; }
-.head__call .serif { margin-top: 0.6mm; font-size: 4.8mm; line-height: 1; }
+/* Kopf ohne dunkles Band: direkt auf dem Kalkstein, feine Linie darunter wie über der Fußzeile */
+.head { position: absolute; left: 6mm; right: 6mm; top: 0; height: 17.5mm; border-bottom: 0.25mm solid #cbbea6; }
+.head__title { position: absolute; left: 0; bottom: 3mm; display: flex; align-items: baseline; gap: 3mm; white-space: nowrap; }
+.head__title .serif { font-size: 9.5mm; line-height: 0.9; letter-spacing: -0.02em; color: #1b1814; }
+.head__title .serif em { color: #7e5e22; }
+.head__title .ar { font-family: 'Reem Kufi', sans-serif; font-weight: 600; font-size: 4mm; line-height: 1; color: #7e5e22; }
+.head__call { position: absolute; right: 0; bottom: 3mm; text-align: right; }
+.head__call .label { font-size: 1.7mm; color: #7e5e22; }
+.head__call .serif { margin-top: 0.6mm; font-size: 4.8mm; line-height: 1; color: #1b1814; }
 /* fünf Spalten zu 74 mm; die mittlere ist um das Logo geteilt */
-.col { width: 74mm; top: 21mm; height: 166mm; }
+.col { width: 74mm; top: 21mm; height: 164.5mm; }
 .col--1 { left: 6mm; }
 .col--2 { left: 84.5mm; }
 .col--3 { left: 163mm; height: 48mm; }
-.col--4 { left: 163mm; top: 131mm; height: 56mm; }
+.col--4 { left: 163mm; top: 131mm; height: 54.5mm; }
 .col--5 { left: 241.5mm; }
 .col--6 { left: 320mm; }
 /* Logo-Medaillon genau in der Blattmitte; feste Größe */
@@ -222,10 +223,11 @@ const CARD = {
 .qr__title { margin-top: 1.2mm; font-family: 'Instrument Serif', Georgia, serif; font-size: 5.2mm; line-height: 1.02; letter-spacing: -0.01em; color: #1b1814; }
 .qr__text { margin-top: 1.6mm; font-size: 2.5mm; line-height: 1.35; color: #6b6253; }
 .nowrap { white-space: nowrap; }
-.foot { position: absolute; left: 6mm; right: 6mm; bottom: 4.5mm; display: flex; justify-content: space-between; align-items: flex-end;
-  gap: 10mm; padding-top: 1.6mm; border-top: 0.25mm solid #cbbea6; }
-.foot .note { font-size: 2mm; }
-.foot .note:last-child { text-align: right; font-weight: 600; color: #1b1814; white-space: nowrap; }
+.foot { position: absolute; left: 6mm; right: 6mm; bottom: 4.5mm; display: flex; justify-content: space-between; align-items: baseline;
+  gap: 10mm; padding-top: 1.8mm; border-top: 0.25mm solid #cbbea6; }
+.foot .note { font-size: 2.8mm; line-height: 1.2; white-space: nowrap; }
+/* Website und Instagram groß, damit man sie vom Tisch aus abschreiben kann */
+.foot__contact { display: flex; gap: 7mm; font-weight: 600; font-size: 4.4mm; line-height: 1.2; color: #1b1814; white-space: nowrap; }
 `,
   html() {
     return `<div class="head">
@@ -234,7 +236,7 @@ const CARD = {
 </div>
 ${columnsHtml(this.cols, this.withDesc)}
 <div class="medal">${logoHtml()}</div>
-<div class="foot"><p class="note">${notes.replace('\n', ' ')}</p><p class="note">${contacts}</p></div>`;
+<div class="foot"><p class="note">${notes.replace('\n', ' ')}</p><p class="foot__contact"><span>${website}</span><span>Instagram ${restaurant.instagramHandle}</span></p></div>`;
   },
 };
 
@@ -264,7 +266,10 @@ const COLS = {
 const darkCss = `
 .sheet { background: #14120e; }
 body { color: #ece3d2; }
-.head { background: #14120e; border-bottom: 0.25mm solid #6d5a36; }
+.head { border-bottom-color: #3a3227; }
+.head__title .serif, .head__call .serif { color: #ece3d2; }
+.head__title .serif em, .head__title .ar { color: #e3c98f; }
+.head__call .label { color: #c9a45c; }
 .cat__head { border-bottom-color: #c9a45c; }
 .cat__intro { color: #c9bea9; }
 .cat__extras { color: #ece3d2; }
@@ -277,7 +282,7 @@ body { color: #ece3d2; }
 .welcome__rule { background: #8f7543; }
 .foot { border-top-color: #3a3227; }
 .foot .note { color: #a99f8c; }
-.foot .note:last-child { color: #ece3d2; }
+.foot__contact { color: #ece3d2; }
 .qr { border-top-color: #3a3227; }
 .qr__label { color: #c9a45c; }
 .qr__title { color: #ece3d2; }
