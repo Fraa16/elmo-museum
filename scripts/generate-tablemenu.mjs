@@ -89,7 +89,7 @@ const welcomeHtml = () => `<section class="welcome">
   <p class="welcome__hello">Schön, dass du da bist.</p>
   <span class="welcome__rule"></span>
   <p class="welcome__title">Alles von Hand.<br><em>Frisch vom Spieß.</em></p>
-  <p class="welcome__text">Selbst mariniert und von Hand geschichtet. Falafel und Labban aus unserem selbstgemachten Joghurt.</p>
+  <p class="welcome__text">Selbst mariniert und von Hand geschichtet. Handgemachte, frisch zubereitete Falafel. Und unser selbstgemachter Joghurt, aus dem der Labban entsteht.</p>
 </section>`;
 
 const SPECIAL = { welcome: welcomeHtml };
@@ -200,7 +200,7 @@ const B = {
 .welcome__rule { width: 16mm; height: 0.4mm; margin: 6mm 0 5.5mm; background: #b8975a; }
 .welcome__title { font-family: 'Instrument Serif', Georgia, serif; font-size: 11.5mm; line-height: 0.95; letter-spacing: -0.015em; }
 .welcome__title em { color: #7e5e22; }
-.welcome__text { max-width: 90mm; margin-top: 3.5mm; font-size: 3.7mm; line-height: 1.35; color: #6b6253; }
+.welcome__text { max-width: 101mm; margin-top: 3.5mm; font-size: 3.7mm; line-height: 1.35; color: #6b6253; }
 .foot { position: absolute; left: 14mm; right: 14mm; bottom: 11mm; display: flex; justify-content: space-between; align-items: flex-end;
   gap: 14mm; padding-top: 2.5mm; border-top: 0.3mm solid #cbbea6; }
 .foot .note:last-child { text-align: right; font-weight: 600; color: #1b1814; white-space: nowrap; }
