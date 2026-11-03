@@ -7,6 +7,8 @@ Alle Dateien
 - 3 mm Beschnitt rundum, Endformat als TrimBox hinterlegt
 - Dateien ohne Zusatz: für Online-Druckereien (dort keine Schnittmarken erwünscht)
 - Dateien mit „_Schnittmarken“: für Druckereien, die Schnittmarken wünschen
+- „Drucksachen_alle“: alles in einer Datei (Seite 1 Speisekarte, Seite 2 und 3
+  Visitenkarte vorne und hinten), zum Weitergeben und für Druckereien, die eine Datei wünschen
 
 Visitenkarte
 - Endformat 85 × 55 mm, Datei 91 × 61 mm mit Beschnitt

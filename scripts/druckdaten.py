@@ -184,6 +184,18 @@ def max_ink(pdf_path: Path, tmp: Path) -> float:
     return worst
 
 
+def combine(parts: list, dst: Path, title: str) -> None:
+    """Alle Drucksachen in einer Datei: Seiten der fertigen PDF/X-Dateien hintereinander (gleiche Ausgabebedingung)."""
+    with pikepdf.open(parts[0]) as pdf:
+        for part in parts[1:]:
+            with pikepdf.open(part) as other:
+                pdf.pages.extend(other.pages)
+        with pdf.open_metadata(set_pikepdf_as_editor=False) as meta:
+            meta['dc:title'] = title
+        pdf.docinfo['/Title'] = title
+        pdf.save(dst, object_stream_mode=pikepdf.ObjectStreamMode.disable, force_version='1.3')
+
+
 def main() -> None:
     if not shutil.which('gs'):
         sys.exit('\n✖ Ghostscript fehlt. Einmalig installieren: sudo apt install ghostscript\n')
@@ -193,6 +205,7 @@ def main() -> None:
     with tempfile.TemporaryDirectory(prefix='elmo-druck-') as t:
         tmp = Path(t)
         black = text_black_cmyk(tmp)
+        finals = []
         for src_rel, stem, title in JOBS:
             src = ROOT / src_rel
             if not src.exists():
@@ -201,6 +214,7 @@ def main() -> None:
             ghostscript(src, converted, title, tmp)
             final = OUT / f'{stem}_PDFX3_FOGRA39.pdf'
             replaced = finish(converted, final, black)
+            finals.append(final)
             marked = OUT / f'{stem}_PDFX3_FOGRA39_Schnittmarken.pdf'
             with_crop_marks(final, marked)
             ink = max_ink(final, tmp)
@@ -208,6 +222,10 @@ def main() -> None:
                 sys.exit(f'✖ {final.name}: Farbauftrag {ink:.0f} % über 300 %')
             print(f'✔ {final.name}  (Farbauftrag max. {ink:.0f} %, Schwarz 100 K: {replaced} Stellen)')
             print(f'✔ {marked.name}')
+        # alle Drucksachen in einer Datei, Speisekarte zuerst
+        combined = OUT / 'Elmo-Shawarma_Drucksachen_alle_PDFX3_FOGRA39.pdf'
+        combine(finals[1:] + finals[:1], combined, 'Elmo Shawarma Drucksachen')
+        print(f'✔ {combined.name}  (alle Seiten in einer Datei)')
     print(f'\nDruckdaten (PDF/X-3, FOGRA39) in /{OUT.relative_to(ROOT)}/')
 
 
