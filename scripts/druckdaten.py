@@ -43,10 +43,11 @@ TEXT_BLACK_RGB = (0x1B, 0x18, 0x14)
 JOBS = [
     ('print/visitenkarte/Elmo-Shawarma_Visitenkarte_85x55mm_3mm-Beschnitt.pdf',
      'Elmo-Shawarma_Visitenkarte_85x55mm', 'Elmo Shawarma Visitenkarte 85 x 55 mm'),
-    ('print/speisekarte-tisch/Elmo-Shawarma_Tischkarte_B_eine-Richtung_A2-quer.pdf',
-     'Elmo-Shawarma_Speisekarte_A2-quer_hell', 'Elmo Shawarma Speisekarte A2 quer hell'),
-    ('print/speisekarte-tisch/Elmo-Shawarma_Tischkarte_B_eine-Richtung_dunkel_A2-quer.pdf',
-     'Elmo-Shawarma_Speisekarte_A2-quer_dunkel', 'Elmo Shawarma Speisekarte A2 quer dunkel'),
+    *(
+        (f'print/speisekarte-tisch/Elmo-Shawarma_Speisekarte_40x20cm_{v}.pdf',
+         f'Elmo-Shawarma_Speisekarte_40x20cm_{v}', f'Elmo Shawarma Speisekarte 40 x 20 cm {v.replace("_", " ")}')
+        for v in ('hell_mit-Beschreibung', 'hell_ohne-Beschreibung', 'dunkel_mit-Beschreibung', 'dunkel_ohne-Beschreibung')
+    ),
 ]
 
 

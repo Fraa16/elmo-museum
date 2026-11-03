@@ -21,7 +21,7 @@ externen Requests.
 | `npm run qr -- --dry-run`  | QR-Testlauf in einen temporären Ordner                       |
 | `npm run og`               | Vorschaubilder (1200 × 630) nach `public/og/`, braucht Playwright |
 | `npm run card`             | Visitenkarte 85 × 55 mm: Druck-PDF mit 3 mm Beschnitt und Vorschauen nach `print/visitenkarte/` |
-| `npm run tischkarte`       | Tisch-Speisekarte DIN A2 Querformat, hell und dunkel, ohne Fotos, Logo in der Blattmitte, nach `print/speisekarte-tisch/` |
+| `npm run tischkarte`       | Tisch-Speisekarte 40 × 20 cm quer, hell und dunkel, je mit und ohne Beschreibungen, Logo in der Blattmitte, nach `print/speisekarte-tisch/` |
 | `npm run druckdaten`       | Druckdaten für die Druckerei aus beiden: PDF/X-3, CMYK FOGRA39, mit und ohne Schnittmarken, nach `print/druckdaten/` (braucht Ghostscript, `icc-profiles` und pikepdf, siehe Skript) |
 
 ## Konfiguration: `src/config.ts`

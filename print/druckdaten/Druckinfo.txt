@@ -14,6 +14,6 @@ Visitenkarte
 - Empfehlung: 350 bis 400 g/m², Bilderdruck matt
 
 Speisekarte (Tischkarte unter der PVC-Folie)
-- Endformat DIN A2 quer, 594 × 420 mm, Datei 600 × 426 mm mit Beschnitt
-- zwei Fassungen: hell und dunkel
+- Endformat 400 × 200 mm quer, Datei 406 × 206 mm mit Beschnitt
+- vier Fassungen: hell und dunkel, jeweils mit und ohne Beschreibung der Gerichte
 - Empfehlung: 135 bis 170 g/m², Bilderdruck matt (matt spiegelt unter der Folie weniger)

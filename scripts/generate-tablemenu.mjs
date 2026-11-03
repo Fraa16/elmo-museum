@@ -2,13 +2,12 @@
 /**
  * Tischkarte (Speisekarte unter der PVC-Folie) im Design der Website: `npm run tischkarte`
  *
- * DIN A2 Querformat (59,4 × 42 cm), eine Karte pro Tisch, in einer Richtung lesbar:
- * fünf Spalten ohne Fotos, in der Blattmitte das Logo in einem dunklen Medaillon,
- * darüber Begrüßung und „Alles von Hand“. Zwei Fassungen: hell (Kalkstein) und
- * dunkel (Farben der dunklen Website-Abschnitte).
+ * Format 40 × 20 cm quer, in einer Richtung lesbar: fünf Spalten, in der Blattmitte
+ * das Logo in einem dunklen Medaillon, darüber eine kurze Begrüßung.
+ * Vier Fassungen: hell und dunkel, jeweils mit und ohne Beschreibung der Gerichte.
  *
  * Schreibt nach /print/speisekarte-tisch/: Druck-PDFs mit 3 mm Beschnitt.
- * Inhalte und Preise kommen aus src/data/menu.ts. Die Schriftgröße wird
+ * Inhalte und Preise kommen aus src/data/menu.ts. Die Schriftgröße wird je Fassung
  * automatisch so gewählt, dass die Spalten möglichst voll sind.
  *
  * Braucht Playwright mit Chromium.
@@ -44,16 +43,16 @@ const BLEED = 3;
 const esc = (s) => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;');
 const byId = (id) => menu.find((c) => c.id === id);
 
-function dishHtml(dish) {
+function dishHtml(dish, withDesc) {
   const tags = [];
   if (dish.diet) tags.push(`<span class="tag tag--leaf">${dish.diet === 'vegan' ? 'Vegan' : 'Vegetarisch'}</span>`);
   for (const e of dish.extras ?? []) tags.push(`<span class="tag">${esc(e.label)} +${formatPrice(e.price)}</span>`);
   return `<div class="dish">
   <div class="dish__head">
-    <p class="dish__name">${esc(dish.name)}${dish.ar ? ` <span class="dish__ar" lang="ar" dir="rtl">${dish.ar}</span>` : ''}</p>
+    <p class="dish__name">${esc(dish.name)}</p>
     <p class="dish__price">${priceLabel(dish)}${dish.unit ? `<span class="dish__unit">${esc(dish.unit)}</span>` : ''}</p>
   </div>
-  ${dish.description ? `<p class="dish__desc">${esc(dish.description)}</p>` : ''}
+  ${withDesc && dish.description ? `<p class="dish__desc">${esc(dish.description)}</p>` : ''}
   ${tags.length ? `<p class="dish__tags">${tags.join('')}</p>` : ''}
 </div>`;
 }
@@ -62,14 +61,14 @@ function dishHtml(dish) {
  * Eine Kategorie oder ein Teil davon. Spalteneintrag: 'id' oder
  * { id, from, to, title } für einen Ausschnitt mit eigenem, kleinerem Titel.
  */
-function categoryHtml(entry) {
+function categoryHtml(entry, withDesc) {
   const { id, from = 0, to, title } = typeof entry === 'string' ? { id: entry } : entry;
   const cat = byId(id);
   const items = cat.items.slice(from, to);
   if (title) {
     return `<section class="cat">
   <header class="cat__head"><h2 class="cat__title cat__title--sub">${esc(title)}</h2></header>
-  ${items.map(dishHtml).join('')}
+  ${items.map((d) => dishHtml(d, withDesc)).join('')}
 </section>`;
   }
   const extras = cat.extras ? `<p class="cat__extras">Extra: ${cat.extras.map((e) => `${esc(e.label)} +${formatPrice(e.price)}`).join(', ')}</p>` : '';
@@ -79,7 +78,7 @@ function categoryHtml(entry) {
     ${cat.intro ? `<p class="cat__intro">${esc(cat.intro)}</p>` : ''}
     ${extras}
   </header>
-  ${items.map(dishHtml).join('')}
+  ${items.map((d) => dishHtml(d, withDesc)).join('')}
 </section>`;
 }
 
@@ -89,16 +88,15 @@ const welcomeHtml = () => `<section class="welcome">
   <p class="welcome__hello">Schön, dass du da bist.</p>
   <span class="welcome__rule"></span>
   <p class="welcome__title">Alles von Hand.<br><em>Frisch vom Spieß.</em></p>
-  <p class="welcome__text">Selbst mariniert und von Hand geschichtet. Handgemachte, frisch zubereitete Falafel. Und unser selbstgemachter Joghurt, aus dem der Labban entsteht.</p>
 </section>`;
 
 const SPECIAL = { welcome: welcomeHtml };
 
-const columnsHtml = (cols) =>
+const columnsHtml = (cols, withDesc) =>
   cols
     .map(
       (entries, i) =>
-        `<div class="col col--${i + 1}">${entries.map((e) => (SPECIAL[e] ? SPECIAL[e]() : categoryHtml(e))).join('')}</div>`,
+        `<div class="col col--${i + 1}">${entries.map((e) => (SPECIAL[e] ? SPECIAL[e]() : categoryHtml(e, withDesc))).join('')}</div>`,
     )
     .join('');
 
@@ -117,7 +115,6 @@ const baseCss = `
 @font-face { font-family: 'Instrument Sans'; font-weight: 400; src: url('${font('instrument-sans', 'instrument-sans-latin-400-normal')}'); }
 @font-face { font-family: 'Instrument Sans'; font-weight: 600; src: url('${font('instrument-sans', 'instrument-sans-latin-600-normal')}'); }
 @font-face { font-family: 'Reem Kufi'; font-weight: 600; src: url('${font('reem-kufi', 'reem-kufi-arabic-600-normal')}'); }
-@font-face { font-family: 'Noto Naskh Arabic'; font-weight: 500; src: url('${font('noto-naskh-arabic', 'noto-naskh-arabic-arabic-500-normal')}'); }
 html, body { margin: 0; padding: 0; }
 * { box-sizing: border-box; margin: 0; }
 body { font-family: 'Instrument Sans', sans-serif; -webkit-font-smoothing: antialiased; color: #1b1814; }
@@ -143,11 +140,10 @@ body { font-family: 'Instrument Sans', sans-serif; -webkit-font-smoothing: antia
 .cat .dish:last-child { border-bottom: 0; padding-bottom: 0; }
 .dish__head { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: start; gap: calc(var(--name) * 0.6); }
 .dish__name { font-family: 'Instrument Serif', Georgia, serif; font-size: var(--name); line-height: 1.08; }
-.dish__ar { font-family: 'Noto Naskh Arabic', serif; font-weight: 500; font-size: calc(var(--name) * 0.62); color: #7e5e22; white-space: nowrap; }
 .dish__price { display: flex; flex-direction: column; align-items: flex-end; padding-top: calc(var(--name) * 0.2);
   font-weight: 600; font-size: var(--price); line-height: 1.1; font-variant-numeric: tabular-nums; white-space: nowrap; }
 .dish__unit { font-weight: 400; font-size: calc(var(--desc) * 0.85); color: #6b6253; }
-.dish__desc { margin-top: calc(var(--desc) * 0.3); font-size: var(--desc); line-height: 1.32; color: #6b6253; }
+.dish__desc { margin-top: calc(var(--desc) * 0.25); font-size: var(--desc); line-height: 1.28; color: #6b6253; }
 .dish__tags { display: flex; flex-wrap: wrap; gap: calc(var(--tag) * 0.5); margin-top: calc(var(--tag) * 0.7); }
 .tag { display: inline-flex; align-items: center; height: calc(var(--tag) * 1.9); padding: 0 calc(var(--tag) * 0.8);
   border: var(--thin) solid currentColor; border-radius: 999mm; font-size: var(--tag); font-weight: 600; color: #6b6253; white-space: nowrap; }
@@ -156,53 +152,47 @@ body { font-family: 'Instrument Sans', sans-serif; -webkit-font-smoothing: antia
 .note { font-size: var(--note); line-height: 1.4; color: #6b6253; }
 `;
 
-/* ------------------------------------------------- Karte (DIN A2 quer) */
+/* ------------------------------------------------- Karte 40 × 20 cm quer */
 
-const B = {
-  name: 'B_eine-Richtung',
-  base: { w: 594, h: 420 },
-  formats: [{ label: 'A2-quer', w: 594, h: 420 }],
+/** Endformat in mm. */
+const SIZE = { w: 400, h: 200 };
+
+const CARD = {
+  // Größen bei Faktor 1; die automatische Suche (bestFactor) skaliert sie gemeinsam
   vars: `--label: 2.6mm; --cat: 10.4mm; --name: 5mm; --price: 4.5mm; --desc: 3.15mm; --tag: 2.45mm;
-    --note: 2.7mm; --cat-gap: 8mm; --dish-pad: 1.9mm; --head-pad: 2.4mm; --rule: 0.55mm; --thin: 0.3mm;`,
-  // fünf Spalten; die mittlere ist um das Logo geteilt (oben Begrüßung, unten Suppen und Getränke)
-  cols: [
-    [{ id: 'sandwiches', to: 12 }, 'schueler'],
-    [{ id: 'sandwiches', from: 12, title: 'Vegetarische Sandwiches' }, 'burger', 'broasted'],
-    ['welcome'],
-    ['suppen', 'getraenke'],
-    ['teller', { id: 'mezze', to: 4 }],
-    [{ id: 'mezze', from: 4, title: 'Vegetarische Mezze' }, 'tageskueche'],
-  ],
+    --note: 2.7mm; --cat-gap: 6.5mm; --dish-pad: 1.5mm; --head-pad: 2mm; --rule: 0.55mm; --thin: 0.35mm;`,
   css: `
-.head { position: absolute; left: -${BLEED}mm; right: -${BLEED}mm; top: -${BLEED}mm; height: calc(40mm + ${BLEED}mm); background: #14120e; color: #ece3d2; }
-.head__title { position: absolute; left: calc(14mm + ${BLEED}mm); bottom: 6mm; display: flex; align-items: baseline; gap: 5mm; white-space: nowrap; }
-.head__title .serif { font-size: 19mm; line-height: 0.9; letter-spacing: -0.02em; }
+.head { position: absolute; left: -${BLEED}mm; right: -${BLEED}mm; top: -${BLEED}mm; height: calc(16mm + ${BLEED}mm); background: #14120e; color: #ece3d2; }
+.head__title { position: absolute; left: calc(6mm + ${BLEED}mm); bottom: 3.2mm; display: flex; align-items: baseline; gap: 3mm; white-space: nowrap; }
+.head__title .serif { font-size: 9.5mm; line-height: 0.9; letter-spacing: -0.02em; }
 .head__title .serif em { color: #e3c98f; }
-.head__title .ar { font-family: 'Reem Kufi', sans-serif; font-weight: 600; font-size: 7mm; line-height: 1; color: #e3c98f; }
-.head__call { position: absolute; right: calc(14mm + ${BLEED}mm); bottom: 6mm; text-align: right; }
-.head__call .serif { margin-top: 1mm; font-size: 8.5mm; line-height: 1; }
-.col { width: 105.2mm; top: 50mm; height: 348mm; }
-.col--1 { left: 14mm; }
-.col--2 { left: 129.2mm; }
-.col--3 { left: 244.4mm; height: 102mm; }
-.col--4 { left: 244.4mm; top: 268mm; height: 130mm; }
-.col--5 { left: 359.6mm; }
-.col--6 { left: 474.8mm; }
-/* Logo-Medaillon genau in der Blattmitte (Tischmitte), zwischen Spalte 3 oben und unten; feste Größe */
-.medal { position: absolute; left: 245mm; top: 158mm; width: 104mm; height: 104mm; border-radius: 50%; background: #14120e;
+.head__title .ar { font-family: 'Reem Kufi', sans-serif; font-weight: 600; font-size: 4mm; line-height: 1; color: #e3c98f; }
+.head__call { position: absolute; right: calc(6mm + ${BLEED}mm); bottom: 3.2mm; text-align: right; }
+.head__call .label { font-size: 1.7mm; }
+.head__call .serif { margin-top: 0.6mm; font-size: 4.8mm; line-height: 1; }
+/* fünf Spalten zu 74 mm; die mittlere ist um das Logo geteilt */
+.col { width: 74mm; top: 21mm; height: 166mm; }
+.col--1 { left: 6mm; }
+.col--2 { left: 84.5mm; }
+.col--3 { left: 163mm; height: 48mm; }
+.col--4 { left: 163mm; top: 131mm; height: 56mm; }
+.col--5 { left: 241.5mm; }
+.col--6 { left: 320mm; }
+/* Logo-Medaillon genau in der Blattmitte; feste Größe */
+.medal { position: absolute; left: 172mm; top: 72mm; width: 56mm; height: 56mm; border-radius: 50%; background: #14120e;
   display: flex; align-items: center; justify-content: center; }
-.medal::after { content: ''; position: absolute; inset: 4mm; border-radius: 50%; border: 0.5mm solid #c9a45c; }
-.medal .logo { --logo: 36mm; }
-/* Begrüßung und „Alles von Hand“ mittig über dem Logo; feste Größen, unabhängig vom Schriftfaktor */
+.medal::after { content: ''; position: absolute; inset: 2.3mm; border-radius: 50%; border: 0.35mm solid #c9a45c; }
+.medal .logo { --logo: 19mm; }
+/* Begrüßung mittig über dem Logo; feste Größen, unabhängig vom Schriftfaktor */
 .welcome { margin: auto 0; display: flex; flex-direction: column; align-items: center; text-align: center; }
-.welcome__ar { font-family: 'Reem Kufi', sans-serif; font-weight: 600; font-size: 10mm; line-height: 1.1; color: #7e5e22; }
-.welcome__hello { margin-top: 2.5mm; font-family: 'Instrument Serif', Georgia, serif; font-style: italic; font-size: 7mm; line-height: 1; }
-.welcome__rule { width: 16mm; height: 0.4mm; margin: 6mm 0 5.5mm; background: #b8975a; }
-.welcome__title { font-family: 'Instrument Serif', Georgia, serif; font-size: 11.5mm; line-height: 0.95; letter-spacing: -0.015em; }
+.welcome__ar { font-family: 'Reem Kufi', sans-serif; font-weight: 600; font-size: 5.4mm; line-height: 1.1; color: #7e5e22; }
+.welcome__hello { margin-top: 1.3mm; font-family: 'Instrument Serif', Georgia, serif; font-style: italic; font-size: 3.8mm; line-height: 1; }
+.welcome__rule { width: 10mm; height: 0.3mm; margin: 3mm 0 2.8mm; background: #b8975a; }
+.welcome__title { font-family: 'Instrument Serif', Georgia, serif; font-size: 6mm; line-height: 0.95; letter-spacing: -0.015em; }
 .welcome__title em { color: #7e5e22; }
-.welcome__text { max-width: 101mm; margin-top: 3.5mm; font-size: 3.7mm; line-height: 1.35; color: #6b6253; }
-.foot { position: absolute; left: 14mm; right: 14mm; bottom: 11mm; display: flex; justify-content: space-between; align-items: flex-end;
-  gap: 14mm; padding-top: 2.5mm; border-top: 0.3mm solid #cbbea6; }
+.foot { position: absolute; left: 6mm; right: 6mm; bottom: 4.5mm; display: flex; justify-content: space-between; align-items: flex-end;
+  gap: 10mm; padding-top: 1.6mm; border-top: 0.25mm solid #cbbea6; }
+.foot .note { font-size: 2mm; }
 .foot .note:last-child { text-align: right; font-weight: 600; color: #1b1814; white-space: nowrap; }
 `,
   html() {
@@ -210,28 +200,47 @@ const B = {
   <div class="head__title"><p class="serif">Die <em>Karte</em></p><p class="ar" lang="ar" dir="rtl">قائمة الطعام</p></div>
   <div class="head__call"><p class="label">Vorbestellen und abholen</p><p class="serif">${restaurant.phone}</p></div>
 </div>
-${columnsHtml(this.cols)}
+${columnsHtml(this.cols, this.withDesc)}
 <div class="medal">${logoHtml()}</div>
 <div class="foot"><p class="note">${notes.replace('\n', ' ')}</p><p class="note">${contacts}</p></div>`;
   },
 };
 
-/* --------------------------------------------- Variante B dunkel (A2 quer) */
+/** Spaltenaufteilung je Fassung (Lesereihenfolge links nach rechts; Spalte 3 über, Spalte 4 unter dem Logo). */
+const COLS = {
+  mit: [
+    [{ id: 'sandwiches', to: 12 }, 'schueler'],
+    [{ id: 'sandwiches', from: 12, title: 'Vegetarische Sandwiches' }, 'burger', 'broasted'],
+    ['welcome'],
+    ['suppen', 'getraenke'],
+    ['teller', { id: 'mezze', to: 4 }],
+    [{ id: 'mezze', from: 4, title: 'Vegetarische Mezze' }, 'tageskueche'],
+  ],
+  ohne: [
+    [{ id: 'sandwiches', to: 12 }, 'schueler'],
+    [{ id: 'sandwiches', from: 12, title: 'Vegetarische Sandwiches' }, 'burger', 'broasted'],
+    ['welcome'],
+    ['getraenke'],
+    ['teller', { id: 'mezze', to: 4 }],
+    [{ id: 'mezze', from: 4, title: 'Vegetarische Mezze' }, 'tageskueche', 'suppen'],
+  ],
+};
+
+/* --------------------------------------------- dunkle Fassung */
 
 /** Farben der dunklen Website-Abschnitte: Fast-Schwarz, Kalkstein, Gold. */
 const darkCss = `
 .sheet { background: #14120e; }
 body { color: #ece3d2; }
-.head { background: #14120e; border-bottom: 0.3mm solid #6d5a36; }
+.head { background: #14120e; border-bottom: 0.25mm solid #6d5a36; }
 .cat__head { border-bottom-color: #c9a45c; }
-.cat__intro, .welcome__text { color: #c9bea9; }
+.cat__intro { color: #c9bea9; }
 .cat__extras { color: #ece3d2; }
 .dish { border-bottom-color: #3a3227; }
 .dish__desc, .dish__unit { color: #b5aa95; }
-.dish__ar { color: #e3c98f; }
 .tag { color: #b5aa95; }
 .tag--leaf { color: #8fbf7a; }
-.medal { border: 0.3mm solid #6d5a36; }
+.medal { border: 0.25mm solid #6d5a36; }
 .welcome__ar, .welcome__title em { color: #e3c98f; }
 .welcome__rule { background: #8f7543; }
 .foot { border-top-color: #3a3227; }
@@ -239,7 +248,15 @@ body { color: #ece3d2; }
 .foot .note:last-child { color: #ece3d2; }
 `;
 
-const BDark = { ...B, name: 'B_eine-Richtung_dunkel', css: B.css + darkCss };
+const VARIANTS = ['hell', 'dunkel'].flatMap((tone) =>
+  ['mit', 'ohne'].map((desc) => ({
+    ...CARD,
+    name: `${tone}_${desc}-Beschreibung`,
+    withDesc: desc === 'mit',
+    cols: COLS[desc],
+    css: tone === 'dunkel' ? CARD.css + darkCss : CARD.css,
+  })),
+);
 
 /**
  * Alle Größen-Variablen einer Variante mit dem Faktor --k multiplizieren:
@@ -265,20 +282,19 @@ const browser = await chromium.launch();
 const page = await browser.newPage();
 let problems = 0;
 
-/** Seite für eine Variante, ein Format und einen Größenfaktor erzeugen und Spaltenfüllung messen. */
-async function render(variant, format, k) {
-  const scale = format.w / variant.base.w;
-  const W = format.w + 2 * BLEED;
-  const H = format.h + 2 * BLEED;
+/** Seite für eine Fassung und einen Größenfaktor erzeugen und Spaltenfüllung messen. */
+async function render(variant, k) {
+  const W = SIZE.w + 2 * BLEED;
+  const H = SIZE.h + 2 * BLEED;
   const html = `<!doctype html><html lang="de"><head><meta charset="utf-8"><style>
 ${baseCss}
 ${variant.css}
 @page { size: ${W}mm ${H}mm; margin: 0; }
 .sheet { width: ${W}mm; height: ${H}mm; }
-.design { left: ${BLEED}mm; top: ${BLEED}mm; width: ${variant.base.w}mm; height: ${variant.base.h}mm; transform: scale(${scale});
+.design { left: ${BLEED}mm; top: ${BLEED}mm; width: ${SIZE.w}mm; height: ${SIZE.h}mm;
   --k: ${k}; ${scaled(variant.vars)} }
 </style></head><body><div class="sheet"><div class="design">${variant.html()}</div></div></body></html>`;
-  const htmlFile = join(tmp, `${variant.name}-${format.label}.html`);
+  const htmlFile = join(tmp, `${variant.name}.html`);
   await writeFile(htmlFile, html);
   await page.goto(pathToFileURL(htmlFile).href, { waitUntil: 'load' });
   await page.evaluate(() => document.fonts.ready);
@@ -296,30 +312,32 @@ ${variant.css}
   return { ...check, W, H };
 }
 
-/** Größter Faktor, bei dem keine Spalte über MAX_FILL % kommt (Halbierung zwischen 0,8 und 1,6). */
+/** Größter Faktor, bei dem keine Spalte über MAX_FILL % kommt (Halbierung zwischen 0,4 und 1,6). */
 const MAX_FILL = 97;
 async function bestFactor(variant) {
-  let lo = 0.8;
+  let lo = 0.4;
   let hi = 1.6;
-  for (let step = 0; step < 9; step++) {
+  for (let step = 0; step < 10; step++) {
     const mid = (lo + hi) / 2;
-    const { fills } = await render(variant, variant.formats[0], mid);
+    const { fills } = await render(variant, mid);
     if (Math.max(...fills) <= MAX_FILL) lo = mid;
     else hi = mid;
   }
   return Math.floor(lo * 100) / 100;
 }
 
-for (const variant of [B, BDark]) {
+/** Gedruckte Schriftgröße in pt für eine Größe in mm bei Faktor k. */
+const pt = (mm, k) => ((mm * k * 72) / 25.4).toFixed(1).replace('.', ',');
+
+for (const variant of VARIANTS) {
   const k = await bestFactor(variant);
-  for (const format of variant.formats) {
-    const { fills, W, H } = await render(variant, format, k);
-    const over = fills.filter((f) => f > 100);
-    if (over.length) problems++;
-    const name = `Elmo-Shawarma_Tischkarte_${variant.name}_${format.label}`;
-    await page.pdf({ path: out(`${name}.pdf`), width: `${W}mm`, height: `${H}mm`, printBackground: true, preferCSSPageSize: true });
-    console.log(`${over.length ? '✖' : '✔'} ${name}.pdf  (Schriftfaktor ${k.toFixed(2)}, Spalten gefüllt: ${fills.map((f) => `${f}%`).join(' ')})`);
-  }
+  const { fills, W, H } = await render(variant, k);
+  const over = fills.filter((f) => f > 100);
+  if (over.length) problems++;
+  const name = `Elmo-Shawarma_Speisekarte_40x20cm_${variant.name}`;
+  await page.pdf({ path: out(`${name}.pdf`), width: `${W}mm`, height: `${H}mm`, printBackground: true, preferCSSPageSize: true });
+  const sizes = `Gericht ${pt(5, k)} pt${variant.withDesc ? `, Beschreibung ${pt(3.15, k)} pt` : ''}`;
+  console.log(`${over.length ? '✖' : '✔'} ${name}.pdf  (Faktor ${k.toFixed(2)}, ${sizes}, Spalten: ${fills.map((f) => `${f}%`).join(' ')})`);
 }
 
 await browser.close();
