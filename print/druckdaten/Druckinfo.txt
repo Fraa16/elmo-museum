@@ -15,5 +15,6 @@ Visitenkarte
 
 Speisekarte (Tischkarte unter der PVC-Folie)
 - Endformat 400 × 200 mm quer, Datei 406 × 206 mm mit Beschnitt
-- vier Fassungen: hell und dunkel, jeweils mit und ohne Beschreibung der Gerichte
+- helle Fassung ohne Beschreibungen; unter „Mezze und Salate“ führt ein QR-Code
+  zur Speisekarte auf elmo-shawarma.de mit allen Beschreibungen
 - Empfehlung: 135 bis 170 g/m², Bilderdruck matt (matt spiegelt unter der Folie weniger)

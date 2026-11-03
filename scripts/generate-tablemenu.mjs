@@ -4,7 +4,9 @@
  *
  * Format 40 × 20 cm quer, in einer Richtung lesbar: fünf Spalten, in der Blattmitte
  * das Logo in einem dunklen Medaillon, darüber eine kurze Begrüßung.
- * Vier Fassungen: hell und dunkel, jeweils mit und ohne Beschreibung der Gerichte.
+ * Gedruckt wird die Fassung hell, ohne Beschreibungen der Gerichte; unter „Mezze und
+ * Salate“ führt ein QR-Code zur Speisekarte der Website mit allen Beschreibungen.
+ * Dunkel und mit Beschreibungen lassen sich unten bei CHOSEN wieder einschalten.
  *
  * Schreibt nach /print/speisekarte-tisch/: Druck-PDFs mit 3 mm Beschnitt.
  * Inhalte und Preise kommen aus src/data/menu.ts. Die Schriftgröße wird je Fassung
@@ -17,6 +19,7 @@ import { createRequire } from 'node:module';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
+import QRCode from 'qrcode';
 import sharp from 'sharp';
 
 import { SITE_URL } from '../src/config.ts';
@@ -90,7 +93,23 @@ const welcomeHtml = () => `<section class="welcome">
   <p class="welcome__title">Alles von Hand.<br><em>Frisch vom Spieß.</em></p>
 </section>`;
 
-const SPECIAL = { welcome: welcomeHtml };
+/** Ziel des QR-Codes: Speisekarte der Website mit allen Beschreibungen. */
+const MENU_URL = `${SITE_URL}/speisekarte`;
+/** QR-Code als SVG, dunkel auf Kalkstein mit Ruhezone (auch auf dunklem Grund gut scannbar). */
+const menuQr = await QRCode.toString(MENU_URL, {
+  type: 'svg',
+  errorCorrectionLevel: 'M',
+  margin: 4,
+  color: { dark: '#1b1814', light: '#ece3d2' },
+});
+
+/** Spalteneintrag 'qr': Hinweis auf die Beschreibungen, mit QR-Code zur Website. */
+const qrHtml = () => `<section class="qr">
+  <div class="qr__code" aria-label="QR-Code zur Speisekarte auf der Website">${menuQr}</div>
+  <p class="qr__text"><strong>Beschreibungen zu allen Gerichten:</strong> <span class="nowrap">QR-Code</span> scannen oder einfach unser Team fragen.</p>
+</section>`;
+
+const SPECIAL = { welcome: welcomeHtml, qr: qrHtml };
 
 const columnsHtml = (cols, withDesc) =>
   cols
@@ -190,6 +209,13 @@ const CARD = {
 .welcome__rule { width: 10mm; height: 0.3mm; margin: 3mm 0 2.8mm; background: #b8975a; }
 .welcome__title { font-family: 'Instrument Serif', Georgia, serif; font-size: 6mm; line-height: 0.95; letter-spacing: -0.015em; }
 .welcome__title em { color: #7e5e22; }
+/* QR-Hinweis: feste Codegröße, damit er am Tisch sicher scannbar bleibt */
+.qr { display: flex; align-items: center; gap: calc(3.5mm * var(--k)); padding-top: calc(var(--dish-pad) * 1.5); border-top: var(--thin) solid #cbbea6; }
+.qr__code { flex: none; width: 17mm; height: 17mm; }
+.qr__code svg { display: block; width: 100%; height: 100%; }
+.qr__text { font-size: calc(var(--desc) * 1.2); line-height: 1.35; color: #6b6253; }
+.qr__text strong { font-weight: 600; color: #1b1814; }
+.nowrap { white-space: nowrap; }
 .foot { position: absolute; left: 6mm; right: 6mm; bottom: 4.5mm; display: flex; justify-content: space-between; align-items: flex-end;
   gap: 10mm; padding-top: 1.6mm; border-top: 0.25mm solid #cbbea6; }
 .foot .note { font-size: 2mm; }
@@ -221,7 +247,7 @@ const COLS = {
     [{ id: 'sandwiches', from: 12, title: 'Vegetarische Sandwiches' }, 'burger', 'broasted'],
     ['welcome'],
     ['getraenke'],
-    ['teller', { id: 'mezze', to: 4 }],
+    ['teller', { id: 'mezze', to: 4 }, 'qr'],
     [{ id: 'mezze', from: 4, title: 'Vegetarische Mezze' }, 'tageskueche', 'suppen'],
   ],
 };
@@ -246,17 +272,23 @@ body { color: #ece3d2; }
 .foot { border-top-color: #3a3227; }
 .foot .note { color: #a99f8c; }
 .foot .note:last-child { color: #ece3d2; }
+.qr { border-top-color: #3a3227; }
+.qr__text { color: #b5aa95; }
+.qr__text strong { color: #ece3d2; }
 `;
 
-const VARIANTS = ['hell', 'dunkel'].flatMap((tone) =>
-  ['mit', 'ohne'].map((desc) => ({
-    ...CARD,
-    name: `${tone}_${desc}-Beschreibung`,
-    withDesc: desc === 'mit',
-    cols: COLS[desc],
-    css: tone === 'dunkel' ? CARD.css + darkCss : CARD.css,
-  })),
-);
+/**
+ * Gedruckt wird die gewählte Fassung: hell, ohne Beschreibungen (dafür QR-Code zur Website).
+ * Weitere Fassungen zum Vergleich: z. B. ['dunkel', 'ohne'] oder ['hell', 'mit'] ergänzen.
+ */
+const CHOSEN = [['hell', 'ohne']];
+const VARIANTS = CHOSEN.map(([tone, desc]) => ({
+  ...CARD,
+  name: `${tone}_${desc}-Beschreibung`,
+  withDesc: desc === 'mit',
+  cols: COLS[desc],
+  css: tone === 'dunkel' ? CARD.css + darkCss : CARD.css,
+}));
 
 /**
  * Alle Größen-Variablen einer Variante mit dem Faktor --k multiplizieren:

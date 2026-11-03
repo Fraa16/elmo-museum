@@ -46,7 +46,7 @@ JOBS = [
     *(
         (f'print/speisekarte-tisch/Elmo-Shawarma_Speisekarte_40x20cm_{v}.pdf',
          f'Elmo-Shawarma_Speisekarte_40x20cm_{v}', f'Elmo Shawarma Speisekarte 40 x 20 cm {v.replace("_", " ")}')
-        for v in ('hell_mit-Beschreibung', 'hell_ohne-Beschreibung', 'dunkel_mit-Beschreibung', 'dunkel_ohne-Beschreibung')
+        for v in ('hell_ohne-Beschreibung',)
     ),
 ]
 
