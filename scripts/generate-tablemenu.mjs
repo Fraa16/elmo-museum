@@ -191,8 +191,8 @@ const CARD = {
 .head__title .serif em { color: #7e5e22; }
 .head__title .ar { font-family: 'Reem Kufi', sans-serif; font-weight: 600; font-size: 4mm; line-height: 1; color: #7e5e22; }
 .head__call { position: absolute; right: 0; bottom: 3mm; text-align: right; }
-.head__call .label { font-size: 1.7mm; color: #7e5e22; }
-.head__call .serif { margin-top: 0.6mm; font-size: 4.8mm; line-height: 1; color: #1b1814; }
+.head__call .label { font-size: 2.4mm; color: #7e5e22; }
+.head__call .serif { margin-top: 0.8mm; font-size: 6mm; line-height: 1; color: #1b1814; }
 /* fünf Spalten zu 74 mm; die mittlere ist um das Logo geteilt */
 .col { width: 74mm; top: 21mm; height: 164.5mm; }
 .col--1 { left: 6mm; }
