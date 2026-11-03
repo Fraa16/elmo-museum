@@ -16,6 +16,8 @@
  * Bilder: je Kategorie optional ein kleines Foto. Eine Datei
  * src/assets/menu/<kategorie-id>.(webp|jpg|png), z. B. mezze.webp, hat Vorrang
  * vor der Standardzuordnung unten; Kategorien ohne Bild zeigen keins.
+ * src/assets/menu/story.webp ersetzt das Foto im Block „Alles von Hand“.
+ * Die Fotos dort sind schon im Format der Bildköpfe (4 : 5) zugeschnitten.
  *
  * Braucht Playwright mit Chromium.
  */
@@ -86,6 +88,15 @@ async function categoryImages() {
   return images;
 }
 
+/** Foto für „Alles von Hand“: src/assets/menu/story.(webp|jpg|png), sonst das Marinieren-Foto. */
+async function storyImage() {
+  for (const ext of ['webp', 'jpg', 'png']) {
+    const path = `src/assets/menu/story.${ext}`;
+    if (await exists(path)) return path;
+  }
+  return 'src/assets/food/marinieren.webp';
+}
+
 const esc = (s) => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;');
 const byId = (id) => menu.find((c) => c.id === id);
 
@@ -140,7 +151,7 @@ const wordsHtml = () => `<section class="cat words">
 
 /** Kurzer Block „Alles von Hand“ mit Foto: bei B als Spalteneintrag 'story', bei A quer unter zwei Spalten. */
 const storyHtml = () => `<section class="story">
-  <div class="thumb"><div><img src="${file('src/assets/food/marinieren.webp')}" alt="" style="object-position:50% 50%"></div></div>
+  <div class="thumb"><div><img src="${file(story)}" alt="" style="object-position:50% 50%"></div></div>
   <div>
     <p class="story__title">Alles von Hand.<br><em>Frisch vom Spieß.</em></p>
     <p class="story__text">Selbst mariniert und von Hand geschichtet. Falafel und Labban aus unserem selbstgemachten Joghurt.</p>
@@ -386,7 +397,8 @@ const scaled = (vars) => vars.replace(/(--[\w-]+):\s*([\d.]+)mm;/g, '$1: calc($2
 /* ------------------------------------------------------------------ Bauen */
 
 const images = await categoryImages();
-for (const p of [...Object.values(images).map((i) => i.src), 'src/assets/brand/elmo-emblem.png', 'src/assets/food/marinieren.webp']) {
+const story = await storyImage();
+for (const p of [...Object.values(images).map((i) => i.src), 'src/assets/brand/elmo-emblem.png', story]) {
   await printImage(p);
 }
 const outDir = new URL('print/speisekarte-tisch/', root);

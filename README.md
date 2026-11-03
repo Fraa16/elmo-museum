@@ -75,7 +75,8 @@ scripts/generate-og.mjs    Vorschaubilder je Seite (Logo, Titel, Foto im Bogen)
 scripts/generate-card.mjs  Visitenkarte im Website-Design (Daten aus restaurant.ts, QR zur Website)
 print/visitenkarte/        Druck-PDF (91 × 61 mm inkl. Beschnitt, 2 Seiten) und PNG-Vorschauen
 scripts/generate-tablemenu.mjs  Tisch-Speisekarte aus src/data/menu.ts; Fotos je Kategorie
-                           optional unter src/assets/menu/<kategorie-id>.webp (z. B. mezze.webp);
+                           optional unter src/assets/menu/<kategorie-id>.webp (z. B. mezze.webp),
+                           story.webp für „Alles von Hand“;
                            die Schriftgröße wird automatisch so gewählt, dass die Spalten voll sind
 print/speisekarte-tisch/   Druck-PDFs (3 mm Beschnitt) und Vorschauen
 public/                    Favicon (Kuppel aus dem Emblem), Homescreen-Icons, Manifest, og/
