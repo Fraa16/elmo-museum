@@ -27,13 +27,16 @@ export const TRIM = { w: 85, h: 55 };
 const STRIPE = 2.5;
 
 const website = new URL(SITE_URL).host;
+/** Schlichtes Instagram-Zeichen (Linien), Farbe wie der Text. */
+const instagramIcon = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-label="Instagram"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4.2"/><circle cx="17.4" cy="6.6" r="0.6" fill="currentColor" stroke="none"/></svg>`;
 
 /** QR-Code zur Website, dunkel auf Kalkstein, mit Ruhezone. */
 export async function cardQr() {
   return QRCode.toString(`${SITE_URL}/`, {
     type: 'svg',
     errorCorrectionLevel: 'M',
-    margin: 4,
+    // ohne eingebaute Ruhezone: der Abstand kommt aus dem Layout (mindestens 4 Module rundum)
+    margin: 0,
     color: { dark: '#1b1814', light: '#ece3d2' },
   });
 }
@@ -67,15 +70,17 @@ export function cardCss(b = BLEED) {
 .c-ar { font-family: 'Reem Kufi', sans-serif; font-weight: 600; font-size: 3.2mm; line-height: 1; color: #7e5e22; }
 .c-phone { margin-top: 1.4mm; font-family: 'Instrument Serif', Georgia, serif; font-size: 10.5mm; line-height: 1; letter-spacing: -0.01em; color: #1b1814; text-decoration: none; }
 .c-slogan { margin-top: 1.6mm; font-family: 'Instrument Serif', Georgia, serif; font-style: italic; font-size: 3.4mm; line-height: 1.1; color: #7e5e22; }
-.c-rows { margin-top: auto; padding-top: 2.4mm; border-top: 0.45mm solid #1b1814; display: grid;
-  grid-template-columns: auto auto auto; justify-content: space-between; align-items: end; column-gap: 3mm; }
-.c-addr { font-family: 'Instrument Serif', Georgia, serif; font-size: 3.1mm; line-height: 1.12; }
-.c-web { margin-top: 1.4mm; font-size: 2.15mm; line-height: 1.4; }
+.c-rows { margin-top: auto; padding-top: 3.4mm; border-top: 0.45mm solid #1b1814; display: grid;
+  grid-template-columns: auto auto auto; justify-content: space-between; align-items: end; column-gap: 2.6mm; white-space: nowrap; }
+.c-addr { font-family: 'Instrument Serif', Georgia, serif; font-size: 3.3mm; line-height: 1.12; }
+.c-web { margin-top: 1.8mm; font-size: 2.3mm; line-height: 1.45; }
 .c-web strong { font-weight: 600; }
-.c-hours .label { margin-bottom: 0.8mm; }
-.c-hours dl { display: grid; grid-template-columns: auto auto; column-gap: 2.2mm; font-size: 2.15mm; line-height: 1.42; }
+.c-ig { display: inline-flex; align-items: center; gap: 0.8mm; }
+.c-ig svg { width: 2.5mm; height: 2.5mm; }
+.c-hours .label { margin-bottom: 1mm; font-size: 1.85mm; }
+.c-hours dl { display: grid; grid-template-columns: auto auto; column-gap: 1.9mm; font-size: 2.3mm; line-height: 1.42; }
 .c-hours dd { font-variant-numeric: tabular-nums; }
-.c-qr svg { display: block; width: 14mm; height: 14mm; }
+.c-qr svg { display: block; width: 13mm; height: 13mm; }
 `;
 }
 
@@ -103,7 +108,7 @@ export function cardMarkup(side, img, qrSvg = '') {
     <div class="c-rows">
       <div>
         <p class="c-addr">${restaurant.street}<br>${restaurant.postalCode} ${restaurant.city}</p>
-        <p class="c-web"><strong>${website}</strong><br>Instagram ${restaurant.instagramHandle}</p>
+        <p class="c-web"><strong>${website}</strong><br><span class="c-ig">${instagramIcon}${restaurant.instagramHandle}</span></p>
       </div>
       <div class="c-hours">
         <p class="label">Öffnungszeiten</p>
