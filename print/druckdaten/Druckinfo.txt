@@ -1,0 +1,19 @@
+Elmo Shawarma: Druckdaten
+
+Alle Dateien
+- PDF/X-3, CMYK, Farbprofil ISO Coated v2 300 % (ECI), Ausgabebedingung FOGRA39
+- Schriften eingebettet, keine Transparenz, Farbauftrag höchstens 300 %
+- dunkle Schrift, Linien und QR-Code in 100 % Schwarz
+- 3 mm Beschnitt rundum, Endformat als TrimBox hinterlegt
+- Dateien ohne Zusatz: für Online-Druckereien (dort keine Schnittmarken erwünscht)
+- Dateien mit „_Schnittmarken“: für Druckereien, die Schnittmarken wünschen
+
+Visitenkarte
+- Endformat 85 × 55 mm, Datei 91 × 61 mm mit Beschnitt
+- 2 Seiten: Seite 1 Vorderseite, Seite 2 Rückseite
+- Empfehlung: 350 bis 400 g/m², Bilderdruck matt
+
+Speisekarte (Tischkarte unter der PVC-Folie)
+- Endformat DIN A2 quer, 594 × 420 mm, Datei 600 × 426 mm mit Beschnitt
+- zwei Fassungen: hell und dunkel
+- Empfehlung: 135 bis 170 g/m², Bilderdruck matt (matt spiegelt unter der Folie weniger)

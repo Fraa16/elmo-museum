@@ -249,9 +249,11 @@ const scaled = (vars) => vars.replace(/(--[\w-]+):\s*([\d.]+)mm;/g, '$1: calc($2
 
 /* ------------------------------------------------------------------ Bauen */
 
-// Emblem für den Druck verkleinert (höchstens 1200 px breit, im Medaillon rund 76 mm): hält die PDFs klein
+// Emblem für den Druck verkleinert (höchstens 1200 px breit, im Medaillon rund 76 mm): hält die PDFs klein.
+// Ohne Transparenz, auf den Medaillon-Grund gerechnet: PDF/X-3 erlaubt keine Transparenz (npm run druckdaten).
 const emblemFile = join(tmp, 'emblem.png');
 await sharp(fileURLToPath(new URL('src/assets/brand/elmo-emblem.png', root)))
+  .flatten({ background: '#14120e' })
   .resize({ width: 1200, withoutEnlargement: true })
   .png({ compressionLevel: 9 })
   .toFile(emblemFile);

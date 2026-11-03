@@ -16,6 +16,7 @@ import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 import QRCode from 'qrcode';
+import sharp from 'sharp';
 
 import { SITE_URL } from '../src/config.ts';
 import { openingHours, restaurant } from '../src/data/restaurant.ts';
@@ -139,7 +140,6 @@ async function main() {
 @font-face { font-family: 'Instrument Sans'; font-weight: 400; src: url('${font('instrument-sans', 'instrument-sans-latin-400-normal')}'); }
 @font-face { font-family: 'Instrument Sans'; font-weight: 600; src: url('${font('instrument-sans', 'instrument-sans-latin-600-normal')}'); }
 @font-face { font-family: 'Reem Kufi'; font-weight: 600; src: url('${font('reem-kufi', 'reem-kufi-arabic-600-normal')}'); }`;
-  const img = { emblem: file('src/assets/brand/elmo-emblem.png') };
   const qr = await cardQr();
 
   const doc = (bleed, pageCss) => `<!doctype html><html lang="de"><head><meta charset="utf-8"><style>
@@ -153,6 +153,11 @@ ${cardCss(bleed)}
   await mkdir(outDir, { recursive: true });
   const out = (name) => fileURLToPath(new URL(name, outDir));
   const tmp = await mkdtemp(join(tmpdir(), 'elmo-card-'));
+  // Emblem ohne Transparenz, auf den Kartengrund gerechnet: PDF/X-3 erlaubt keine Transparenz,
+  // sonst würde beim Umwandeln (npm run druckdaten) die ganze Seite zu einem Bild verflacht
+  const emblemFile = join(tmp, 'emblem.png');
+  await sharp(fileURLToPath(new URL('src/assets/brand/elmo-emblem.png', root))).flatten({ background: '#14120e' }).png().toFile(emblemFile);
+  const img = { emblem: pathToFileURL(emblemFile).href };
   const browser = await chromium.launch();
 
   const open = async (page, html, name) => {
