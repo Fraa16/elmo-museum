@@ -114,20 +114,22 @@ Hauptadresse umleiten. `elmo-museum.vercel.app` **nie entfernen** (QR-Schilder).
 
 ## Offene Punkte (TODO)
 
-- **Website vor dem Start:** Fotos (Platzhalter im Bogen), Zahlungsweg für
-  Online-Gutscheine, Catering-Details (Vorlaufzeit, Personenzahl), Parken, Bus,
-  Zahlungsarten, Familiengeschichte; Rückfragen zur Speisekarte (vegan, Allergene,
-  Halal, Schreibweisen); Wörterbuch und Jahreszahlen von Momo freigeben lassen.
+Stand 6. November 2026, dieselbe Liste wie in `04_Offene-Punkte.txt` im Paket für Momo.
 
-- **Bilder:** Bildrechte aller Bilder klären. Alle Bilder sind mit KI bearbeitet (steht im
-  Impressum). Station 11 zeigt ein Gemälde von Sliman Mansour (gestorben 2026, Werk
-  noch geschützt): Erlaubnis der Rechteinhaber nötig.
-- **Impressum / Datenschutz:** Daten von Momo eintragen (markierte Platzhalter),
-  rechtlich prüfen lassen.
-- **Freigaben Momo:** Intro-Text der Startseite, persönliche Aussagen (Station 01),
-  Ortsangaben Al Bayada / Al Mansouri (01, 05) und Tyros (07), Auflösungszeilen des Quiz,
-  Station 10 Harissa & Jounieh (Text, Quiz, Bild), Station 11 Jamal al-Mahamel (Text, Bild,
-  ohne Quiz).
+- **Vor dem Start (rechtlich):**
+  - Impressum: Vorname des Inhabers, USt-IdNr. (falls vorhanden), Verantwortlicher nach
+    § 18 MStV (markierte Platzhalter)
+  - Datenschutz: Verantwortlicher, Speicherdauer und AV-Vertrag Vercel, Freigabedatum;
+    rechtlich prüfen lassen
+  - Bildrechte der Wandbilder; Station 11 (Gemälde von Sliman Mansour, noch geschützt)
+    nur mit Erlaubnis der Rechteinhaber, sonst offline nehmen
+- **Speisekarte:** vegan bei Sauce und Brot, Preis der Sayyudiyye-Platte, Halal, Allergene,
+  was „Mantufe“ ist.
+- **Website:** Link für Online-Gutscheine (Knopf ist bis dahin deaktiviert, mit Platzhalter);
+  Kontakt: barrierefrei ja oder nein.
+- **Freigaben Momo:** Über uns (Jahre 2017 und 2026, Al Bayada), Catering, Gutscheine
+  (Kauf und Einlösung), Museum (Einleitung, Stationen 01, 05, 07, 10, 11).
 - **Quelle Station 10:** fehlt noch (Höhe, Bronze, Lyon, Einweihung 1908, 104 Stufen).
 - **Scan-Test:** gedruckte Schilder vor Ort mit Android und iPhone testen.
-- **Nach Freigabe:** optional `INDEXABLE = true`.
+- **Nach den rechtlichen Angaben:** `INDEXABLE = true`, Sitemap, Google Search Console,
+  Google-Unternehmensprofil aktualisieren.
