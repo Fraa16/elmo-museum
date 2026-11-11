@@ -5,6 +5,7 @@ import Arch from '../components/site/Arch.astro';
 import HoursTable from '../components/site/HoursTable.astro';
 import OpenStatus from '../components/site/OpenStatus.astro';
 import { restaurant, routeHref } from '../data/restaurant';
+import { OPENING_SOON } from '../config';
 import imgGastraum from '../assets/photos/gastraum.webp';
 
 // TODO: Daten von Momo: barrierefrei ja oder nein.
@@ -42,7 +43,7 @@ import imgGastraum from '../assets/photos/gastraum.webp';
         <p class="info__text">Vorbestellen, abholen und Tische reservieren nur telefonisch.</p>
       </div>
       <div class="info__block" data-reveal>
-        <p class="label">Öffnungszeiten</p>
+        <p class="label">{OPENING_SOON ? 'Öffnungszeiten ab Eröffnung' : 'Öffnungszeiten'}</p>
         <HoursTable class="info__hours" />
       </div>
     </section>

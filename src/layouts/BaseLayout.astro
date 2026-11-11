@@ -11,9 +11,10 @@ import sans600 from '@fontsource/instrument-sans/files/instrument-sans-latin-600
 import serif400 from '@fontsource/instrument-serif/files/instrument-serif-latin-400-normal.woff2?url';
 
 import SiteHeader from '../components/site/SiteHeader.astro';
+import SoonBanner from '../components/site/SoonBanner.astro';
 import SiteFooter from '../components/site/SiteFooter.astro';
 import MuseumBar from '../components/MuseumBar.astro';
-import { INDEXABLE, MUSEUM_NAME, SITE_NAME, SITE_URL } from '../config';
+import { INDEXABLE, MUSEUM_NAME, OPENING_SOON, SITE_NAME, SITE_URL } from '../config';
 
 interface Props {
   /** Seitentitel ohne Zusatz; „| Elmo Shawarma“ bzw. „| Elmo Museum“ wird angehängt. */
@@ -101,6 +102,7 @@ const showCanonical = !noindex;
     <slot name="head" />
   </head>
   <body class={bodyClass}>
+    {chrome && OPENING_SOON && <SoonBanner />}
     {chrome && <SiteHeader />}
     {chrome && inMuseum && <MuseumBar counter={counter} />}
     <slot />

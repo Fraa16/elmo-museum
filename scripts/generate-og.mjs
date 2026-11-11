@@ -14,6 +14,7 @@ import { join } from 'node:path';
 import { createRequire } from 'node:module';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 
+import { OPENING_SOON } from '../src/config.ts';
 import { stations } from '../src/data/stations.ts';
 
 const require = createRequire(import.meta.url);
@@ -34,7 +35,7 @@ const count = numberWords[stations.length] ?? String(stations.length);
 
 /** Seiten: Name der Datei, Label, Titel (<em> = Gold-Kursive), Foto im Bogen, Ausschnitt. */
 const pages = [
-  { name: 'start', label: 'Libanesische Küche in Schwäbisch Gmünd', title: 'Alles von Hand.<br><em>Frisch vom Spieß.</em>', photo: 'src/assets/food/shawarma-teller.webp', pos: '42% 50%' },
+  { name: 'start', label: OPENING_SOON ? 'Eröffnet bald in Schwäbisch Gmünd' : 'Libanesische Küche in Schwäbisch Gmünd', title: 'Alles von Hand.<br><em>Frisch vom Spieß.</em>', photo: 'src/assets/food/shawarma-teller.webp', pos: '42% 50%' },
   { name: 'speisekarte', label: 'Speisekarte', title: 'Die <em>Karte.</em>', sub: '55 Gerichte, alles handgemacht und frisch zubereitet.', photo: 'src/assets/food/spiess.webp', pos: '50% 40%' },
   { name: 'catering', label: 'Catering und Firmen', title: 'Für eure Feier.<br><em>Für euer Team.</em>', photo: 'src/assets/photos/catering-drk.webp', pos: '50% 22%' },
   { name: 'gutscheine', label: 'Gutscheine', title: 'Genuss<br><em>verschenken.</em>', photo: 'src/assets/photos/kerze.webp', pos: '50% 60%' },

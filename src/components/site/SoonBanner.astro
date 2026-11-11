@@ -1,0 +1,49 @@
+---
+/**
+ * Hinweisleiste ganz oben auf jeder Seite, solange das Restaurant noch nicht
+ * geöffnet hat (OPENING_SOON in src/config.ts). Reines HTML, kein Skript.
+ */
+import { restaurant } from '../../data/restaurant';
+---
+
+<div class="soon" role="note">
+  <p class="soon__text">
+    <strong>Bald geöffnet.</strong>{' '}
+    <span class="soon__long">Elmo Shawarma eröffnet in Kürze in der {restaurant.street}, {restaurant.city}.</span>
+    <span class="soon__short">In Kürze in der {restaurant.street}.</span>
+  </p>
+</div>
+
+<style>
+  .soon {
+    background: var(--terracotta, #a5432b);
+    color: var(--on-terracotta, #f3e9d8);
+  }
+
+  .soon__text {
+    margin: 0 auto;
+    padding: 0.7rem 1rem;
+    font-size: 0.9375rem;
+    line-height: 1.35;
+    text-align: center;
+  }
+
+  .soon__text strong {
+    font-weight: 600;
+    letter-spacing: 0.01em;
+  }
+
+  .soon__long {
+    display: none;
+  }
+
+  @media (min-width: 48rem) {
+    .soon__long {
+      display: inline;
+    }
+
+    .soon__short {
+      display: none;
+    }
+  }
+</style>

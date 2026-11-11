@@ -40,3 +40,11 @@ export const SITE_NAME = 'Elmo Shawarma';
 export const MUSEUM_NAME = 'Elmo Museum';
 export const RESTAURANT = 'Elmo Shawarma';
 export const CITY = 'Schwäbisch Gmünd';
+
+/**
+ * Das Restaurant hat noch nicht eröffnet: Hinweisleiste „Bald geöffnet“ auf jeder
+ * Seite, „Eröffnet bald“ statt Live-Status, „Öffnungszeiten ab Eröffnung“ und keine
+ * Öffnungszeiten im JSON-LD für Google. Auf `false` setzen, sobald das Restaurant
+ * geöffnet hat; dann zeigt die Seite wieder den Live-Status und die Zeiten.
+ */
+export const OPENING_SOON = true;

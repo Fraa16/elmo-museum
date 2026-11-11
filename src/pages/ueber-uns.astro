@@ -6,6 +6,7 @@ import PageHero from '../components/site/PageHero.astro';
 import Arch from '../components/site/Arch.astro';
 import CallBand from '../components/site/CallBand.astro';
 import { restaurant } from '../data/restaurant';
+import { OPENING_SOON } from '../config';
 import { stationImage } from '../lib/images';
 import imgTheke from '../assets/photos/theke.webp';
 
@@ -14,7 +15,10 @@ const roots = stationImage('01.jpg');
 
 const timeline = [
   { year: '2017', text: 'Elmo Shawarma öffnet im City-Center am Höferlesbach.' },
-  { year: '2026', text: 'Neustart in der Kapuzinergasse 6: mehr Platz, neue Küche, größere Karte.' },
+  {
+    year: '2026',
+    text: `Neustart in der Kapuzinergasse 6: mehr Platz, neue Küche, größere Karte.${OPENING_SOON ? ' Wir eröffnen bald.' : ''}`,
+  },
 ];
 
 const hands = [

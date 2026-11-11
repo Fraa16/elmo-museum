@@ -10,6 +10,7 @@ import HoursTable from '../components/site/HoursTable.astro';
 import OpenStatus from '../components/site/OpenStatus.astro';
 import { SITE_URL } from '../config';
 import { restaurant, restaurantJsonLd, routeHref } from '../data/restaurant';
+import { OPENING_SOON } from '../config';
 import { dishCount, featuredDishes } from '../data/menu';
 import { stationPath, stations } from '../data/stations';
 import { ARCH_QUALITY, ARCH_WIDTHS, stationImage, widthsFor } from '../lib/images';
@@ -211,7 +212,7 @@ const steps = [
         <a class="link-arrow" href={routeHref} rel="noopener">Route planen<span aria-hidden="true"><svg class="i-arrow" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2.5 8h11M9 3.5 13.5 8 9 12.5"></path></svg></span></a>
       </div>
       <div class="visit__hours" data-reveal style="--d: 150ms">
-        <p class="label">Öffnungszeiten</p>
+        <p class="label">{OPENING_SOON ? 'Öffnungszeiten ab Eröffnung' : 'Öffnungszeiten'}</p>
         <HoursTable />
         <OpenStatus class="visit__status" />
       </div>

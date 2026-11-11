@@ -2,6 +2,7 @@
  * Stammdaten des Restaurants: eine Quelle für Kopfzeile, Fußzeile, Kontakt,
  * Öffnungsstatus und JSON-LD. Nur echte Angaben; Fehlendes als `null`.
  */
+import { OPENING_SOON } from '../config.ts';
 
 export const restaurant = {
   name: 'Elmo Shawarma',
@@ -64,11 +65,16 @@ export function restaurantJsonLd(siteUrl: string) {
       addressLocality: restaurant.city,
       addressCountry: 'DE',
     },
-    openingHoursSpecification: openingHours.map((slot) => ({
-      '@type': 'OpeningHoursSpecification',
-      dayOfWeek: slot.days.map((d) => SCHEMA_DAYS[d]),
-      opens: slot.opens,
-      closes: slot.closes === '24:00' ? '23:59' : slot.closes,
-    })),
+    // vor der Eröffnung keine Zeiten, damit Google den Laden nicht als geöffnet zeigt
+    ...(OPENING_SOON
+      ? {}
+      : {
+          openingHoursSpecification: openingHours.map((slot) => ({
+            '@type': 'OpeningHoursSpecification',
+            dayOfWeek: slot.days.map((d) => SCHEMA_DAYS[d]),
+            opens: slot.opens,
+            closes: slot.closes === '24:00' ? '23:59' : slot.closes,
+          })),
+        }),
   };
 }

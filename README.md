@@ -33,6 +33,7 @@ externen Requests.
 | `SITE_URL_CONFIRMED` | `true`  | Domain bestätigt (Vercel-Projekt `elmo-museum`, Oktober 2026). Bei `false` verweigert `npm run qr` den Export und der QR-Bogen zeigt „Entwurf, nicht drucken“. |
 | `QUIZ_ENABLED`       | `true`  | Rate-Element global an/aus. Pro Station: `quiz: null`.                  |
 | `INDEXABLE`          | `false` | Bis zur Freigabe `noindex, nofollow` auf allen Seiten und `Disallow: /` in `robots.txt`. |
+| `OPENING_SOON`       | `true` | Vor der Eröffnung: Leiste „Bald geöffnet“ auf jeder Seite, „Eröffnet bald“ statt Live-Status, „Öffnungszeiten ab Eröffnung“, keine Zeiten im JSON-LD. **Am Eröffnungstag auf `false` setzen** (danach `npm run og`). |
 
 ## Seiten
 
@@ -133,3 +134,4 @@ Stand 6. November 2026, dieselbe Liste wie in `04_Offene-Punkte.txt` im Paket f�
 - **Scan-Test:** gedruckte Schilder vor Ort mit Android und iPhone testen.
 - **Nach den rechtlichen Angaben:** `INDEXABLE = true`, Sitemap, Google Search Console,
   Google-Unternehmensprofil aktualisieren.
+- **Am Eröffnungstag:** `OPENING_SOON = false` in `src/config.ts`, dann `npm run og`.
