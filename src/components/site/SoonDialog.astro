@@ -1,0 +1,147 @@
+---
+/**
+ * Pop-up „Bald geöffnet“: erscheint beim ersten Seitenaufruf je Browser-Sitzung,
+ * solange das Restaurant noch nicht eröffnet hat (OPENING_SOON in src/config.ts).
+ * Natives <dialog>: Fokus bleibt im Fenster, Esc und Klick daneben schließen.
+ * Ohne JavaScript bleibt die Hinweisleiste oben (SoonBanner).
+ */
+import Logo from './Logo.astro';
+import { restaurant } from '../../data/restaurant';
+---
+
+<dialog class="soon-dialog" aria-labelledby="soon-dialog-title" data-soon-dialog>
+  <div class="soon-dialog__card">
+    <Logo class="soon-dialog__logo" />
+    <p class="label soon-dialog__label">{restaurant.street}, {restaurant.city}</p>
+    <h2 id="soon-dialog-title" class="display soon-dialog__title">Bald <em>geöffnet.</em></h2>
+    <p class="soon-dialog__text">
+      Elmo Shawarma hat noch nicht geöffnet. Wir eröffnen in Kürze in der {restaurant.street} und freuen uns auf
+      dich.
+    </p>
+    <div class="soon-dialog__actions">
+      <button type="button" class="btn btn--solid" data-soon-close autofocus>Verstanden</button>
+      <a class="soon-dialog__link" href={restaurant.instagram} rel="noopener">Neuigkeiten auf Instagram</a>
+    </div>
+  </div>
+</dialog>
+
+<script>
+  const KEY = 'elmo-soon-seen';
+  const dialog = document.querySelector<HTMLDialogElement>('[data-soon-dialog]');
+
+  let seen = false;
+  try {
+    seen = sessionStorage.getItem(KEY) === '1';
+  } catch {
+    // Speicher gesperrt (privates Fenster): Pop-up trotzdem zeigen
+  }
+
+  if (dialog && !seen && typeof dialog.showModal === 'function') {
+    const close = () => dialog.close();
+    dialog.querySelector('[data-soon-close]')?.addEventListener('click', close);
+    // Klick auf den abgedunkelten Hintergrund schließt ebenfalls
+    dialog.addEventListener('click', (event) => {
+      if (event.target === dialog) close();
+    });
+    dialog.addEventListener('close', () => {
+      try {
+        sessionStorage.setItem(KEY, '1');
+      } catch {
+        // ignorieren
+      }
+    });
+    dialog.showModal();
+  }
+</script>
+
+<style>
+  .soon-dialog {
+    width: min(30rem, calc(100vw - 2rem));
+    max-height: calc(100dvh - 2rem);
+    padding: 0;
+    border: 0;
+    background: transparent;
+    color: var(--text);
+    overflow: visible;
+  }
+
+  .soon-dialog::backdrop {
+    background: rgba(10, 9, 7, 0.78);
+    backdrop-filter: blur(3px);
+  }
+
+  .soon-dialog__card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 2.25rem 1.75rem 2rem;
+    border: 1px solid var(--gold-line);
+    border-top: 4px solid var(--terracotta);
+    background: var(--surface);
+    text-align: center;
+  }
+
+  .soon-dialog__label {
+    margin-top: 1.5rem;
+  }
+
+  .soon-dialog__title {
+    margin-top: 0.75rem;
+    font-size: clamp(3rem, 12vw, 4.25rem);
+    line-height: 0.95;
+  }
+
+  .soon-dialog__title em {
+    color: var(--gold-soft);
+  }
+
+  .soon-dialog__text {
+    max-width: 24rem;
+    margin-top: 1rem;
+    font-size: 1.0625rem;
+    color: var(--muted);
+  }
+
+  .soon-dialog__actions {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+    margin-top: 1.75rem;
+  }
+
+  .soon-dialog__actions .btn {
+    min-width: 12rem;
+    justify-content: center;
+  }
+
+  .soon-dialog__link {
+    font-size: 0.9375rem;
+    color: var(--gold-soft);
+  }
+
+  /* sanft einblenden, nicht bei „Bewegung reduzieren“ */
+  @media (prefers-reduced-motion: no-preference) {
+    .soon-dialog[open],
+    .soon-dialog[open]::backdrop {
+      animation: soon-fade 320ms var(--ease-out) both;
+    }
+
+    .soon-dialog[open] .soon-dialog__card {
+      animation: soon-rise 420ms var(--ease-out) both;
+    }
+  }
+
+  @keyframes soon-fade {
+    from {
+      opacity: 0;
+    }
+  }
+
+  @keyframes soon-rise {
+    from {
+      opacity: 0;
+      transform: translateY(12px) scale(0.98);
+    }
+  }
+</style>

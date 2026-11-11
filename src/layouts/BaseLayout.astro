@@ -12,6 +12,7 @@ import serif400 from '@fontsource/instrument-serif/files/instrument-serif-latin-
 
 import SiteHeader from '../components/site/SiteHeader.astro';
 import SoonBanner from '../components/site/SoonBanner.astro';
+import SoonDialog from '../components/site/SoonDialog.astro';
 import SiteFooter from '../components/site/SiteFooter.astro';
 import MuseumBar from '../components/MuseumBar.astro';
 import { INDEXABLE, MUSEUM_NAME, OPENING_SOON, SITE_NAME, SITE_URL } from '../config';
@@ -107,6 +108,7 @@ const showCanonical = !noindex;
     {chrome && inMuseum && <MuseumBar counter={counter} />}
     <slot />
     {chrome && <SiteFooter />}
+    {chrome && OPENING_SOON && <SoonDialog />}
 
     <script>
       // Bewegung nur mit JS und ohne „Bewegung reduzieren“ (siehe global.css).
